@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" class="services-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services - Triet</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <meta
+      name="description"
+      content="Explore our web development services from budget-friendly solutions to premium enterprise platforms. Find the perfect service tier for your project."
+    />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site services-page">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="services-main">
+      <!-- Hero Section -->
+      <section class="services-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-title">What I Offer</h1>
+            <p class="hero-subtitle">
+              Choose from the following flexible service tiers designed to meet
+              your needs and budget.
+            </p>
+
+            <p>
+              <strong
+                >All prices are starting rates and may vary based on specific
+                requirements.</strong
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Tiers Section -->
+      <section class="service-tiers-section">
+        <div class="container">
+          <!-- Tier Navigation -->
+          <div class="tier-nav" id="tierNav">
+            <button class="tier-tab active" data-tier="budget">Budget</button>
+            <button class="tier-tab" data-tier="standard">Standard</button>
+            <button class="tier-tab" data-tier="premium">Premium</button>
+            <button class="tier-tab" data-tier="custom">Custom</button>
+          </div>
+
+          <!-- Service Tiers Container -->
+          <div class="service-tiers" id="serviceTiers">
+            <!-- Service tiers will be populated by JavaScript -->
+          </div>
+
+          <!-- Loading State -->
+          <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading services...</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../components/addComponents.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/services.js"></script>
+    <script src="../js/chatbot.js"></script>
+  </body>
+</html>

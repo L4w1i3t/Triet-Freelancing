@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en" class="payment-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment - Triet</title>
+
+    <!-- Security Headers -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https://api.emailjs.com https://api.paypal.com https://www.paypal.com https://api.stripe.com; frame-src https://www.paypal.com https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      name="permissions-policy"
+      content="camera=(), microphone=(), geolocation=(), payment=()"
+    />
+
+    <link rel="stylesheet" href="/css/main.css" />
+    <meta
+      name="description"
+      content="Complete your digital commission order - Secure payment processing"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- EmailJS SDK -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+  </head>
+
+  <body class="site payment">
+    <!-- Environment Configuration (Load first to make variables available) -->
+    <script src="/js/env-config.js"></script>
+    
+    <!-- Payment Configuration (Toggle between manual and automated) -->
+    <script src="/js/payment-config.js"></script>
+
+    <!-- PayPal SDK - Dynamically loaded based on configuration -->
+    <script>
+      // Load PayPal SDK with proper configuration - moved here to ensure config is loaded first
+      const loadPayPalSDK = () => {
+        if (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.paypal) {
+          const config = window.PAYMENT_CONFIG.paypal;
+          const environment =
+            config.environment === "production"
+              ? "www.paypal.com"
+              : "www.sandbox.paypal.com";
+          const clientId = config.clientId;
+
+          // Debug logging for PayPal SDK loading
+          console.group("PayPal SDK Loading Debug");
+          console.log("Config environment setting:", config.environment);
+          console.log("Resolved SDK host:", environment);
+          console.log(
+            "Client ID (first 20 chars):",
+            clientId ? clientId.substring(0, 20) + "..." : "Not configured",
+          );
+          console.groupEnd();
+
+          if (clientId && clientId !== "your-paypal-client-id") {
+            const script = document.createElement("script");
+            const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit`;
+            script.src = sdkUrl;
+
+            // Log the complete SDK URL for debugging
+            console.log("Loading PayPal SDK from:", sdkUrl);
+
+            script.setAttribute(
+              "data-sdk-integration-source",
+              "button-factory",
+            );
+            script.onerror = () => {
+              console.warn(
+                "PayPal SDK failed to load. Falling back to manual payment mode.",
+              );
+              if (window.paymentManager) {
+                window.paymentManager.fallbackToManualMode();
+              }
+            };
+            document.head.appendChild(script);
+          } else {
+            console.warn(
+              "PayPal client ID not configured. Using manual payment mode.",
+            );
+          }
+        } else {
+          console.warn("PAYMENT_CONFIG not available. Cannot load PayPal SDK.");
+        }
+      };
+
+      // Load PayPal SDK immediately since config is now available
+      loadPayPalSDK();
+    </script>
+
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="payment-main">
+      <!-- Payment Hero Section -->
+      <section class="payment-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="payment-title">Complete Your Order</h1>
+            <p class="payment-description">
+              Review your order details and confirm to proceed with manual
+              payment coordination
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Payment Content -->
+      <section class="payment-content">
+        <div class="container">
+          <div class="payment-grid">
+            <!-- Order Summary -->
+            <div class="order-summary-section">
+              <div class="order-summary-card">
+                <h3>Order Summary</h3>
+
+                <div class="order-items" id="orderItems">
+                  <!-- Items will be populated by JavaScript -->
+                </div>
+
+                <div class="order-totals">
+                  <div class="summary-line">
+                    <span>Subtotal:</span>
+                    <span id="orderSubtotal">$0.00</span>
+                  </div>
+                  <div class="summary-line">
+                    <span>Tax (6%):</span>
+                    <span id="orderTax">$0.00</span>
+                  </div>
+                  <div class="summary-line total">
+                    <span>Total:</span>
+                    <span id="orderTotal">$0.00</span>
+                  </div>
+                </div>
+
+                <div class="customer-info">
+                  <h4>Customer Information</h4>
+                  <div class="customer-details" id="customerDetails">
+                    <!-- Customer info will be populated by JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods-section">
+              <h2 id="paymentSectionTitle">Payment</h2>
+
+              <!-- COMMENTED OUT: Manual Payment Notice -->
+              <!-- 
+              <div class="manual-payment-notice">
+                <div class="notice-card">
+                  <div class="notice-icon">
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                  <div class="notice-content">
+                    <h3>Manual Payment Processing</h3>
+                    <p>As of right now, I only accept manual payment methods. Once you confirm your order below, I will be in contact with you shortly to arrange payment and begin work on your project.</p>
+                    <p class="notice-warning">
+                      <strong>Important:</strong> Please do not send any payments until I have fully completed your order and provided you with the necessary payment details.
+                    </p>
+                    <ul class="payment-methods-list">
+                      <li><i class="fas fa-check"></i> PayPal</li>
+                      <li><i class="fas fa-check"></i> Venmo</li>
+                      <li><i class="fas fa-check"></i> Zelle</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COMMENTED OUT: Manual Payment Notice -->
+              <!-- 
+              <div class="manual-payment-notice">
+                <div class="notice-card">
+                  <div class="notice-icon">
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                  <div class="notice-content">
+                    <h3>Manual Payment Processing</h3>
+                    <p>As of right now, I only accept manual payment methods. Once you confirm your order below, I will be in contact with you shortly to arrange payment and begin work on your project.</p>
+                    <p class="notice-warning">
+                      <strong>Important:</strong> Please do not send any payments until I have fully completed your order and provided you with the necessary payment details.
+                    </p>
+                    <ul class="payment-methods-list">
+                      <li><i class="fas fa-check"></i> PayPal</li>
+                      <li><i class="fas fa-check"></i> Venmo</li>
+                      <li><i class="fas fa-check"></i> Zelle</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order-confirmation-container">
+                <button id="confirmOrderBtn" type="button" class="btn btn-primary order-confirm-btn">
+                  <span class="button-text">
+                    <i class="fas fa-check-circle"></i> Confirm Order
+                  </span>
+                  <span class="button-loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                  </span>
+                </button>
+                <p class="confirmation-note">
+                  By confirming this order, you agree to proceed with manual payment coordination.
+                </p>
+              </div>
+              -->
+
+              <!-- Manual Payment Notice (Hidden by default, shown via JS for manual mode) -->
+              <div
+                class="manual-payment-notice"
+                id="manualPaymentNotice"
+                style="display: none"
+              >
+                <div class="notice-card">
+                  <div class="notice-icon">
+                    <i class="fas fa-info-circle"></i>
+                  </div>
+                  <div class="notice-content">
+                    <h3>Manual Payment Processing</h3>
+                    <p>
+                      As of right now, I only accept manual payment methods.
+                      Once you confirm your order below, I will be in contact
+                      with you shortly to arrange payment and begin work on your
+                      project.
+                    </p>
+                    <p class="notice-warning">
+                      <strong>Important:</strong> Please do not send any
+                      payments until I have fully completed your order and
+                      provided you with the necessary payment details.
+                    </p>
+                    <ul class="payment-methods-list">
+                      <li><i class="fas fa-check"></i> PayPal</li>
+                      <li><i class="fas fa-check"></i> Venmo</li>
+                      <li><i class="fas fa-check"></i> Zelle</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order Confirmation Button (Hidden by default, shown via JS for manual mode) -->
+              <div
+                class="order-confirmation-container"
+                id="orderConfirmationContainer"
+                style="display: none"
+              >
+                <button
+                  id="confirmOrderBtn"
+                  type="button"
+                  class="btn btn-primary order-confirm-btn"
+                >
+                  <span class="button-text">
+                    <i class="fas fa-check-circle"></i> Confirm Order
+                  </span>
+                  <span class="button-loading" style="display: none">
+                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                  </span>
+                </button>
+                <p class="confirmation-note">
+                  By confirming this order, you agree to proceed with manual
+                  payment coordination.
+                </p>
+              </div>
+
+              <!-- Automated Payment Methods -->
+              <div class="payment-method-selector">
+                <div class="payment-option" data-method="paypal">
+                  <div class="payment-option-header">
+                    <div class="payment-radio">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="paypal"
+                        id="paypalRadio"
+                        checked
+                      />
+                      <label for="paypalRadio"></label>
+                    </div>
+                    <div class="payment-info">
+                      <h3>PayPal & Cards</h3>
+                      <p>
+                        Pay securely for digital services - no shipping required
+                      </p>
+                    </div>
+                    <div class="payment-icons">
+                      <i class="fab fa-paypal"></i>
+                      <i class="fab fa-cc-visa"></i>
+                      <i class="fab fa-cc-mastercard"></i>
+                      <i class="fab fa-cc-amex"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="payment-form-container" id="paypalPaymentForm">
+                <div class="payment-form-card">
+                  <h3>Digital Service Payment</h3>
+                  <p class="payment-note">
+                    Secure payment for your custom digital commission
+                  </p>
+                  <div id="paypal-button-container"></div>
+                </div>
+              </div>
+
+              <!-- commented out Bitcoin payment option for now because I'm not using it at the moment.-->
+              <!-- Bitcoin Payment Form -->
+              <!-- <div class="payment-form-container" id="bitcoinPaymentForm" style="display: none;">
+                <div class="payment-form-card">
+                  <h3>Bitcoin Payment</h3>
+                  <div class="bitcoin-payment-info">
+                    <div class="bitcoin-address-section">
+                      <h4>Send Bitcoin to this address:</h4>
+                      <div class="bitcoin-address-container">
+                        <div class="bitcoin-address" id="bitcoinAddress"> -->
+              <!-- Bitcoin address will be generated -->
+              <!-- </div>
+                        <button class="copy-address-btn" id="copyAddressBtn">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div class="bitcoin-amount-section">
+                      <h4>Amount to send:</h4>
+                      <div class="bitcoin-amount">
+                        <span id="bitcoinAmount">0.00000000</span> BTC
+                        <span class="usd-equivalent">($<span id="usdAmount">0.00</span> USD)</span>
+                      </div>
+                    </div>
+
+                    <div class="bitcoin-qr-section">
+                      <h4>Or scan QR code:</h4>
+                      <div class="qr-code-container" id="bitcoinQrCode"> -->
+              <!-- QR code will be generated -->
+              <!-- </div>
+                    </div>
+
+                    <div class="bitcoin-instructions">
+                      <h4>Instructions:</h4>
+                      <ol>
+                        <li>Copy the Bitcoin address above or scan the QR code</li>
+                        <li>Send the exact amount from your Bitcoin wallet</li>
+                        <li>Click "I've Sent Payment" once the transaction is confirmed</li>
+                        <li>I'll verify the payment and process your order</li>
+                      </ol>
+                    </div>
+
+                    <div class="bitcoin-actions">
+                      <button class="btn btn-primary" id="bitcoinSentBtn">
+                        <i class="fab fa-bitcoin"></i> I've Sent Payment
+                      </button>
+                      <button class="btn btn-secondary" id="refreshBitcoinBtn">
+                        <i class="fas fa-sync"></i> Refresh Status
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- Payment Security Info -->
+              <div class="payment-security">
+                <div class="security-badges">
+                  <div class="security-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SSL Encrypted</span>
+                  </div>
+                  <div class="security-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure Payment</span>
+                  </div>
+                  <div class="security-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Privacy Protected</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Success Modal -->
+    <div
+      id="paymentSuccessModal"
+      class="payment-success-modal"
+      style="display: none"
+    >
+      <div class="modal-content">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h3>Payment Successful!</h3>
+        <p>Your order has been confirmed. Expect a follow-up email shortly.</p>
+        <div class="order-number">
+          Order #: <span id="finalOrderNumber"></span>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="window.location.href='/'">
+            Return to Home Page
+          </button>
+          <button
+            class="btn btn-secondary"
+            onclick="window.location.href='/pages/portfolio.html'"
+          >
+            View Portfolio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/components/addComponents.js"></script>
+
+    <!-- Security & Privacy Scripts -->
+    <script src="/js/security.js"></script>
+    <script src="/js/input-validator.js"></script>
+    <script src="/js/privacy-analytics.js"></script>
+
+    <!-- Payment Scripts -->
+    <script src="/js/email-service.js"></script>
+    <script src="/js/payment.js"></script>
+  </body>
+</html>

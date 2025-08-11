@@ -1,0 +1,31 @@
+// ==================================================
+// FUNCTIONS - LIQUID GLASS / INTERSTELLAR THEME
+// ==================================================
+
+@use "sass:map";
+@use "variables" as *;
+
+// Convert px to rem
+@function rem($px, $base: 16px) {
+  @return ($px / $base) * 1rem;
+}
+
+// Get color from theme palette
+@function theme-color($color) {
+  @return var(--#{$color});
+}
+
+// Create rgba with opacity
+@function alpha($color, $opacity) {
+  @return rgba($color, $opacity);
+}
+
+// Get font size from scale
+@function font-size($size) {
+  @return map.get($font-sizes, $size);
+}
+
+// Get breakpoint value
+@function breakpoint($size) {
+  @return map.get($breakpoints, $size);
+}

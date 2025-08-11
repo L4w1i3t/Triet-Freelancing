@@ -1,0 +1,332 @@
+// ==================================================
+// CARDS - LIQUID GLASS / INTERSTELLAR THEME
+// ==================================================
+
+@use "../abstracts/mixins" as *;
+
+.card {
+  @include glass-morphism(0.1, 25px);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  transition: all var(--transition-smooth);
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+  }
+
+  &:hover {
+    @include hover-lift(8px, 0.4);
+    @include aurora-glow(var(--accent-aurora-cyan), 0.4);
+  }
+}
+
+// Service cards with 3D effect
+.service-card {
+  @include glass-morphism(0.08, 30px);
+  @include card-3d-tilt;
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  // Cosmic background pattern
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(77, 171, 247, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(151, 117, 250, 0.1) 0%,
+        transparent 50%
+      );
+    z-index: -1;
+  }
+
+  .service-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-lg);
+    @include glass-morphism(0.15, 20px);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    @include floating(6s, 15px);
+
+    img,
+    i {
+      width: 40px;
+      height: 40px;
+      filter: drop-shadow(0 0 10px var(--accent-aurora-cyan));
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(
+        45deg,
+        var(--accent-aurora-cyan),
+        var(--accent-aurora-purple)
+      );
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity var(--transition-smooth);
+    }
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+    background: linear-gradient(
+      135deg,
+      var(--text-primary),
+      var(--accent-aurora-cyan)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+
+    .service-icon::after {
+      opacity: 0.3;
+    }
+  }
+}
+
+// Process step cards
+.process-step {
+  @include glass-morphism(0.12, 20px);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  border-left: 3px solid var(--accent-aurora-cyan);
+
+  .step-number {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(
+      135deg,
+      var(--accent-aurora-cyan),
+      var(--accent-aurora-purple)
+    );
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    @include aurora-glow(var(--accent-aurora-cyan), 0.6);
+  }
+
+  h3 {
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-secondary);
+  }
+
+  &:hover {
+    border-left-color: var(--accent-aurora-purple);
+
+    .step-number {
+      transform: scale(1.1);
+      background: linear-gradient(
+        135deg,
+        var(--accent-aurora-purple),
+        var(--accent-aurora-pink)
+      );
+    }
+  }
+}
+
+// Feature card with liquid effect
+.feature-card {
+  @include glass-morphism(0.1, 25px);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  // Liquid morphing background
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      var(--accent-aurora-cyan),
+      var(--accent-aurora-purple),
+      var(--accent-aurora-pink)
+    );
+    opacity: 0.1;
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: liquidMorph 8s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    background: linear-gradient(
+      135deg,
+      var(--accent-aurora-cyan),
+      var(--accent-aurora-purple)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--space-md);
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+  }
+
+  .feature-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  &:hover {
+    @include hover-lift(10px, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
+
+    &::before {
+      opacity: 0.2;
+      animation-duration: 4s;
+    }
+  }
+}
+
+// Testimonial card
+.testimonial-card {
+  @include glass-morphism(0.15, 30px);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  position: relative;
+  text-align: center;
+
+  .quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '"';
+      font-size: 3rem;
+      color: var(--accent-aurora-cyan);
+      position: absolute;
+      top: -10px;
+    }
+
+    &::before {
+      left: -20px;
+    }
+
+    &::after {
+      right: -20px;
+    }
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-full);
+      border: 2px solid var(--accent-aurora-cyan);
+      overflow: hidden;
+    }
+
+    .info {
+      text-align: left;
+
+      .name {
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .title {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+      }
+    }
+  }
+}
+
+// Card grid
+.cards-grid {
+  display: grid;
+  gap: var(--space-lg);
+
+  &.grid-1 {
+    grid-template-columns: 1fr;
+  }
+
+  &.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  &.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  &.grid-4 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}

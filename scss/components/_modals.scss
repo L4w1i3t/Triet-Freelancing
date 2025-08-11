@@ -1,0 +1,238 @@
+// ==================================================
+// MODAL COMPONENTS
+// ==================================================
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+// Customer Info Modal Styles
+.customer-info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+
+  .modal-content {
+    background: linear-gradient(
+      135deg,
+      rgba(20, 35, 60, 0.95),
+      rgba(10, 25, 47, 0.98)
+    );
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-elevated);
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+
+    h3 {
+      color: var(--accent-aurora-cyan);
+      font-size: 1.5rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.customer-info-form {
+  .form-group {
+    margin-bottom: var(--space-lg);
+  }
+
+  label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    margin-bottom: var(--space-sm);
+    font-size: 0.9rem;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-smooth);
+    backdrop-filter: blur(10px);
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-aurora-cyan);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+    }
+  }
+
+  select option {
+    background: #1a1a1a;
+    color: white;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  justify-content: flex-end;
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-smooth);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+
+    &-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+    }
+
+    &-primary {
+      background: var(--gradient-cosmic);
+      color: white;
+      box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+// Checkout Success Modal Styles
+.checkout-success-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+
+  .modal-content {
+    background: linear-gradient(
+      135deg,
+      rgba(20, 35, 60, 0.95),
+      rgba(10, 25, 47, 0.98)
+    );
+    border: 1px solid rgba(40, 167, 69, 0.4);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    max-width: 450px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow-elevated);
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .success-icon {
+    font-size: 3rem;
+    color: #28a745;
+    margin-bottom: var(--space-md);
+  }
+
+  h3 {
+    color: #28a745;
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--space-md);
+    line-height: 1.5;
+  }
+
+  .modal-actions {
+    margin-top: var(--space-lg);
+    justify-content: center;
+  }
+}
+
+// Modal Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .customer-info-modal .modal-content {
+    width: 95%;
+    padding: var(--space-lg);
+    margin: var(--space-md);
+  }
+
+  .modal-actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

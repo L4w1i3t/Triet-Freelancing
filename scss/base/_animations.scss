@@ -1,0 +1,259 @@
+// ==================================================
+// ANIMATIONS - LIQUID GLASS / INTERSTELLAR THEME
+// ==================================================
+
+// Base animation classes for scroll triggers
+.animate-on-scroll {
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &.animated {
+    opacity: 1;
+  }
+}
+
+// Fade animations
+.fadeIn {
+  transform: translateY(30px);
+
+  &.animated {
+    transform: translateY(0);
+  }
+}
+
+.fadeInUp {
+  transform: translateY(50px);
+
+  &.animated {
+    transform: translateY(0);
+  }
+}
+
+.fadeInDown {
+  transform: translateY(-50px);
+
+  &.animated {
+    transform: translateY(0);
+  }
+}
+
+.fadeInLeft {
+  transform: translateX(-50px);
+
+  &.animated {
+    transform: translateX(0);
+  }
+}
+
+.fadeInRight {
+  transform: translateX(50px);
+
+  &.animated {
+    transform: translateX(0);
+  }
+}
+
+// Scale animations
+.scaleIn {
+  transform: scale(0.8);
+
+  &.animated {
+    transform: scale(1);
+  }
+}
+
+// Rotation animations
+.rotateIn {
+  transform: rotate(-10deg) scale(0.8);
+
+  &.animated {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+// Flip animations
+.flipInX {
+  transform: perspective(1000px) rotateX(-90deg);
+
+  &.animated {
+    transform: perspective(1000px) rotateX(0deg);
+  }
+}
+
+// Liquid morphing animation
+@keyframes liquidMorph {
+  0%,
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+.liquid-morph {
+  animation: liquidMorph 8s ease-in-out infinite;
+}
+
+// Floating particles
+@keyframes floatingParticles {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-30px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(-60px) rotate(240deg);
+  }
+}
+
+.floating-particles {
+  animation: floatingParticles 15s ease-in-out infinite;
+}
+
+// Cosmic rotation
+@keyframes cosmicRotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.cosmic-rotation {
+  animation: cosmicRotation 30s linear infinite;
+}
+
+// Pulse glow effect
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--accent-aurora-cyan);
+  }
+  50% {
+    box-shadow:
+      0 0 40px var(--accent-aurora-cyan),
+      0 0 60px var(--accent-aurora-purple);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+// Aurora wave animation
+@keyframes auroraWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.aurora-wave {
+  background: linear-gradient(
+    -45deg,
+    var(--accent-aurora-pink),
+    var(--accent-aurora-blue),
+    var(--accent-aurora-purple),
+    var(--accent-aurora-cyan)
+  );
+  background-size: 400% 400%;
+  animation: auroraWave 15s ease infinite;
+}
+
+// 3D hover effects
+.hover-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-smooth);
+
+  &:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px);
+  }
+}
+
+// Glass shimmer effect
+@keyframes glassShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.glass-shimmer {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: glassShimmer 3s ease-in-out infinite;
+  }
+}
+
+// Tilt on hover
+.tilt-hover {
+  transition: transform var(--transition-smooth);
+
+  &:hover {
+    transform: perspective(1000px) rotateX(10deg) rotateY(10deg);
+  }
+}
+
+// Delay utilities for staggered animations
+.delay-100 {
+  animation-delay: 0.1s;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+.delay-400 {
+  animation-delay: 0.4s;
+}
+.delay-500 {
+  animation-delay: 0.5s;
+}
+.delay-600 {
+  animation-delay: 0.6s;
+}
+.delay-700 {
+  animation-delay: 0.7s;
+}
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+// Reduced motion respect
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

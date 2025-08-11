@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en" class="service-template-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Portfolio - Triet</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <meta
+      name="description"
+      content="Service template page for individual services offered by Triet."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site service-template">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="service-main">
+      <!-- Service Hero Section -->
+      <section class="service-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="service-title">Digital Portfolio</h1>
+            <div class="service-meta">
+              <span class="service-price">Starting at $120</span>
+              <span class="service-duration">
+                <i class="fas fa-clock"></i>
+                2-4 days
+              </span>
+            </div>
+            <p class="service-description">
+              A professional digital portfolio showcasing your work, skills, and
+              achievements. Perfect for freelancers, artists, and professionals
+              looking to enhance their online presence or seek careers and job
+              opportunities.
+            </p>
+            <p class="service-description" style="font-style: italic">
+              Delivery time depends on complexity and selected features. Basic
+              packages typically completed within 2-4 days.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Details Section -->
+      <section class="service-details">
+        <div class="container">
+          <div class="details-grid">
+            <!-- Examples Section -->
+            <div class="examples-section">
+              <h2>Examples of this Service</h2>
+              <div class="examples-list">
+                <div class="example-item">
+                  <h4>Freelancers</h4>
+                  <p>
+                    Showcase your work, skills, and achievements in a visually
+                    appealing format.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Employers</h4>
+                  <p>
+                    Showcase your company culture, values, and job
+                    opportunities.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Job Seekers</h4>
+                  <p>
+                    Highlight your skills and experience to attract potential
+                    employers.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Creatives</h4>
+                  <p>
+                    Showcase your artistic work, design projects, and creative
+                    process.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pricing Calculator -->
+            <div class="pricing-calculator">
+              <h2>Customize Your Package</h2>
+
+              <!-- Project Description -->
+              <div class="project-description-section">
+                <h3>Tell Us About Your Project</h3>
+                <p class="description-help">
+                  Please describe your project in detail. The more information
+                  you provide, the better I can tailor it service to your needs.
+                  This includes but is not limited to:
+                </p>
+                <ul class="description-hints" style="font-style: italic">
+                  <li>
+                    - The purpose of your project (freelance, professional,
+                    etc.)
+                  </li>
+                  <li>- Your target audience and industry</li>
+                  <li>- Design preferences and style inspirations</li>
+                  <li>
+                    - Specific features or functionality you need (outside of
+                    the addon library)
+                  </li>
+                  <li>- Any existing branding or content you have</li>
+                  <li>- Timeline and launch expectations</li>
+                </ul>
+                <div class="description-field-container">
+                  <textarea
+                    id="projectDescription"
+                    class="project-description-field"
+                    placeholder="Example: I'm trying to land an internship this summer and I need a portfolio that highlights my skills and experiences effectively. I'm a CS major and I want to emphasize my SE skills and undergrad experience. I need a resume page and a contact page, and I can provide any images or content needed."
+                    rows="6"
+                    maxlength="65535"
+                  ></textarea>
+                  <div class="description-counter">
+                    <span class="char-count">
+                      <span id="descriptionCount">0</span> characters
+                    </span>
+                    <span class="description-encouragement"
+                      >• More details help me serve you better!</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Base Service -->
+              <div class="base-service">
+                <h3>Base Service</h3>
+                <div class="base-core">
+                  <div class="base-item-header">
+                    <span class="item-name">Digital Portfolio</span>
+                    <span class="item-price">$120</span>
+                  </div>
+                  <p class="base-description">
+                    Customize below to fit your needs.
+                  </p>
+                </div>
+
+                <!-- Base Features (can be modified) -->
+                <div class="base-features">
+                  <div class="features-header">
+                    <h4>Included Features</h4>
+                    <p class="features-description">
+                      These features are included in your package. You can
+                      remove or reduce them as needed.
+                    </p>
+                  </div>
+                  <div class="base-features-list">
+                    <!-- Static site specific feature: Number of pages -->
+                    <div
+                      class="base-feature-item flexible-feature"
+                      data-feature-id="pages"
+                      data-price-per-unit="24"
+                      data-default-quantity="5"
+                      data-min-quantity="1"
+                      data-required="false"
+                    >
+                      <div class="feature-main">
+                        <div class="feature-controls">
+                          <div class="feature-info">
+                            <span class="feature-name">Portfolio Pages</span>
+                            <span class="feature-description"
+                              >Number of pages for your portfolio</span
+                            >
+                          </div>
+                        </div>
+                        <div class="feature-pricing">
+                          <span class="feature-price">$24 per page</span>
+                        </div>
+                      </div>
+                      <div class="feature-quantity-controls">
+                        <label for="pages-quantity">Number of pages:</label>
+                        <div class="quantity-input">
+                          <button
+                            type="button"
+                            class="quantity-btn minus"
+                            data-target="pages-quantity"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            id="pages-quantity"
+                            class="quantity-field"
+                            min="1"
+                            max="5"
+                            value="5"
+                          />
+                          <button
+                            type="button"
+                            class="quantity-btn plus"
+                            data-target="pages-quantity"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span class="quantity-total"
+                          >Total: $<span id="pages-total">100</span></span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Responsive Design Feature -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="responsive-design"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Responsive Design</span>
+                          <span class="feature-description"
+                            >Mobile-friendly design that works on all
+                            devices</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Core Development (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="core-development"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Core Development</span>
+                          <span class="feature-description"
+                            >HTML, CSS, and JavaScript development</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Embedded Resume Feature -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="embedded-resume"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Embedded Resume</span>
+                          <span class="feature-description"
+                            >Section that includes a PDF of your resume or
+                            CV</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+
+                    <!-- Contact Section (required)-->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="contact-section"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Contact Section</span>
+                          <span class="feature-description"
+                            >A section for users to contact you (email, phone,
+                            etc.)</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add-ons -->
+              <div class="addons-section">
+                <h3>Available Add-ons</h3>
+                <p style="font-style: italic">
+                  More to come. If you do not see a specific add-on, specify
+                  what you need in the project description [FREE!].
+                </p>
+                <div class="addons-list">
+                  <div
+                    class="addon-item"
+                    data-addon-id="project-galleries"
+                    data-price="20"
+                    data-max-quantity="10"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Project Galleries</span>
+                      </div>
+                      <span class="addon-price">$20 each</span>
+                    </div>
+                    <div class="addon-description">
+                      Interactive project showcases with live previews (if
+                      applicable) and detailed descriptions
+                    </div>
+                    <div class="quantity-controls" style="display: none">
+                      <label for="project-galleries-quantity">Quantity:</label>
+                      <div class="quantity-input">
+                        <button
+                          type="button"
+                          class="quantity-btn minus"
+                          data-target="project-galleries-quantity"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          id="project-galleries-quantity"
+                          class="quantity-field"
+                          min="1"
+                          max="10"
+                          value="1"
+                        />
+                        <button
+                          type="button"
+                          class="quantity-btn plus"
+                          data-target="project-galleries-quantity"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="testimonials-section"
+                    data-price="5"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Client Testimonials</span>
+                      </div>
+                      <span class="addon-price">$5</span>
+                    </div>
+                    <div class="addon-description">
+                      Dedicated section for client reviews and testimonials with
+                      ratings and profile photos
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="skills-visualization"
+                    data-price="20"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Skills Visualization</span>
+                      </div>
+                      <span class="addon-price">$20</span>
+                    </div>
+                    <div class="addon-description">
+                      Charts and progress bars to showcase your technical skills
+                      and expertise levels
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="blog-section"
+                    data-price="40"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Blog/Articles Section</span>
+                      </div>
+                      <span class="addon-price">$40</span>
+                    </div>
+                    <div class="addon-description">
+                      User-friendly blog section to share insights, case
+                      studies, and industry thoughts
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="video-intro"
+                    data-price="30"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Video Introduction</span>
+                      </div>
+                      <span class="addon-price">$30</span>
+                    </div>
+                    <div class="addon-description">
+                      Embedded video player for personal introduction or
+                      portfolio walkthrough
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="appointment-booking"
+                    data-price="35"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Appointment Booking</span>
+                      </div>
+                      <span class="addon-price">$35</span>
+                    </div>
+                    <div class="addon-description">
+                      Integrated calendar system for clients to book
+                      consultations or meetings
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="analytics-dashboard"
+                    data-price="25"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Analytics Dashboard</span>
+                      </div>
+                      <span class="addon-price">$25</span>
+                    </div>
+                    <div class="addon-description">
+                      Basic analytics to track portfolio views, popular
+                      projects, and visitor engagement
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="custom-animations"
+                    data-price="45"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Custom Animations</span>
+                      </div>
+                      <span class="addon-price">$45</span>
+                    </div>
+                    <div class="addon-description">
+                      Smooth scroll animations, hover effects, and interactive
+                      elements to enhance user experience
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Calculator -->
+              <div class="total-section">
+                <div class="pricing-breakdown">
+                  <div class="breakdown-line">
+                    <span class="breakdown-label">Base Package:</span>
+                    <span class="breakdown-price" id="basePrice">$200</span>
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="adjustedFeaturesLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Feature Adjustments:</span>
+                    <span class="breakdown-price" id="adjustedFeaturesPrice"
+                      >$0</span
+                    >
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="addonsLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Add-ons:</span>
+                    <span class="breakdown-price" id="addonsPrice">+$0</span>
+                  </div>
+                  <div class="breakdown-divider"></div>
+                  <div class="total-line">
+                    <span class="total-label">Total Price:</span>
+                    <span class="total-price" id="totalPrice">$200</span>
+                  </div>
+                </div>
+                <div class="package-summary" id="packageSummary">
+                  <h4>Package Summary:</h4>
+                  <ul id="packageItems"></ul>
+                </div>
+                <button class="add-to-cart-btn" id="addToCartBtn">
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/cart.js"></script>
+    <script src="../../js/service-page.js"></script>
+    <script src="../../js/chatbot.js"></script>
+  </body>
+</html>

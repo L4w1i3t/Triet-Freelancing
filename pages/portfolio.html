@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" class="portfolio-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio - Triet</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <meta
+      name="description"
+      content="Explore our portfolio of websites, PWAs, and digital solutions. See how I've helped clients build their online presence with cutting-edge technology."
+    />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site portfolio-page">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="portfolio-main">
+      <!-- Hero Section -->
+      <section class="portfolio-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-title">My Portfolio</h1>
+            <p class="hero-subtitle">
+              Discover my collection of media that I have created for myself and
+              for clients.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Filter Section -->
+      <section class="portfolio-filters">
+        <div class="container">
+          <div class="filter-tabs" id="filterTabs">
+            <!-- Filter buttons will be populated by JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Portfolio Grid -->
+      <section class="portfolio-grid-section">
+        <div class="container">
+          <div class="portfolio-grid" id="portfolioGrid">
+            <!-- Portfolio items will be populated by JavaScript -->
+          </div>
+
+          <!-- Loading State -->
+          <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading portfolio items...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="emptyState" style="display: none">
+            <i class="fas fa-search"></i>
+            <h3>No projects found</h3>
+            <p>Try adjusting your filters to see more results.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../components/addComponents.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/portfolio.js"></script>
+    <script src="../js/chatbot.js"></script>
+  </body>
+</html>

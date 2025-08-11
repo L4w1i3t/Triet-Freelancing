@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en" class="service-template-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Business Card - Triet</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <meta
+      name="description"
+      content="Service template page for individual services offered by Triet."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site service-template">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="service-main">
+      <!-- Service Hero Section -->
+      <section class="service-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="service-title">Digital Business Card</h1>
+            <div class="service-meta">
+              <span class="service-price">Starting at $80</span>
+              <span class="service-duration">
+                <i class="fas fa-clock"></i>
+                1-3 days
+              </span>
+            </div>
+            <p class="service-description">
+              A modern, interactive digital business card that replaces
+              traditional paper cards. Share your contact information, social
+              media, and professional details with a simple QR code or link.
+              Perfect for networking events, conferences, and professional
+              meetings.
+            </p>
+            <p class="service-description" style="font-style: italic">
+              Delivery time depends on complexity and selected features. Basic
+              packages typically completed within 1-3 days.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Details Section -->
+      <section class="service-details">
+        <div class="container">
+          <div class="details-grid">
+            <!-- Examples Section -->
+            <div class="examples-section">
+              <h2>Examples of this Service</h2>
+              <div class="examples-list">
+                <div class="example-item">
+                  <h4>Business Professionals</h4>
+                  <p>
+                    Share contact details, LinkedIn profile, and company
+                    information instantly at networking events.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Freelancers & Consultants</h4>
+                  <p>
+                    Showcase your services, portfolio links, and booking
+                    calendar in one convenient card.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Real Estate Agents</h4>
+                  <p>
+                    Include property listings, testimonials, and direct contact
+                    options for potential clients.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Creatives</h4>
+                  <p>
+                    Display your artistic work, social media handles, and
+                    commission information in an interactive format.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pricing Calculator -->
+            <div class="pricing-calculator">
+              <h2>Customize Your Package</h2>
+
+              <!-- Project Description -->
+              <div class="project-description-section">
+                <h3>Tell Us About Your Card</h3>
+                <p class="description-help">
+                  Please describe your digital business card requirements in
+                  detail. The more information you provide, the better I can
+                  tailor the service to your needs. This includes but is not
+                  limited to:
+                </p>
+                <ul class="description-hints" style="font-style: italic">
+                  <li>- Your profession and industry</li>
+                  <li>
+                    - Contact information to include (phone, email, address)
+                  </li>
+                  <li>- Social media platforms you want to link</li>
+                  <li>- Brand colors and style preferences</li>
+                  <li>- Any specific features or functionality needed</li>
+                  <li>
+                    - How you plan to share the card (QR code, link, etc.)
+                  </li>
+                </ul>
+                <div class="description-field-container">
+                  <textarea
+                    id="projectDescription"
+                    class="project-description-field"
+                    placeholder="Example: I'm a marketing consultant and need a professional digital business card for networking events. I want to include my contact info, LinkedIn, portfolio website, and a brief bio. My brand colors are teal and navy blue. I'd like a clean, modern design that reflects my expertise in digital marketing. I plan to share it via QR code on my phone and email signature..."
+                    rows="6"
+                    maxlength="65535"
+                  ></textarea>
+                  <div class="description-counter">
+                    <span class="char-count">
+                      <span id="descriptionCount">0</span> characters
+                    </span>
+                    <span class="description-encouragement"
+                      >• More details help me serve you better!</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Base Service -->
+              <div class="base-service">
+                <h3>Base Service</h3>
+                <div class="base-core">
+                  <div class="base-item-header">
+                    <span class="item-name">Digital Business Card</span>
+                    <span class="item-price">$80</span>
+                  </div>
+                  <p class="base-description">
+                    Customize below to fit your needs.
+                  </p>
+                </div>
+
+                <!-- Base Features (can be modified) -->
+                <div class="base-features">
+                  <div class="features-header">
+                    <h4>Included Features</h4>
+                    <p class="features-description">
+                      These features are included in your package. You can
+                      remove or reduce them as needed.
+                    </p>
+                  </div>
+                  <div class="base-features-list">
+                    <!-- Contact Information (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="contact-info"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name"
+                            >Basic Contact Information</span
+                          >
+                          <span class="feature-description"
+                            >Name, title, company, phone, email, and
+                            website</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Responsive Design Feature -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="responsive-design"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Mobile Responsive</span>
+                          <span class="feature-description"
+                            >Optimized for all devices and screen sizes</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- QR Code Generation (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="qr-code"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">QR Code Generation</span>
+                          <span class="feature-description"
+                            >Custom QR code for easy sharing</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Social Media Links (Optional) -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="social-links"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Social Media Links</span>
+                          <span class="feature-description"
+                            >Links to your social media profiles</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+
+                    <!-- Professional Photo -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="professional-photo"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Profile Photo</span>
+                          <span class="feature-description"
+                            >Professional headshot or company logo</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add-ons -->
+              <div class="addons-section">
+                <h3>Available Add-ons</h3>
+                <p style="font-style: italic">
+                  More to come. If you do not see a specific add-on, specify
+                  what you need in the project description [FREE!].
+                </p>
+                <div class="addons-list">
+                  <div
+                    class="addon-item"
+                    data-addon-id="calendar-booking"
+                    data-price="15"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Calendar Integration</span>
+                      </div>
+                      <span class="addon-price">$15</span>
+                    </div>
+                    <div class="addon-description">
+                      Embedded calendar for appointment booking and meeting
+                      scheduling
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="video-introduction"
+                    data-price="15"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Video Introduction</span>
+                      </div>
+                      <span class="addon-price">$15</span>
+                    </div>
+                    <div class="addon-description">
+                      Embedded video player for personal introductions or
+                      elevator pitches
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="analytics-tracking"
+                    data-price="15"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Analytics Tracking</span>
+                      </div>
+                      <span class="addon-price">$15</span>
+                    </div>
+                    <div class="addon-description">
+                      Track views, clicks, and contact interactions
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="vcard-download"
+                    data-price="10"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">vCard Download</span>
+                      </div>
+                      <span class="addon-price">$10</span>
+                    </div>
+                    <div class="addon-description">
+                      Downloadable vCard file for easy contact saving to phone
+                      address books
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Calculator -->
+              <div class="total-section">
+                <div class="pricing-breakdown">
+                  <div class="breakdown-line">
+                    <span class="breakdown-label">Base Package:</span>
+                    <span class="breakdown-price" id="basePrice">$80</span>
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="adjustedFeaturesLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Feature Adjustments:</span>
+                    <span class="breakdown-price" id="adjustedFeaturesPrice"
+                      >$0</span
+                    >
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="addonsLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Add-ons:</span>
+                    <span class="breakdown-price" id="addonsPrice">+$0</span>
+                  </div>
+                  <div class="breakdown-divider"></div>
+                  <div class="total-line">
+                    <span class="total-label">Total Price:</span>
+                    <span class="total-price" id="totalPrice">$80</span>
+                  </div>
+                </div>
+                <div class="package-summary" id="packageSummary">
+                  <h4>Package Summary:</h4>
+                  <ul id="packageItems"></ul>
+                </div>
+                <button class="add-to-cart-btn" id="addToCartBtn">
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/cart.js"></script>
+    <script src="../../js/service-page.js"></script>
+    <script src="../../js/chatbot.js"></script>
+  </body>
+</html>

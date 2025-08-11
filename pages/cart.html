@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" class="cart-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart - Triet</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <meta
+      name="description"
+      content="Review and manage your selected services before checkout."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site cart">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="cart-main">
+      <!-- Cart Hero Section -->
+      <section class="cart-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="cart-title">Shopping Cart</h1>
+            <p class="cart-subtitle">
+              Review your selected services and checkout at your leisure.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cart Content -->
+      <section class="cart-content">
+        <div class="container">
+          <div class="cart-grid">
+            <!-- Cart Items -->
+            <div class="cart-items-section">
+              <div class="cart-items-header">
+                <h2>Your Services</h2>
+                <button class="clear-cart-btn" id="clearCartBtn">
+                  <i class="fas fa-trash"></i>
+                  Clear Cart
+                </button>
+              </div>
+
+              <!-- Empty Cart State -->
+              <div class="empty-cart" id="emptyCart">
+                <div class="empty-cart-icon">
+                  <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3>Your cart is empty</h3>
+                <p>Browse our services and add items to your cart</p>
+                <a href="/pages/services.html" class="btn btn-primary">
+                  <i class="fas fa-plus"></i>
+                  Browse Services
+                </a>
+              </div>
+
+              <!-- Cart Items Container -->
+              <div class="cart-items-container" id="cartItemsContainer">
+                <!-- Cart items will be dynamically generated here -->
+              </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-summary-section">
+              <div class="cart-summary-card">
+                <h3>Order Summary</h3>
+
+                <div class="summary-line">
+                  <span>Subtotal:</span>
+                  <span id="cartSubtotal">$0</span>
+                </div>
+
+                <div class="summary-line">
+                  <span>Tax (Estimated):</span>
+                  <span id="cartTax">$0</span>
+                </div>
+
+                <div class="summary-line total">
+                  <span>Total:</span>
+                  <span id="cartTotal">$0</span>
+                </div>
+
+                <div class="cart-actions">
+                  <button
+                    class="btn btn-primary btn-large checkout-btn"
+                    id="checkoutBtn"
+                  >
+                    <i class="fas fa-credit-card"></i>
+                    Proceed to Checkout
+                  </button>
+
+                  <a href="/pages/services.html" class="btn btn-glass">
+                    <i class="fas fa-arrow-left"></i>
+                    Continue Shopping
+                  </a>
+                </div>
+
+                <div class="cart-notes">
+                  <h4>Order Notes</h4>
+                  <textarea
+                    placeholder="Add any special requirements or notes for your order..."
+                    id="orderNotes"
+                    rows="4"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <!-- EmailJS -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <script src="/js/env-config.js"></script>
+    <script src="/components/addComponents.js"></script>
+    <script src="/js/email-service.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/chatbot.js"></script>
+  </body>
+</html>

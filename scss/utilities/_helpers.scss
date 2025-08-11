@@ -1,0 +1,416 @@
+// ==================================================
+// HELPER UTILITIES
+// ==================================================
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+// Spacing utilities
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size,
+    $length
+      in (
+        0: 0,
+        1: var(--space-xs),
+        2: var(--space-sm),
+        3: var(--space-md),
+        4: var(--space-lg),
+        5: var(--space-xl),
+        6: var(--space-xxl)
+      )
+  {
+    .#{$abbrev}-#{$size} {
+      #{$prop}: #{$length};
+    }
+    .#{$abbrev}t-#{$size} {
+      #{$prop}-top: #{$length};
+    }
+    .#{$abbrev}r-#{$size} {
+      #{$prop}-right: #{$length};
+    }
+    .#{$abbrev}b-#{$size} {
+      #{$prop}-bottom: #{$length};
+    }
+    .#{$abbrev}l-#{$size} {
+      #{$prop}-left: #{$length};
+    }
+    .#{$abbrev}x-#{$size} {
+      #{$prop}-left: #{$length};
+      #{$prop}-right: #{$length};
+    }
+    .#{$abbrev}y-#{$size} {
+      #{$prop}-top: #{$length};
+      #{$prop}-bottom: #{$length};
+    }
+  }
+}
+
+// Auto margins
+.m-auto {
+  margin: auto;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Border radius utilities
+.rounded-0 {
+  border-radius: 0;
+}
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+.rounded {
+  border-radius: var(--radius-md);
+}
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+.rounded-full {
+  border-radius: var(--radius-full);
+}
+
+// Shadow utilities
+.shadow-none {
+  box-shadow: none;
+}
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.shadow {
+  box-shadow: var(--shadow-glass);
+}
+.shadow-lg {
+  box-shadow: var(--shadow-elevated);
+}
+.shadow-glow {
+  box-shadow: var(--glow-aurora);
+}
+
+// Position utilities
+.position-static {
+  position: static;
+}
+.position-relative {
+  position: relative;
+}
+.position-absolute {
+  position: absolute;
+}
+.position-fixed {
+  position: fixed;
+}
+.position-sticky {
+  position: sticky;
+}
+
+// Overflow utilities
+.overflow-hidden {
+  overflow: hidden;
+}
+.overflow-visible {
+  overflow: visible;
+}
+.overflow-scroll {
+  overflow: scroll;
+}
+.overflow-auto {
+  overflow: auto;
+}
+
+// Visibility utilities
+.visible {
+  visibility: visible;
+}
+.invisible {
+  visibility: hidden;
+}
+
+// Opacity utilities
+.opacity-0 {
+  opacity: 0;
+}
+.opacity-25 {
+  opacity: 0.25;
+}
+.opacity-50 {
+  opacity: 0.5;
+}
+.opacity-75 {
+  opacity: 0.75;
+}
+.opacity-100 {
+  opacity: 1;
+}
+
+// Z-index utilities
+.z-0 {
+  z-index: 0;
+}
+.z-10 {
+  z-index: var(--z-content);
+}
+.z-20 {
+  z-index: var(--z-elevated);
+}
+.z-30 {
+  z-index: var(--z-floating);
+}
+.z-40 {
+  z-index: var(--z-modal);
+}
+.z-50 {
+  z-index: var(--z-tooltip);
+}
+
+// Cursor utilities
+.cursor-auto {
+  cursor: auto;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+.cursor-move {
+  cursor: move;
+}
+.cursor-grab {
+  cursor: grab;
+}
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+// Pointer events
+.pointer-events-none {
+  pointer-events: none;
+}
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+// User select
+.select-none {
+  user-select: none;
+}
+.select-text {
+  user-select: text;
+}
+.select-all {
+  user-select: all;
+}
+.select-auto {
+  user-select: auto;
+}
+
+// Object fit
+.object-contain {
+  object-fit: contain;
+}
+.object-cover {
+  object-fit: cover;
+}
+.object-fill {
+  object-fit: fill;
+}
+.object-none {
+  object-fit: none;
+}
+.object-scale-down {
+  object-fit: scale-down;
+}
+
+// Background utilities
+.bg-transparent {
+  background-color: transparent;
+}
+.bg-glass {
+  background: var(--bg-glass);
+}
+.bg-cosmic {
+  background: var(--bg-cosmic);
+}
+
+// Glass effect utilities
+.glass-light {
+  @include glass-morphism(0.15, 25px);
+}
+.glass-medium {
+  @include glass-morphism(0.1, 20px);
+}
+.glass-dark {
+  @include glass-morphism(0.05, 15px);
+}
+
+// Aurora glow utilities
+.glow-cyan {
+  @include aurora-glow(var(--accent-aurora-cyan), 0.5);
+}
+.glow-purple {
+  @include aurora-glow(var(--accent-aurora-purple), 0.5);
+}
+.glow-pink {
+  @include aurora-glow(var(--accent-aurora-pink), 0.5);
+}
+
+// 3D utilities
+.transform-3d {
+  transform-style: preserve-3d;
+}
+.perspective {
+  perspective: 1000px;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+// Transition utilities
+.transition-none {
+  transition: none;
+}
+.transition-fast {
+  transition: all var(--transition-fast);
+}
+.transition-normal {
+  transition: all var(--transition-smooth);
+}
+.transition-slow {
+  transition: all var(--transition-slow);
+}
+
+// Transform utilities
+.transform {
+  transform: var(--tw-transform);
+}
+.scale-50 {
+  transform: scale(0.5);
+}
+.scale-75 {
+  transform: scale(0.75);
+}
+.scale-90 {
+  transform: scale(0.9);
+}
+.scale-100 {
+  transform: scale(1);
+}
+.scale-105 {
+  transform: scale(1.05);
+}
+.scale-110 {
+  transform: scale(1.1);
+}
+.scale-125 {
+  transform: scale(1.25);
+}
+.scale-150 {
+  transform: scale(1.5);
+}
+
+// Rotate utilities
+.rotate-0 {
+  transform: rotate(0deg);
+}
+.rotate-45 {
+  transform: rotate(45deg);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+// Translate utilities
+.translate-x-0 {
+  transform: translateX(0);
+}
+.translate-y-0 {
+  transform: translateY(0);
+}
+.translate-x-1 {
+  transform: translateX(0.25rem);
+}
+.translate-y-1 {
+  transform: translateY(0.25rem);
+}
+.-translate-x-1 {
+  transform: translateX(-0.25rem);
+}
+.-translate-y-1 {
+  transform: translateY(-0.25rem);
+}
+
+// Filter utilities
+.blur-none {
+  filter: blur(0);
+}
+.blur-sm {
+  filter: blur(4px);
+}
+.blur {
+  filter: blur(8px);
+}
+.blur-md {
+  filter: blur(12px);
+}
+.blur-lg {
+  filter: blur(16px);
+}
+.blur-xl {
+  filter: blur(24px);
+}
+
+// Backdrop filter utilities
+.backdrop-blur-none {
+  backdrop-filter: blur(0);
+}
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+.backdrop-blur {
+  backdrop-filter: blur(8px);
+}
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+}
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+// Special effects
+.neon-text {
+  @include neon-text();
+}
+.floating {
+  @include floating();
+}
+.hover-lift {
+  @include hover-lift();
+}
+.cosmic-particles {
+  @include cosmic-particles();
+}
+
+// Print utilities
+@media print {
+  .print-hidden {
+    display: none;
+  }
+  .print-visible {
+    display: block;
+  }
+}

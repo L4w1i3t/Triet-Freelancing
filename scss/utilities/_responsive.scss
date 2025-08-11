@@ -1,0 +1,380 @@
+// ==================================================
+// RESPONSIVE UTILITIES
+// ==================================================
+
+@use "sass:map";
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+// Show/hide utilities for different breakpoints
+@each $breakpoint in map.keys($breakpoints) {
+  @include respond-to($breakpoint) {
+    // Display utilities
+    .d-#{$breakpoint}-none {
+      display: none !important;
+    }
+    .d-#{$breakpoint}-block {
+      display: block !important;
+    }
+    .d-#{$breakpoint}-inline {
+      display: inline !important;
+    }
+    .d-#{$breakpoint}-inline-block {
+      display: inline-block !important;
+    }
+    .d-#{$breakpoint}-flex {
+      display: flex !important;
+    }
+    .d-#{$breakpoint}-inline-flex {
+      display: inline-flex !important;
+    }
+    .d-#{$breakpoint}-grid {
+      display: grid !important;
+    }
+
+    // Text alignment
+    .text-#{$breakpoint}-left {
+      text-align: left !important;
+    }
+    .text-#{$breakpoint}-center {
+      text-align: center !important;
+    }
+    .text-#{$breakpoint}-right {
+      text-align: right !important;
+    }
+
+    // Flex direction
+    .flex-#{$breakpoint}-row {
+      flex-direction: row !important;
+    }
+    .flex-#{$breakpoint}-column {
+      flex-direction: column !important;
+    }
+    .flex-#{$breakpoint}-row-reverse {
+      flex-direction: row-reverse !important;
+    }
+    .flex-#{$breakpoint}-column-reverse {
+      flex-direction: column-reverse !important;
+    }
+
+    // Justify content
+    .justify-content-#{$breakpoint}-start {
+      justify-content: flex-start !important;
+    }
+    .justify-content-#{$breakpoint}-center {
+      justify-content: center !important;
+    }
+    .justify-content-#{$breakpoint}-end {
+      justify-content: flex-end !important;
+    }
+    .justify-content-#{$breakpoint}-between {
+      justify-content: space-between !important;
+    }
+    .justify-content-#{$breakpoint}-around {
+      justify-content: space-around !important;
+    }
+
+    // Align items
+    .align-items-#{$breakpoint}-start {
+      align-items: flex-start !important;
+    }
+    .align-items-#{$breakpoint}-center {
+      align-items: center !important;
+    }
+    .align-items-#{$breakpoint}-end {
+      align-items: flex-end !important;
+    }
+    .align-items-#{$breakpoint}-baseline {
+      align-items: baseline !important;
+    }
+    .align-items-#{$breakpoint}-stretch {
+      align-items: stretch !important;
+    }
+  }
+}
+
+// Container breakpoints
+@include respond-to("xl") {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@include respond-to("lg") {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@include respond-to("md") {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@include respond-to("sm") {
+  .container {
+    max-width: 540px;
+  }
+}
+
+// Responsive spacing
+@each $breakpoint in map.keys($breakpoints) {
+  @include respond-to($breakpoint) {
+    @each $prop, $abbrev in (margin: m, padding: p) {
+      @each $size,
+        $length
+          in (
+            0: 0,
+            1: var(--space-xs),
+            2: var(--space-sm),
+            3: var(--space-md),
+            4: var(--space-lg),
+            5: var(--space-xl),
+            6: var(--space-xxl)
+          )
+      {
+        .#{$abbrev}-#{$breakpoint}-#{$size} {
+          #{$prop}: #{$length} !important;
+        }
+        .#{$abbrev}t-#{$breakpoint}-#{$size} {
+          #{$prop}-top: #{$length} !important;
+        }
+        .#{$abbrev}r-#{$breakpoint}-#{$size} {
+          #{$prop}-right: #{$length} !important;
+        }
+        .#{$abbrev}b-#{$breakpoint}-#{$size} {
+          #{$prop}-bottom: #{$length} !important;
+        }
+        .#{$abbrev}l-#{$breakpoint}-#{$size} {
+          #{$prop}-left: #{$length} !important;
+        }
+        .#{$abbrev}x-#{$breakpoint}-#{$size} {
+          #{$prop}-left: #{$length} !important;
+          #{$prop}-right: #{$length} !important;
+        }
+        .#{$abbrev}y-#{$breakpoint}-#{$size} {
+          #{$prop}-top: #{$length} !important;
+          #{$prop}-bottom: #{$length} !important;
+        }
+      }
+    }
+  }
+}
+
+// Responsive font sizes
+@each $breakpoint in map.keys($breakpoints) {
+  @include respond-to($breakpoint) {
+    @each $size, $value in $font-sizes {
+      .fs-#{$breakpoint}-#{$size} {
+        font-size: #{$value} !important;
+      }
+    }
+  }
+}
+
+// Mobile-first responsive design patterns
+.mobile-only {
+  @include respond-to("md") {
+    display: none !important;
+  }
+}
+
+.tablet-up {
+  display: none !important;
+
+  @include respond-to("md") {
+    display: block !important;
+  }
+}
+
+.desktop-only {
+  display: none !important;
+
+  @include respond-to("lg") {
+    display: block !important;
+  }
+}
+
+// Responsive grid helpers
+.grid-responsive {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to("lg") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.grid-2-col {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.grid-3-col {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+
+  @include respond-to("sm") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to("lg") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.grid-4-col {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+
+  @include respond-to("sm") {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to("md") {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to("lg") {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Responsive aspect ratios
+.aspect-ratio-16-9 {
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%; // 16:9 aspect ratio
+  }
+
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.aspect-ratio-4-3 {
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    padding-top: 75%; // 4:3 aspect ratio
+  }
+
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.aspect-ratio-1-1 {
+  position: relative;
+
+  &::before {
+    content: "";
+    display: block;
+    padding-top: 100%; // 1:1 aspect ratio
+  }
+
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Responsive image utilities
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+// Responsive video utilities
+.video-responsive {
+  position: relative;
+  padding-bottom: 56.25%; // 16:9 aspect ratio
+  height: 0;
+  overflow: hidden;
+
+  iframe,
+  object,
+  embed,
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Print styles
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  // Reset colors for print
+  * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  // Show URLs for links
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  // Page breaks
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+}

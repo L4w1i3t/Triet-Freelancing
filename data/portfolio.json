@@ -1,0 +1,137 @@
+{
+  "projects": [
+    {
+      "id": "triet-dev",
+      "title": "Triet",
+      "category": "tools",
+      "year": "2024",
+      "description": "This website (duh.)",
+      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript", "PayPal SDK"],
+      "links": {
+        "live": "/",
+        "github": null
+      },
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "charlesmelvin",
+      "title": "charleslmelvin.com",
+      "category": "websites",
+      "year": "2025",
+      "description": "A static portfolio website showcasing work, skills, and projects.",
+      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
+      "links": {
+        "live": null,
+        "github": null
+      },
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "trevordewall",
+      "title": "trevordewall.com",
+      "category": "websites",
+      "year": "2025",
+      "description": "A static portfolio website showcasing work, skills, and projects.",
+      "technologies": ["HTML5", "CSS3", "JavaScript"],
+      "links": {
+        "live": "https://trevordewall.com",
+        "github": null
+      },
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "alter-ego-pwa",
+      "title": "ALTER EGO PWA",
+      "category": "pwas",
+      "year": "2024",
+      "description": "A sprite-based artificial intelligence program with plug-and-play personality implementation.",
+      "technologies": [
+        "PWA",
+        "TypeScript",
+        "React",
+        "Dexie.js",
+        "OpenAI API",
+        "ElevenLabs API"
+      ],
+      "links": {
+        "live": "https://alter-ego-pwa.vercel.app",
+        "github": null
+      },
+      "icon": "fas fa-mobile-alt"
+    },
+    {
+      "id": "ddmc-site",
+      "title": "Doki Doki Modding Central",
+      "category": "websites",
+      "year": "2023",
+      "description": "A community-driven platform for Doki Doki Literature Club modding. Features user-friendly tools for creating, sharing, and discovering mods.",
+      "technologies": ["HTML5", "CSS3", "JavaScript"],
+      "links": {
+        "live": "https://ddmc.site",
+        "github": null
+      },
+      "icon": "fas fa-book"
+    },
+    {
+      "id": "societal-ai",
+      "title": "Societal AI",
+      "category": "websites",
+      "year": "2025",
+      "description": "Official website for Societal AI, a startup organization at the University of Virginia.",
+      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/L4w1i3t/ATIH-UVA"
+      },
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "ema",
+      "title": "EMA (Expeditionary Modular Agents)",
+      "category": "tools",
+      "year": "2025",
+      "description": "An open-source platform for training and personalizing modular AI agents using machine learning. Still a work-in-progress.",
+      "technologies": ["TypeScript", "Hugging Face", "Transformers", "PyTorch"],
+      "links": {
+        "live": null,
+        "github": null
+      },
+      "icon": "fas fa-tools"
+    },
+    {
+      "id": "matsuda-akai-bot",
+      "title": "Matsuda Akai Discord Bot",
+      "category": "tools",
+      "year": "2024",
+      "description": "An advanced Discord bot for lifelike engagement and moderation in Discord servers.",
+      "technologies": ["TypeScript", "Discord.js"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/L4w1i3t/Matsuda-Akai-Discord-Bot"
+      },
+      "icon": "fas fa-tools"
+    }
+  ],
+  "categories": [
+    {
+      "id": "all",
+      "label": "All Projects",
+      "icon": "fas fa-th"
+    },
+    {
+      "id": "websites",
+      "label": "Websites",
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "pwas",
+      "label": "PWAs",
+      "icon": "fas fa-mobile-alt"
+    },
+    {
+      "id": "tools",
+      "label": "Tools & Apps",
+      "icon": "fas fa-tools"
+    }
+  ]
+}

@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en" class="service-template-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discord Bot Development - Triet</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <meta
+      name="description"
+      content="Custom Discord bot development services for servers, communities, and businesses."
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site service-template">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="service-main">
+      <!-- Service Hero Section -->
+      <section class="service-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="service-title">Discord Bot Development</h1>
+            <div class="service-meta">
+              <span class="service-price">Starting at $80</span>
+              <span class="service-duration">
+                <i class="fas fa-clock"></i>
+                3-7 days
+              </span>
+            </div>
+            <p class="service-description">
+              Custom Discord bot development to enhance your server with
+              automated moderation, interactive commands, games, music, and
+              specialized features.
+            </p>
+            <p class="service-description" style="font-style: italic">
+              Delivery time depends on complexity and selected features. Basic
+              packages typically completed within 3-7 days.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Details Section -->
+      <section class="service-details">
+        <div class="container">
+          <div class="details-grid">
+            <!-- Examples Section -->
+            <div class="examples-section">
+              <h2>Examples of this Service</h2>
+              <div class="examples-list">
+                <div class="example-item">
+                  <h4>Moderation Bots</h4>
+                  <p>
+                    Automated moderation with spam filtering, user warnings,
+                    auto-kicks/bans, and role management systems.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Community Engagement</h4>
+                  <p>
+                    Welcome messages, reaction roles, polls, giveaways, and
+                    interactive features to boost server activity.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Gaming & Entertainment</h4>
+                  <p>
+                    Mini-games, economy systems, leaderboards, music bots, and
+                    custom commands for gaming communities.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Business & Productivity</h4>
+                  <p>
+                    Meeting schedulers, notification systems, task management,
+                    and integration with external services and APIs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pricing Calculator -->
+            <div class="pricing-calculator">
+              <h2>Customize Your Package</h2>
+
+              <!-- Project Description -->
+              <div class="project-description-section">
+                <h3>Tell Us About Your Discord Bot</h3>
+                <p class="description-help">
+                  Please describe your Discord bot requirements in detail. The
+                  more information you provide, the better I can tailor the
+                  service to your needs. This includes but is not limited to:
+                </p>
+                <ul class="description-hints" style="font-style: italic">
+                  <li>- Type of server/community and target audience</li>
+                  <li>- Primary bot functions and features needed</li>
+                  <li>- Moderation requirements and rules to enforce</li>
+                  <li>
+                    - Integration needs (databases, APIs, external services)
+                  </li>
+                  <li>- Custom commands and their specific behaviors</li>
+                  <li>- Hosting preferences and technical requirements</li>
+                </ul>
+                <div class="description-field-container">
+                  <textarea
+                    id="projectDescription"
+                    class="project-description-field"
+                    placeholder="Example: I need a Discord bot for my gaming server with 500+ members. The bot should handle moderation (auto-delete spam, warn users, temporary mutes), welcome new members with custom messages, manage reaction roles for game access, and include a simple economy system with daily rewards. I'd also like integration with our game's API to show player stats. The server focuses on competitive gaming, so we need leaderboards and tournament management features..."
+                    rows="6"
+                    maxlength="65535"
+                  ></textarea>
+                  <div class="description-counter">
+                    <span class="char-count">
+                      <span id="descriptionCount">0</span> characters
+                    </span>
+                    <span class="description-encouragement"
+                      >• More details help me serve you better!</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Base Service -->
+              <div class="base-service">
+                <h3>Base Service</h3>
+                <div class="base-core">
+                  <div class="base-item-header">
+                    <span class="item-name">Basic Discord Bot</span>
+                    <span class="item-price">$80</span>
+                  </div>
+                  <p class="base-description">
+                    Customize below to fit your needs.
+                  </p>
+                </div>
+
+                <!-- Base Features (can be modified) -->
+                <div class="base-features">
+                  <div class="features-header">
+                    <h4>Included Features</h4>
+                    <p class="features-description">
+                      These features are included in your package. You can
+                      remove or reduce them as needed.
+                    </p>
+                  </div>
+                  <div class="base-features-list">
+                    <!-- Custom Commands (Flexible) -->
+                    <div
+                      class="base-feature-item flexible-feature"
+                      data-feature-id="custom-commands"
+                      data-price-per-unit="18"
+                      data-default-quantity="3"
+                      data-min-quantity="1"
+                      data-required="false"
+                    >
+                      <div class="feature-main">
+                        <div class="feature-controls">
+                          <div class="feature-info">
+                            <span class="feature-name">Custom Commands</span>
+                            <span class="feature-description"
+                              >Number of custom slash commands and text
+                              commands</span
+                            >
+                          </div>
+                        </div>
+                        <div class="feature-pricing">
+                          <span class="feature-price">$18 per command</span>
+                        </div>
+                      </div>
+                      <div class="feature-quantity-controls">
+                        <label for="custom-commands-quantity"
+                          >Number of commands:</label
+                        >
+                        <div class="quantity-input">
+                          <button
+                            type="button"
+                            class="quantity-btn minus"
+                            data-target="custom-commands-quantity"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            id="custom-commands-quantity"
+                            class="quantity-field"
+                            min="1"
+                            max="10"
+                            value="3"
+                          />
+                          <button
+                            type="button"
+                            class="quantity-btn plus"
+                            data-target="custom-commands-quantity"
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span class="quantity-total"
+                          >Total: $<span id="custom-commands-total"
+                            >54</span
+                          ></span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Bot Setup & Deployment (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="bot-setup"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name"
+                            >Bot Setup & Deployment</span
+                          >
+                          <span class="feature-description"
+                            >Complete bot creation, configuration, and hosting
+                            instructions</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Basic Documentation (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="documentation"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Basic Documentation</span>
+                          <span class="feature-description"
+                            >Command list, setup instructions, and basic usage
+                            guide</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Basic Moderation (Optional) -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="basic-moderation"
+                      data-price="26"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Basic Moderation</span>
+                          <span class="feature-description"
+                            >Kick, ban, mute commands with reason logging</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">$26</span>
+                      </div>
+                    </div>
+
+                    <!-- Welcome Messages (Optional) -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="welcome-messages"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Welcome Messages</span>
+                          <span class="feature-description"
+                            >Customizable welcome and goodbye messages for new
+                            members</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add-ons -->
+              <div class="addons-section">
+                <h3>Available Add-ons</h3>
+                <p style="font-style: italic">
+                  More to come. If you do not see a specific add-on, specify
+                  what you need in the project description [FREE!].
+                </p>
+                <div class="addons-list">
+                  <div
+                    class="addon-item"
+                    data-addon-id="advanced-moderation"
+                    data-price="26"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Advanced Moderation</span>
+                      </div>
+                      <span class="addon-price">$26</span>
+                    </div>
+                    <div class="addon-description">
+                      Auto-moderation, spam filtering, word filters, warning
+                      systems, timed punishments, etc.
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="reaction-roles"
+                    data-price="10"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Reaction Role System</span>
+                      </div>
+                      <span class="addon-price">$10</span>
+                    </div>
+                    <div class="addon-description">
+                      Self-assignable roles through reactions with customizable
+                      menus and categories
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="economy-system"
+                    data-price="30"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Economy System</span>
+                      </div>
+                      <span class="addon-price">$30</span>
+                    </div>
+                    <div class="addon-description">
+                      Virtual currency, daily rewards, shop system, and/or user
+                      balances with persistence
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="music-player"
+                    data-price="10"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Music Player</span>
+                      </div>
+                      <span class="addon-price">$10</span>
+                    </div>
+                    <div class="addon-description">
+                      Music integration with queue management, playlists, and
+                      audio controls. Can support MP3, SoundCloud, and more.
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="database-integration"
+                    data-price="30"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name"
+                          >Local Database Integration</span
+                        >
+                      </div>
+                      <span class="addon-price">$30</span>
+                    </div>
+                    <div class="addon-description">
+                      Persistent data storage for user stats, settings, and
+                      other custom information
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="api-integration"
+                    data-price="20"
+                    data-max-quantity="20"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">External API Integration</span>
+                      </div>
+                      <span class="addon-price">$20 each</span>
+                    </div>
+                    <div class="addon-description">
+                      Connect with external services like game APIs, weather,
+                      news, or custom webhooks
+                    </div>
+                    <div class="quantity-controls" style="display: none">
+                      <label for="api-integration-quantity">Quantity:</label>
+                      <div class="quantity-input">
+                        <button
+                          type="button"
+                          class="quantity-btn minus"
+                          data-target="api-integration-quantity"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          id="api-integration-quantity"
+                          class="quantity-field"
+                          min="1"
+                          max="2"
+                          value="1"
+                        />
+                        <button
+                          type="button"
+                          class="quantity-btn plus"
+                          data-target="api-integration-quantity"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="admin-dashboard"
+                    data-price="40"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Web Admin Dashboard</span>
+                      </div>
+                      <span class="addon-price">$40</span>
+                    </div>
+                    <div class="addon-description">
+                      Web interface for managing bot settings, viewing logs, and
+                      configuring features.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Calculator -->
+              <div class="total-section">
+                <div class="pricing-breakdown">
+                  <div class="breakdown-line">
+                    <span class="breakdown-label">Base Package:</span>
+                    <span class="breakdown-price" id="basePrice">$80</span>
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="adjustedFeaturesLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Feature Adjustments:</span>
+                    <span class="breakdown-price" id="adjustedFeaturesPrice"
+                      >$0</span
+                    >
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="addonsLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Add-ons:</span>
+                    <span class="breakdown-price" id="addonsPrice">+$0</span>
+                  </div>
+                  <div class="breakdown-divider"></div>
+                  <div class="total-line">
+                    <span class="total-label">Total Price:</span>
+                    <span class="total-price" id="totalPrice">$80</span>
+                  </div>
+                </div>
+                <div class="package-summary" id="packageSummary">
+                  <h4>Package Summary:</h4>
+                  <ul id="packageItems"></ul>
+                </div>
+                <button class="add-to-cart-btn" id="addToCartBtn">
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/cart.js"></script>
+    <script src="../../js/service-page.js"></script>
+    <script src="../../js/chatbot.js"></script>
+  </body>
+</html>

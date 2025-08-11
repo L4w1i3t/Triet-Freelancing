@@ -1,0 +1,253 @@
+// ==================================================
+// BUTTONS - LIQUID GLASS / INTERSTELLAR THEME
+// ==================================================
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  font-family: $font-heading;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  min-height: 48px;
+
+  // Base button (glass)
+  @include glass-morphism(0.15, 20px);
+  color: var(--text-primary);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      45deg,
+      var(--accent-aurora-cyan),
+      var(--accent-aurora-purple)
+    );
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+    border-radius: inherit;
+  }
+
+  span,
+  i {
+    position: relative;
+    z-index: 2;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      var(--shadow-elevated),
+      0 0 30px var(--accent-aurora-cyan);
+
+    &::before {
+      opacity: 0.3;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Primary button - Aurora glow
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--accent-aurora-cyan),
+    var(--accent-aurora-purple)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  @include aurora-glow(var(--accent-aurora-cyan), 0.8);
+
+  &::before {
+    background: linear-gradient(
+      45deg,
+      var(--accent-aurora-purple),
+      var(--accent-aurora-pink)
+    );
+  }
+
+  &:hover {
+    box-shadow:
+      var(--shadow-elevated),
+      0 0 40px var(--accent-aurora-cyan),
+      0 0 60px var(--accent-aurora-purple);
+  }
+}
+
+// Secondary button - Glass with border
+.btn-secondary {
+  background: var(--bg-glass);
+  border: 2px solid var(--accent-aurora-cyan);
+  color: var(--accent-aurora-cyan);
+
+  &::before {
+    background: var(--accent-aurora-cyan);
+  }
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-aurora-purple);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+// CTA button - Animated gradient
+.btn-cta {
+  background: linear-gradient(
+    -45deg,
+    var(--accent-aurora-pink),
+    var(--accent-aurora-blue),
+    var(--accent-aurora-purple),
+    var(--accent-aurora-cyan)
+  );
+  background-size: 400% 400%;
+  animation: auroraWave 6s ease infinite;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-size: 1.125rem;
+  padding: var(--space-md) var(--space-xxl);
+
+  &::before {
+    background: linear-gradient(
+      -45deg,
+      var(--accent-aurora-cyan),
+      var(--accent-aurora-purple),
+      var(--accent-aurora-pink),
+      var(--accent-aurora-blue)
+    );
+    background-size: 400% 400%;
+    animation: auroraWave 6s ease infinite reverse;
+  }
+
+  &:hover {
+    animation-duration: 2s;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 0 50px var(--accent-aurora-cyan),
+      0 0 80px var(--accent-aurora-purple);
+  }
+}
+
+// Ghost button
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-secondary);
+  backdrop-filter: none;
+
+  &:hover {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    color: var(--text-primary);
+    border-color: var(--accent-aurora-cyan);
+  }
+}
+
+// Icon button
+.btn-icon {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  @include glass-morphism(0.2, 15px);
+
+  &:hover {
+    @include aurora-glow(var(--accent-aurora-cyan), 0.6);
+  }
+}
+
+// Floating action button
+.btn-fab {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    135deg,
+    var(--accent-aurora-cyan),
+    var(--accent-aurora-purple)
+  );
+  @include aurora-glow(var(--accent-aurora-cyan), 1);
+  z-index: var(--z-floating);
+
+  @include floating(4s, 10px);
+
+  &:hover {
+    transform: translateY(-4px) scale(1.1);
+  }
+}
+
+// Button group
+.btn-group {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+
+  .btn {
+    flex: 1;
+    min-width: max-content;
+  }
+}
+
+// Loading state
+.btn.loading {
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 1s linear infinite;
+  }
+
+  span {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+// Size variants
+.btn-sm {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: var(--space-lg) var(--space-xxl);
+  font-size: 1.25rem;
+  min-height: 56px;
+}

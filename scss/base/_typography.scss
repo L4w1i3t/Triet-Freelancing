@@ -1,0 +1,235 @@
+// ==================================================
+// TYPOGRAPHY
+// ==================================================
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-heading;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+
+  // Gradient text effect
+  background: linear-gradient(
+    135deg,
+    var(--text-primary),
+    var(--accent-aurora-cyan),
+    var(--accent-aurora-purple)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+
+  .accent {
+    background: linear-gradient(
+      135deg,
+      var(--accent-aurora-pink),
+      var(--accent-aurora-cyan)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-aurora-pink),
+        var(--accent-aurora-cyan)
+      );
+      border-radius: 1px;
+    }
+  }
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+}
+
+// Paragraphs
+p {
+  margin-bottom: var(--space-md);
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  line-height: 1.7;
+
+  &.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--text-primary);
+  }
+
+  &.small {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+}
+
+// Links
+a {
+  color: var(--accent-aurora-cyan);
+  transition: all var(--transition-smooth);
+  position: relative;
+
+  &:hover {
+    color: var(--accent-aurora-purple);
+    text-shadow: 0 0 8px var(--accent-aurora-cyan);
+  }
+
+  &.link-glow {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-aurora-cyan),
+        var(--accent-aurora-purple)
+      );
+      transition: width var(--transition-smooth);
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+}
+
+// Code
+code {
+  font-family: $font-mono;
+  background: var(--glass-dark);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+  border: 1px solid var(--glass-border);
+}
+
+pre {
+  @include glass-morphism(0.05, 15px);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+
+  code {
+    background: none;
+    padding: 0;
+    border: none;
+  }
+}
+
+// Blockquotes
+blockquote {
+  @include glass-morphism(0.08, 20px);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-left: 3px solid var(--accent-aurora-cyan);
+  border-radius: var(--radius-md);
+  font-style: italic;
+
+  &::before {
+    content: '"';
+    font-size: 3rem;
+    color: var(--accent-aurora-cyan);
+    line-height: 1;
+    float: left;
+    margin-right: 0.5rem;
+    margin-top: -0.5rem;
+  }
+}
+
+// Text utilities
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-accent {
+  color: var(--text-accent);
+}
+
+.font-heading {
+  font-family: $font-heading;
+}
+.font-mono {
+  font-family: $font-mono;
+}
+
+.font-light {
+  font-weight: 300;
+}
+.font-normal {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-extrabold {
+  font-weight: 800;
+}

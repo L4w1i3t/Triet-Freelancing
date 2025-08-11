@@ -1,0 +1,149 @@
+// ==================================================
+// RESET & BASE STYLES
+// ==================================================
+
+@use "../abstracts/variables" as *;
+
+// Modern CSS reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: $font-primary;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-cosmic);
+  min-height: 100vh;
+  min-height: 100dvh; // Dynamic viewport height for mobile browsers
+  overflow-x: hidden;
+  position: relative;
+
+  // Add cosmic background effect
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(120, 119, 198, 0.3) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 119, 198, 0.3) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba(120, 200, 255, 0.3) 0%,
+        transparent 50%
+      );
+    z-index: var(--z-background);
+    pointer-events: none;
+    animation: cosmicPulse 20s ease-in-out infinite;
+  }
+}
+
+@keyframes cosmicPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Remove list styles
+ul,
+ol {
+  list-style: none;
+}
+
+// Reset button styles
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+// Reset link styles
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// Images
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// Focus styles
+:focus-visible {
+  outline: 2px solid var(--accent-aurora-cyan);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+// Selection styles
+::selection {
+  background: var(--accent-aurora-cyan);
+  color: var(--primary-deep-space);
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-deep-space);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    45deg,
+    var(--accent-aurora-cyan),
+    var(--accent-aurora-purple)
+  );
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    45deg,
+    var(--accent-aurora-purple),
+    var(--accent-aurora-pink)
+  );
+}
+
+// Homepage specific styles to prevent scrolling
+html.homepage {
+  height: 100vh;
+  height: 100dvh; // Dynamic viewport height for mobile browsers
+  overflow: hidden;
+}
+
+body.homepage {
+  height: 100vh;
+  height: 100dvh; // Dynamic viewport height for mobile browsers
+  overflow: hidden;
+}

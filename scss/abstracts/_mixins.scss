@@ -1,0 +1,213 @@
+// ==================================================
+// MIXINS - LIQUID GLASS / INTERSTELLAR THEME
+// ==================================================
+
+@use "sass:map";
+@use "variables" as *;
+
+// Glass morphism effect
+@mixin glass-morphism($opacity: 0.1, $blur: 20px) {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, $opacity),
+    rgba(255, 255, 255, $opacity * 0.5)
+  );
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-glass);
+}
+
+// 3D depth effect
+@mixin depth-3d($depth: 1) {
+  transform-style: preserve-3d;
+  transform: perspective(1000px) translateZ(#{$depth * 10px});
+}
+
+// Floating animation
+@mixin floating($duration: 6s, $distance: 20px) {
+  animation: floating $duration ease-in-out infinite;
+
+  @keyframes floating {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-#{$distance});
+    }
+  }
+}
+
+// Aurora glow effect
+@mixin aurora-glow($color: var(--accent-aurora-cyan), $intensity: 1) {
+  box-shadow:
+    0 0 #{20px * $intensity} #{$color}#{33},
+    0 0 #{40px * $intensity} #{$color}#{22},
+    0 0 #{60px * $intensity} #{$color}#{11};
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      45deg,
+      #{$color}#{33},
+      transparent,
+      #{$color}#{33}
+    );
+    border-radius: inherit;
+    filter: blur(10px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// Keyframes for liquid gradient animation
+@keyframes liquidGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Liquid gradient background
+@mixin liquid-gradient($colors...) {
+  background: linear-gradient(-45deg, $colors);
+  background-size: 400% 400%;
+  animation: liquidGradient 15s ease infinite;
+}
+
+// Responsive mixins
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media screen and (max-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map.keys($breakpoints)}.";
+  }
+}
+
+@mixin respond-from($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map.keys($breakpoints)}.";
+  }
+}
+
+// 3D card tilt effect
+@mixin card-3d-tilt {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-smooth);
+
+  &:hover {
+    transform: perspective(1000px) rotateX(10deg) rotateY(10deg)
+      translateZ(20px);
+  }
+}
+
+// Cosmic particle effect
+@mixin cosmic-particles {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 60% 30%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 90% 70%,
+        rgba(255, 255, 255, 0.2) 1px,
+        transparent 1px
+      );
+    animation: particleFloat 20s linear infinite;
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+  }
+}
+
+// Neon text effect
+@mixin neon-text($color: var(--accent-aurora-cyan)) {
+  color: $color;
+  text-shadow:
+    0 0 5px #{$color}#{88},
+    0 0 10px #{$color}#{66},
+    0 0 20px #{$color}#{44},
+    0 0 40px #{$color}#{22};
+
+  &:hover {
+    text-shadow:
+      0 0 5px #{$color},
+      0 0 10px #{$color}#{88},
+      0 0 20px #{$color}#{66},
+      0 0 40px #{$color}#{44};
+  }
+}
+
+// Frosted glass effect
+@mixin frosted-glass($blur: 25px, $opacity: 0.15) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+// Hover lift effect
+@mixin hover-lift($distance: 10px, $shadow-intensity: 0.3) {
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+
+  &:hover {
+    transform: translateY(-#{$distance});
+    box-shadow: 0 #{$distance * 2} #{$distance * 4}
+      rgba(0, 0, 0, $shadow-intensity);
+  }
+}

@@ -1,0 +1,3 @@
+<!-- This is a placeholder for the profile photo. Replace with your actual 16:9 aspect ratio photo -->
+<!-- The file should be named profile-photo.jpg and placed in the images directory -->
+<!-- Recommended dimensions: 1920x1080, 1600x900, or 1280x720 pixels -->

@@ -1,0 +1,887 @@
+// Services Page Styles
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.services-page {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 25, 47, 0.98) 0%,
+    rgba(20, 35, 60, 0.95) 50%,
+    rgba(0, 42, 116, 0.98) 100%
+  );
+  min-height: 100vh;
+
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(120, 119, 198, 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 119, 198, 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba(120, 255, 198, 0.1) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .site {
+    overflow-y: auto;
+  }
+}
+
+// Services Main Content
+.services-main {
+  padding-top: 120px;
+  position: relative;
+  z-index: 2;
+}
+
+// Services Hero Section
+.services-hero {
+  padding: 80px 0;
+  text-align: center;
+  position: relative;
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #64ffda, #7c4dff, #ff4081);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-align: center;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// Service Tiers Section with Tabbed Interface
+.service-tiers-section {
+  padding: 40px 0 80px;
+
+  .container {
+    max-width: 1200px;
+    padding: 0 1rem;
+
+    @media (max-width: 768px) {
+      padding: 0 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0 0.6rem;
+    }
+  }
+}
+
+// Tier Navigation Tabs
+.tier-nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .tier-tab {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #64ffda, #7c4dff);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(100, 255, 218, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Service Tiers Container
+.service-tiers {
+  position: relative;
+  min-height: 500px;
+}
+
+.service-tier {
+  display: none;
+  animation: fadeIn 0.5s ease-in-out;
+
+  &.active {
+    display: block;
+  }
+}
+
+// Individual Service Tier
+.service-tier {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #64ffda, #7c4dff, #ff4081);
+  }
+
+  &[data-tier="budget"] {
+    &::before {
+      background: linear-gradient(90deg, #4caf50, #8bc34a);
+    }
+  }
+
+  &[data-tier="standard"] {
+    &::before {
+      background: linear-gradient(90deg, #2196f3, #00bcd4);
+    }
+  }
+
+  &[data-tier="premium"] {
+    &::before {
+      background: linear-gradient(90deg, #ff9800, #f44336);
+    }
+  }
+
+  &[data-tier="custom"] {
+    &::before {
+      background: linear-gradient(90deg, #9c27b0, #e91e63);
+    }
+  }
+}
+
+// Tier Header
+.tier-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+
+  .tier-name {
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+
+  .tier-price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #64ffda;
+    margin-bottom: 1rem;
+  }
+
+  .tier-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+// Tier Services
+.tier-services {
+  h3 {
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.8rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    gap: 1.2rem;
+  }
+
+  @media (max-width: 360px) {
+    gap: 1rem;
+  }
+}
+
+// Service Card
+.service-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  height: fit-content;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(100, 255, 218, 0.05),
+      rgba(124, 77, 255, 0.05)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .service-cta {
+      background: linear-gradient(135deg, #7c4dff, #64ffda);
+    }
+  }
+}
+
+.service-content {
+  position: relative;
+  z-index: 2;
+
+  .service-title {
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .service-price {
+    color: #64ffda;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .service-duration {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+
+  .service-description {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .service-cta {
+    width: 100%;
+    background: linear-gradient(135deg, #64ffda, #7c4dff);
+    color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(100, 255, 218, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover i {
+      transform: translateX(5px);
+    }
+  }
+}
+
+// Loading and Error States
+.loading-state {
+  text-align: center;
+  padding: 4rem 0;
+  color: rgba(255, 255, 255, 0.8);
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #64ffda;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+}
+
+.error-state {
+  text-align: center;
+  padding: 4rem 0;
+  color: rgba(255, 255, 255, 0.8);
+
+  i {
+    font-size: 3rem;
+    color: #ff4081;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+  }
+
+  .retry-button {
+    background: linear-gradient(135deg, #64ffda, #7c4dff);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .services-main {
+    padding-top: 100px;
+  }
+
+  .services-hero {
+    padding: 40px 0;
+
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .service-tiers-section {
+    padding: 30px 0 60px;
+  }
+
+  .tier-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 0.3rem;
+
+    .tier-tab {
+      padding: 0.8rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+  }
+
+  .service-tier {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .tier-header {
+    margin-bottom: 2rem;
+
+    .tier-name {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tier-price {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .tier-description {
+      font-size: 1rem;
+    }
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .service-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .service-content {
+    .service-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .service-price {
+      font-size: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .service-duration {
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-description {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-cta {
+      padding: 0.9rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 12px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .services-hero {
+    padding: 30px 0;
+
+    .hero-title {
+      font-size: 1.8rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  .service-tiers-section {
+    padding: 20px 0 40px;
+  }
+
+  .tier-nav {
+    margin-bottom: 1.5rem;
+
+    .tier-tab {
+      padding: 0.7rem 0.8rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  .service-tier {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .tier-header {
+    margin-bottom: 1.5rem;
+
+    .tier-name {
+      font-size: 1.6rem;
+    }
+
+    .tier-price {
+      font-size: 1.2rem;
+    }
+
+    .tier-description {
+      font-size: 0.95rem;
+    }
+  }
+
+  .services-grid {
+    gap: 1rem;
+  }
+
+  .service-card {
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .service-content {
+    .service-title {
+      font-size: 1.1rem;
+    }
+
+    .service-price {
+      font-size: 1.3rem;
+    }
+
+    .service-description {
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .service-cta {
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 10px;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .services-hero {
+    padding: 20px 0;
+
+    .hero-title {
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .tier-nav .tier-tab {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .service-tier {
+    padding: 0.8rem;
+  }
+
+  .tier-header {
+    .tier-name {
+      font-size: 1.4rem;
+    }
+
+    .tier-price {
+      font-size: 1.1rem;
+    }
+  }
+
+  .service-card {
+    padding: 1rem;
+  }
+
+  .service-content {
+    .service-title {
+      font-size: 1rem;
+    }
+
+    .service-price {
+      font-size: 1.2rem;
+    }
+
+    .service-cta {
+      padding: 0.7rem 0.8rem;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// No Services Message
+.no-services-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  margin-top: 1rem;
+
+  i {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  h4 {
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+// Custom Services Message
+.custom-services-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(156, 39, 176, 0.1),
+    rgba(233, 30, 99, 0.1)
+  );
+  border: 2px solid rgba(156, 39, 176, 0.3);
+  border-radius: 20px;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #9c27b0, #e91e63);
+  }
+
+  i {
+    font-size: 3.5rem;
+    color: #e91e63;
+    margin-bottom: 1.5rem;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(233, 30, 99, 0.3));
+  }
+
+  h4 {
+    color: #ffffff;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+
+    &:last-of-type {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .custom-cta {
+    margin-top: 2rem;
+  }
+
+  .contact-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 1.2rem 2rem;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(156, 39, 176, 0.3);
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(156, 39, 176, 0.4);
+      background: linear-gradient(135deg, #ad42c4, #f06292);
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+
+    i {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+      filter: none;
+      color: inherit;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover i {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+
+    i {
+      font-size: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    .contact-button {
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1rem;
+
+    i {
+      font-size: 2rem;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    .contact-button {
+      padding: 0.8rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      i {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
