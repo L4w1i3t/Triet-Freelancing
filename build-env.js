@@ -45,14 +45,14 @@ window.PP_API_BASE = window.ENV_CONFIG.PP_API_BASE;`;
   }
 
   fs.writeFileSync(outputPath, configContent);
-  console.log('✅ Environment configuration generated successfully');
+  console.log(' Environment configuration generated successfully');
   
   // Log which variables were found/missing
   Object.entries(envVars).forEach(([key, value]) => {
     if (value) {
-      console.log(`✅ ${key}: Set`);
+      console.log(` ${key}: Set`);
     } else {
-      console.log(`❌ ${key}: Missing or empty`);
+      console.log(` ${key}: Missing or empty`);
     }
   });
 };
