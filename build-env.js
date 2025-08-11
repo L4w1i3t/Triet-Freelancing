@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// Load environment variables from .env file
+// Load public environment variables from .env file
 require('dotenv').config();
 
 // Generate env-config.js from environment variables during build
@@ -45,14 +45,14 @@ window.PP_API_BASE = window.ENV_CONFIG.PP_API_BASE;`;
   }
 
   fs.writeFileSync(outputPath, configContent);
-  console.log(' Environment configuration generated successfully');
+  console.log('✅ Environment configuration generated successfully');
   
   // Log which variables were found/missing
   Object.entries(envVars).forEach(([key, value]) => {
     if (value) {
-      console.log(` ${key}: Set`);
+      console.log(`✅ ${key}: Set`);
     } else {
-      console.log(` ${key}: Missing or empty`);
+      console.log(`❌ ${key}: Missing or empty`);
     }
   });
 };
