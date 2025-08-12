@@ -1,5 +1,5 @@
 {
-  "name": "insert_brand_here",
+  "name": "triet-freelancing",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,8 @@
     "sass:watch": "sass --watch scss/main.scss:css/main.css",
     "prebuild": "node build-env.js",
     "build": "npm run prebuild && sass scss/main.scss:css/main.css --style compressed",
-    "build:obfuscated": "sass scss/main.scss:css/main.css --style compressed && node build-obfuscated.js",
-    "build:production": "npm run build:obfuscated",
+    "build:prod": "node build-production.js",
     "server": "http-server -p 8080 -c-1",
-    "server:public": "http-server public -p 8080 -c-1",
     "dev": "browser-sync start --server --files \"css/*.css, *.html, js/*.js, components/*.html, pages/*.html\" --browser \"brave\"",
     "start": "npm-run-all --parallel sass:watch dev",
     "format": "prettier --write \"**/*.{js,scss,css,html,json}\""
@@ -31,7 +29,11 @@
   },
   "devDependencies": {
     "browser-sync": "^3.0.2",
+    "clean-css": "^5.3.3",
+    "clean-css-cli": "^5.6.3",
     "dotenv": "^17.2.1",
+    "fs-extra": "^11.3.1",
+    "html-minifier-terser": "^7.2.0",
     "http-server": "^14.1.1",
     "javascript-obfuscator": "^4.1.1",
     "npm-run-all": "^4.1.5",
