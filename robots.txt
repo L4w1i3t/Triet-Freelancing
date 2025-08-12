@@ -1,0 +1,97 @@
+# Robots.txt for trietdev.com - Freelance Web Development Portfolio
+# Last updated: 2025-08-12
+
+# Default rules for all crawlers
+User-agent: *
+Allow: /
+
+# EXPLICITLY ALLOW - Important pages for SEO and user discovery
+Allow: /index.html
+Allow: /pages/about.html
+Allow: /pages/services.html
+Allow: /pages/portfolio.html
+Allow: /pages/contact.html
+Allow: /pages/services/
+
+# ALLOW - Static assets needed for proper rendering
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /components/
+
+# DISALLOW - Sensitive configuration and backend files
+Disallow: /api/
+Disallow: /data/
+Disallow: /.htaccess
+Disallow: /htaccess
+Disallow: /security-config.json
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /postcss.config.js
+
+# DISALLOW - Build and development files
+Disallow: /build-env.js
+Disallow: /build-production.js
+Disallow: /build_production.bat
+Disallow: /run_dev.bat
+Disallow: /open_code.bat
+Disallow: /*.bat
+Disallow: /*.py
+Disallow: /remove_empty_files.py
+Disallow: /removeemojis.py
+
+# DISALLOW - Source files (compiled versions are in /css/)
+Disallow: /scss/
+Disallow: /node_modules/
+
+# DISALLOW - Admin and payment processing pages
+Disallow: /pages/cart.html
+Disallow: /pages/payment.html
+
+# DISALLOW - Template files and email templates
+Disallow: /email-template.html
+
+# DISALLOW - Security and documentation files
+Disallow: /SECURITY.md
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /.vscode/
+Disallow: /.env*
+Disallow: /README.md
+
+# DISALLOW - Temporary and backup files
+Disallow: /*~
+Disallow: /*.bak
+Disallow: /*.tmp
+Disallow: /*temp*
+Disallow: /*.log
+
+# Special rules for specific crawlers
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /data/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /data/
+
+# Block malicious or unwanted bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Crawl delay to be respectful to server resources
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://trietdev.com/sitemap.xml

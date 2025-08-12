@@ -903,22 +903,31 @@ class PaymentManager {
       // Use passed orderData or fall back to this.orderData
       const dataToSend = orderData || this.orderData;
 
+      console.log(" Starting email notifications for order:", dataToSend?.orderId);
+
       // Send admin notification (detailed order info)
+      console.log(" Sending admin notification...");
       const adminResult =
         await this.emailService.sendOrderNotification(dataToSend);
+      console.log(" Admin result:", adminResult);
 
       // Send customer confirmation (using customer template)
+      console.log(" Sending customer confirmation...");
       const customerResult =
         await this.emailService.sendCustomerConfirmation(dataToSend);
+      console.log(" Customer result:", customerResult);
 
       if (adminResult.success && customerResult.success) {
-        console.log("Both admin and customer emails sent successfully");
+        console.log(" Both admin and customer emails sent successfully");
         this.showInfo("Order confirmation emails sent successfully!");
       } else if (adminResult.success || customerResult.success) {
-        console.log("One email sent successfully, one failed");
+        console.log(" One email sent successfully, one failed");
+        console.log("Admin success:", adminResult.success, "Customer success:", customerResult.success);
         this.showInfo("Order confirmation email sent (partial success).");
       } else {
-        console.error("Both emails failed to send");
+        console.error(" Both emails failed to send");
+        console.error("Admin error:", adminResult.error);
+        console.error("Customer error:", customerResult.error);
         this.showInfo(
           "Payment successful! Note: Confirmation emails could not be sent.",
         );

@@ -34,14 +34,21 @@ class EmailService {
       return { success: false, error: "Email service not available" };
     }
 
-    // Validate and sanitize order data
-    if (!this.validateOrderData(orderData)) {
-      return { success: false, error: "Invalid order data" };
+    // Use more lenient validation for admin notifications
+    if (!this.validateOrderDataForAdmin(orderData)) {
+      return { success: false, error: "Invalid order data for admin notification" };
     }
 
     try {
       // Format the order data for the email template
       const emailParams = this.formatOrderForEmail(orderData);
+
+      console.log(" Sending ADMIN notification with params:", {
+        serviceId: this.config.serviceId,
+        templateId: this.config.templateId,
+        recipient: emailParams.customer_email,
+        orderId: emailParams.order_id
+      });
 
       const response = await emailjs.send(
         this.config.serviceId,
@@ -49,10 +56,12 @@ class EmailService {
         emailParams,
       );
 
-      console.log("Order notification sent successfully:", response);
+      console.log(" Admin order notification sent successfully:", response);
       return { success: true, response };
     } catch (error) {
-      console.error("Failed to send order notification:", error);
+      console.error(" Failed to send admin order notification:", error);
+      console.error("Template ID used:", this.config.templateId);
+      console.error("Service ID used:", this.config.serviceId);
       return { success: false, error: error.message || error };
     }
   }
@@ -69,6 +78,13 @@ class EmailService {
       // Format the order data for customer confirmation using the same format as admin
       const emailParams = this.formatOrderForEmail(orderData);
 
+      console.log(" Sending CUSTOMER confirmation with params:", {
+        serviceId: this.config.serviceId,
+        templateId: this.config.customerTemplateId,
+        recipient: emailParams.customer_email,
+        orderId: emailParams.order_id
+      });
+
       // Use the customer-specific template
       const response = await emailjs.send(
         this.config.serviceId,
@@ -76,10 +92,12 @@ class EmailService {
         emailParams,
       );
 
-      console.log("Customer confirmation sent successfully:", response);
+      console.log(" Customer confirmation sent successfully:", response);
       return { success: true, response };
     } catch (error) {
-      console.error("Failed to send customer confirmation:", error);
+      console.error(" Failed to send customer confirmation:", error);
+      console.error("Customer template ID used:", this.config.customerTemplateId);
+      console.error("Service ID used:", this.config.serviceId);
       return { success: false, error: error.message || error };
     }
   }
@@ -90,17 +108,18 @@ class EmailService {
       return false;
     }
 
-    // Validate customer information
+    // Validate customer information - but be more lenient for admin notifications
     if (orderData.customerInfo) {
       const customerValidation = this.inputValidator?.validateForm(
         orderData.customerInfo,
       );
       if (customerValidation && !customerValidation.isValid) {
-        console.error(
-          " Invalid customer information:",
+        console.warn(
+          " Customer validation warnings (proceeding anyway):",
           customerValidation.errors,
         );
-        return false;
+        // Don't block admin emails for minor validation issues
+        // return false;
       }
     }
 
@@ -123,6 +142,39 @@ class EmailService {
     for (let item of orderData.items) {
       if (!item.service || !item.pricing) {
         console.error(" Invalid item structure in order");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // More lenient validation for admin notifications
+  validateOrderDataForAdmin(orderData) {
+    if (!orderData) {
+      console.error(" No order data provided to email service");
+      return false;
+    }
+
+    // Don't validate customer info for admin emails - just check required fields
+    const requiredFields = ["items", "summary"];
+    for (let field of requiredFields) {
+      if (!orderData[field]) {
+        console.error(` Missing required field in order data: ${field}`);
+        return false;
+      }
+    }
+
+    // Validate items array
+    if (!Array.isArray(orderData.items) || orderData.items.length === 0) {
+      console.error(" Order must contain at least one item");
+      return false;
+    }
+
+    // Basic item validation
+    for (let item of orderData.items) {
+      if (!item.pricing) {
+        console.error(" Invalid item structure in order - missing pricing");
         return false;
       }
     }
@@ -307,6 +359,50 @@ class EmailService {
     return await this.sendOrderNotification(testOrder);
   }
 
+  // Test admin email specifically
+  async testAdminEmail() {
+    console.log(" Testing admin email notification...");
+    return await this.testEmail();
+  }
+
+  // Test customer email specifically
+  async testCustomerEmail() {
+    console.log(" Testing customer email confirmation...");
+    const testOrder = {
+      orderId: "TEST-CUSTOMER-" + Date.now(),
+      timestamp: new Date().toISOString(),
+      customerInfo: {
+        name: "Test Customer",
+        email: "test@example.com",
+        phone: "555-0123",
+        preferredContact: "email",
+      },
+      items: [
+        {
+          service: {
+            name: "Test Service",
+            basePrice: 100,
+          },
+          pricing: {
+            basePrice: 100,
+            totalPrice: 120,
+          },
+          packages: [{ name: "Test Package", price: 20 }],
+          addons: [],
+          projectDescription: "This is a test order",
+        },
+      ],
+      notes: "Test order notes",
+      summary: {
+        subtotal: 120,
+        tax: 10.5,
+        total: 130.5,
+      },
+    };
+
+    return await this.sendCustomerConfirmation(testOrder);
+  }
+
   // Add a global function to test email from browser console
   static async runEmailTest() {
     console.log("Running email test...");
@@ -331,5 +427,61 @@ class EmailService {
 // Export for use in other scripts
 window.EmailService = EmailService;
 
-// Add global test function
-// window.testEmail = EmailService.runEmailTest;
+// Add global test functions for debugging
+window.testAdminEmail = async function() {
+  console.log(" Running admin email test...");
+  const emailService = new EmailService();
+  
+  // Wait for initialization
+  setTimeout(async () => {
+    const result = await emailService.testAdminEmail();
+    if (result.success) {
+      console.log(" Admin test email sent successfully!");
+      alert("Admin test email sent successfully! Check your admin inbox.");
+    } else {
+      console.error(" Admin test email failed:", result.error);
+      alert("Admin test email failed. Check console for details.");
+    }
+  }, 1000);
+};
+
+window.testCustomerEmail = async function() {
+  console.log(" Running customer email test...");
+  const emailService = new EmailService();
+  
+  // Wait for initialization
+  setTimeout(async () => {
+    const result = await emailService.testCustomerEmail();
+    if (result.success) {
+      console.log(" Customer test email sent successfully!");
+      alert("Customer test email sent successfully! Check your customer inbox.");
+    } else {
+      console.error(" Customer test email failed:", result.error);
+      alert("Customer test email failed. Check console for details.");
+    }
+  }, 1000);
+};
+
+window.testBothEmails = async function() {
+  console.log(" Running both email tests...");
+  const emailService = new EmailService();
+  
+  // Wait for initialization
+  setTimeout(async () => {
+    console.log("Testing admin email...");
+    const adminResult = await emailService.testAdminEmail();
+    
+    console.log("Testing customer email...");
+    const customerResult = await emailService.testCustomerEmail();
+    
+    console.log("Results:");
+    console.log("Admin:", adminResult.success ? " Success" : " Failed", adminResult.error || "");
+    console.log("Customer:", customerResult.success ? " Success" : " Failed", customerResult.error || "");
+    
+    if (adminResult.success && customerResult.success) {
+      alert("Both test emails sent successfully!");
+    } else {
+      alert(`Email test results:\nAdmin: ${adminResult.success ? 'Success' : 'Failed'}\nCustomer: ${customerResult.success ? 'Success' : 'Failed'}\n\nCheck console for details.`);
+    }
+  }, 1000);
+};
