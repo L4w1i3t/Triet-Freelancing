@@ -6,7 +6,7 @@
 
 window.PAYMENT_CONFIG = {
   // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
-  mode: "manual", // Options: 'manual' or 'automated'
+  mode: "automated", // Options: 'manual' or 'automated'
 
   // PayPal Configuration (for automated payments)
   paypal: {

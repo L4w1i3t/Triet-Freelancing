@@ -410,6 +410,9 @@ class PaymentManager {
       // Render PayPal buttons
       paypal
         .Buttons({
+          funding: {
+            disallowed: [ paypal.FUNDING.CREDIT, paypal.FUNDING.PAYLATER ]
+          },
           style: {
             layout: "vertical",
             color: "blue",

@@ -68,7 +68,7 @@
 
           if (clientId && clientId !== "your-paypal-client-id") {
             const script = document.createElement("script");
-            const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit`;
+            const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit,paylater`;
             script.src = sdkUrl;
 
             // Log the complete SDK URL for debugging
@@ -412,12 +412,12 @@
           Order #: <span id="finalOrderNumber"></span>
         </div>
         <div class="modal-actions">
-          <button class="btn btn-primary" onclick="window.location.href='/'">
+          <button class="btn btn-primary" onclick="window.location.href='../'">
             Return to Home Page
           </button>
           <button
             class="btn btn-secondary"
-            onclick="window.location.href='/pages/portfolio.html'"
+            onclick="window.location.href='./portfolio.html'"
           >
             View Portfolio
           </button>
