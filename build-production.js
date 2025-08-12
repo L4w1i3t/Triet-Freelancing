@@ -108,6 +108,12 @@ const EXCLUDE_PATTERNS = [
   'build_production.bat',
 ];
 
+// HTML files where inline JavaScript should NOT be obfuscated (only minified)
+// Add filenames here to preserve readability of inline scripts while still minifying HTML
+const HTML_INLINE_JS_IGNORE_LIST = [
+  'payment.html'
+];
+
 // Check if a file should be excluded
 function shouldExclude(filePath) {
   const relativePath = path.relative(SRC_DIR, filePath);
@@ -142,7 +148,7 @@ async function obfuscateJavaScript(inputPath, outputPath) {
     const code = await fs.readFile(inputPath, 'utf8');
     
     // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === 'dummy.js') { //named something else for now.
+    if (path.basename(inputPath) === 'DUMMY.js') { // named something else for now.
       console.log(`    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`);
       await fs.copy(inputPath, outputPath);
       return;
@@ -158,20 +164,27 @@ async function obfuscateJavaScript(inputPath, outputPath) {
   }
 }
 
-// Minify and obfuscate HTML file with an ignore list for inline javascript (payment.html)
+// Minify and obfuscate HTML file with an ignore list for inline javascript
 async function processHTML(inputPath, outputPath) {
   try {
     let html = await fs.readFile(inputPath, 'utf8');
+    const fileName = path.basename(inputPath);
+    const shouldObfuscateInlineJS = !HTML_INLINE_JS_IGNORE_LIST.includes(fileName);
     
     // Extract and process inline JavaScript
     html = html.replace(/<script(?:\s[^>]*)?>([^]*?)<\/script>/gi, (match, scriptContent) => {
       if (scriptContent.trim()) {
-        try {
-          const obfuscated = JavaScriptObfuscator.obfuscate(scriptContent, jsObfuscatorOptions);
-          return match.replace(scriptContent, obfuscated.getObfuscatedCode());
-        } catch (error) {
-          console.warn(`Warning: Could not obfuscate inline script in ${inputPath}`);
-          return match;
+        if (shouldObfuscateInlineJS) {
+          try {
+            const obfuscated = JavaScriptObfuscator.obfuscate(scriptContent, jsObfuscatorOptions);
+            return match.replace(scriptContent, obfuscated.getObfuscatedCode());
+          } catch (error) {
+            console.warn(`Warning: Could not obfuscate inline script in ${inputPath}`);
+            return match;
+          }
+        } else {
+          console.log(`    Skipping inline JS obfuscation for ${fileName} (in ignore list)`);
+          return match; // Keep original inline script, will be minified by HTML minifier
         }
       }
       return match;
