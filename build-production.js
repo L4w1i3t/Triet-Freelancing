@@ -114,6 +114,16 @@ const HTML_INLINE_JS_IGNORE_LIST = [
   'payment.html'
 ];
 
+// JSON files to encrypt/obfuscate (files in data/ directory that contain sensitive or valuable data)
+const JSON_ENCRYPT_LIST = [
+  'portfolio.json',
+  'services.json',
+  'profanity.json'
+];
+
+// Simple encryption key (you can change this to any string)
+const ENCRYPTION_KEY = 'triet-data-key-2025';
+
 // Check if a file should be excluded
 function shouldExclude(filePath) {
   const relativePath = path.relative(SRC_DIR, filePath);
@@ -121,6 +131,60 @@ function shouldExclude(filePath) {
     relativePath.includes(pattern) || 
     relativePath.startsWith(pattern)
   );
+}
+
+// Simple XOR encryption for JSON data
+function encryptString(text, key) {
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  }
+  return result;
+}
+
+// Encrypt and encode JSON data
+function encryptJsonData(jsonString, key) {
+  // First compress by removing unnecessary whitespace
+  const compressed = JSON.stringify(JSON.parse(jsonString));
+  
+  // Encrypt the compressed JSON
+  const encrypted = encryptString(compressed, key);
+  
+  // Encode to base64 for safe transport
+  const encoded = Buffer.from(encrypted, 'binary').toString('base64');
+  
+  return encoded;
+}
+
+// Create a decoder function that will be included in the build
+function generateDecoderFunction() {
+  return `
+// JSON Data Decoder - Auto-generated
+window.DataDecoder = {
+  key: '${ENCRYPTION_KEY}',
+  
+  decrypt: function(encodedData) {
+    try {
+      // Decode from base64
+      const encrypted = Buffer.from ? 
+        Buffer.from(encodedData, 'base64').toString('binary') :
+        atob(encodedData); // Fallback for older browsers
+      
+      // Decrypt using XOR
+      let decrypted = '';
+      for (let i = 0; i < encrypted.length; i++) {
+        decrypted += String.fromCharCode(encrypted.charCodeAt(i) ^ this.key.charCodeAt(i % this.key.length));
+      }
+      
+      // Parse JSON
+      return JSON.parse(decrypted);
+    } catch (error) {
+      console.error('Failed to decrypt data:', error);
+      return null;
+    }
+  }
+};
+`.trim();
 }
 
 // Clean and create dist directory
@@ -148,7 +212,7 @@ async function obfuscateJavaScript(inputPath, outputPath) {
     const code = await fs.readFile(inputPath, 'utf8');
     
     // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === 'env-confi1g.js') {
+    if (path.basename(inputPath) === 'env-config.js') {
       console.log(`    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`);
       await fs.copy(inputPath, outputPath);
       return;
@@ -217,6 +281,46 @@ async function processCSS(inputPath, outputPath) {
   }
 }
 
+// Encrypt/obfuscate JSON files
+async function processJSON(inputPath, outputPath) {
+  try {
+    const fileName = path.basename(inputPath);
+    
+    if (JSON_ENCRYPT_LIST.includes(fileName)) {
+      const jsonContent = await fs.readFile(inputPath, 'utf8');
+      const encryptedData = encryptJsonData(jsonContent, ENCRYPTION_KEY);
+      
+      // Create a JavaScript file that contains the encrypted data
+      const jsOutput = `
+// Encrypted JSON data - Auto-generated from ${fileName}
+window.EncryptedData = window.EncryptedData || {};
+window.EncryptedData['${fileName.replace('.json', '')}'] = '${encryptedData}';
+
+// Convenience function to decrypt this specific data
+window.get${fileName.replace('.json', '').replace(/[^a-zA-Z0-9]/g, '').replace(/^./, c => c.toUpperCase())}Data = function() {
+  if (window.DataDecoder) {
+    return window.DataDecoder.decrypt(window.EncryptedData['${fileName.replace('.json', '')}']);
+  }
+  console.error('DataDecoder not available. Make sure data-decoder.js is loaded first.');
+  return null;
+};
+`.trim();
+
+      // Change output extension to .js
+      const jsOutputPath = outputPath.replace('.json', '.encrypted.js');
+      await fs.outputFile(jsOutputPath, jsOutput);
+      console.log(`  🔐 Encrypted JSON: ${path.relative(SRC_DIR, inputPath)} → ${path.basename(jsOutputPath)}`);
+    } else {
+      // Just copy regular JSON files
+      await fs.copy(inputPath, outputPath);
+      console.log(`  📋 Copied JSON: ${path.relative(SRC_DIR, inputPath)}`);
+    }
+  } catch (error) {
+    console.error(`Error processing JSON ${inputPath}:`, error.message);
+    await fs.copy(inputPath, outputPath);
+  }
+}
+
 // Copy other files without processing
 async function copyFile(inputPath, outputPath) {
   await fs.copy(inputPath, outputPath);
@@ -253,12 +357,25 @@ async function processFiles(srcPath = SRC_DIR, distPath = DIST_DIR) {
         case '.css':
           await processCSS(fullSrcPath, fullDistPath);
           break;
+        case '.json':
+          await processJSON(fullSrcPath, fullDistPath);
+          break;
         default:
           await copyFile(fullSrcPath, fullDistPath);
           break;
       }
     }
   }
+}
+
+// Create data decoder file
+async function createDataDecoder() {
+  const decoderContent = generateDecoderFunction();
+  await fs.outputFile(
+    path.join(DIST_DIR, 'js', 'data-decoder.js'),
+    decoderContent
+  );
+  console.log('🔑 Created data decoder file');
 }
 
 // Create build info file
@@ -290,6 +407,7 @@ async function build() {
     console.log('\n Processing files...');
     await processFiles();
     
+    await createDataDecoder();
     await createBuildInfo();
     
     console.log('\n Production build completed successfully!');
@@ -302,6 +420,7 @@ async function build() {
     console.log(`  JavaScript files obfuscated: ${stats.js}`);
     console.log(`  HTML files processed: ${stats.html}`);
     console.log(`  CSS files minified: ${stats.css}`);
+    console.log(`  JSON files processed: ${stats.json}`);
     console.log(`  Other files copied: ${stats.other}`);
     
   } catch (error) {
@@ -312,7 +431,7 @@ async function build() {
 
 // Get build statistics
 async function getBuildStats() {
-  const stats = { total: 0, js: 0, html: 0, css: 0, other: 0 };
+  const stats = { total: 0, js: 0, html: 0, css: 0, json: 0, other: 0 };
   
   async function countFiles(dir) {
     const items = await fs.readdir(dir);
@@ -336,6 +455,9 @@ async function getBuildStats() {
             break;
           case '.css':
             stats.css++;
+            break;
+          case '.json':
+            stats.json++;
             break;
           default:
             stats.other++;

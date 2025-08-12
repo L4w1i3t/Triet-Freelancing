@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example: Using Encrypted JSON Data</title>
+</head>
+<body>
+    <h1>Encrypted JSON Data Example</h1>
+    <div id="output"></div>
+
+    <!-- Load the data decoder first -->
+    <script src="dist/js/data-decoder.js"></script>
+    
+    <!-- Load encrypted data files -->
+    <script src="dist/data/portfolio.encrypted.js"></script>
+    <script src="dist/data/services.encrypted.js"></script>
+    <script src="dist/data/profanity.encrypted.js"></script>
+
+    <script>
+        // Example usage of encrypted data
+        const output = document.getElementById('output');
+        
+        // Method 1: Using convenience functions
+        const portfolioData = getPortfolioData();
+        const servicesData = getServicesData();
+        const profanityData = getProfanityData();
+        
+        console.log('Portfolio Data:', portfolioData);
+        console.log('Services Data:', servicesData);
+        console.log('Profanity Data:', profanityData);
+        
+        // Method 2: Using DataDecoder directly
+        const portfolioDataDirect = window.DataDecoder.decrypt(window.EncryptedData['portfolio']);
+        
+        // Display some data
+        if (portfolioData && portfolioData.projects) {
+            output.innerHTML = `
+                <h2>Portfolio Projects (${portfolioData.projects.length} total)</h2>
+                <ul>
+                    ${portfolioData.projects.map(project => 
+                        `<li><strong>${project.title}</strong> (${project.year}) - ${project.description}</li>`
+                    ).join('')}
+                </ul>
+            `;
+        }
+        
+        if (servicesData && servicesData.serviceTiers) {
+            output.innerHTML += `
+                <h2>Service Tiers (${servicesData.serviceTiers.length} total)</h2>
+                <ul>
+                    ${servicesData.serviceTiers.map(tier => 
+                        `<li><strong>${tier.name}</strong> - ${tier.priceRange}</li>`
+                    ).join('')}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
