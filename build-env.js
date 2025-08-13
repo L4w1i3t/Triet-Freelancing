@@ -1,18 +1,19 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Load public environment variables from .env file
-require('dotenv').config();
+require("dotenv").config();
 
 // Generate env-config.js from environment variables during build
 const generateEnvConfig = () => {
   const envVars = {
-    EMAILJS_SERVICE_ID: process.env.EMAILJS_SERVICE_ID || '',
-    EMAILJS_TEMPLATE_ID_ADMIN: process.env.EMAILJS_TEMPLATE_ID_ADMIN || '',
-    EMAILJS_TEMPLATE_ID_CUSTOMER: process.env.EMAILJS_TEMPLATE_ID_CUSTOMER || '',
-    EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY || '',
-    PP_CLIENT_ID: process.env.PP_CLIENT_ID || '',
-    PP_API_BASE: process.env.PP_API_BASE || 'https://api.paypal.com'
+    EMAILJS_SERVICE_ID: process.env.EMAILJS_SERVICE_ID || "",
+    EMAILJS_TEMPLATE_ID_ADMIN: process.env.EMAILJS_TEMPLATE_ID_ADMIN || "",
+    EMAILJS_TEMPLATE_ID_CUSTOMER:
+      process.env.EMAILJS_TEMPLATE_ID_CUSTOMER || "",
+    EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY || "",
+    PP_CLIENT_ID: process.env.PP_CLIENT_ID || "",
+    PP_API_BASE: process.env.PP_API_BASE || "https://api.paypal.com",
   };
 
   const configContent = `// Environment Configuration
@@ -36,8 +37,8 @@ window.EMAILJS_PUBLIC_KEY = window.ENV_CONFIG.EMAILJS_PUBLIC_KEY;
 window.PP_CLIENT_ID = window.ENV_CONFIG.PP_CLIENT_ID;
 window.PP_API_BASE = window.ENV_CONFIG.PP_API_BASE;`;
 
-  const outputPath = path.join(__dirname, 'js', 'env-config.js');
-  
+  const outputPath = path.join(__dirname, "js", "env-config.js");
+
   // Ensure the js directory exists
   const jsDir = path.dirname(outputPath);
   if (!fs.existsSync(jsDir)) {
@@ -45,8 +46,8 @@ window.PP_API_BASE = window.ENV_CONFIG.PP_API_BASE;`;
   }
 
   fs.writeFileSync(outputPath, configContent);
-  console.log(' Environment configuration generated successfully');
-  
+  console.log(" Environment configuration generated successfully");
+
   // Log which variables were found/missing
   Object.entries(envVars).forEach(([key, value]) => {
     if (value) {

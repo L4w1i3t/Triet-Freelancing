@@ -356,14 +356,15 @@ class SecurityManager {
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       const csp = document.createElement("meta");
       csp.httpEquiv = "Content-Security-Policy";
-      
+
       // Check if we're in development (localhost or local IP)
-      const isDevelopment = window.location.hostname === 'localhost' || 
-                           window.location.hostname.startsWith('192.168.') ||
-                           window.location.hostname.startsWith('10.') ||
-                           window.location.hostname.startsWith('172.') ||
-                           window.location.protocol === 'http:';
-      
+      const isDevelopment =
+        window.location.hostname === "localhost" ||
+        window.location.hostname.startsWith("192.168.") ||
+        window.location.hostname.startsWith("10.") ||
+        window.location.hostname.startsWith("172.") ||
+        window.location.protocol === "http:";
+
       let cspContent = `
         default-src 'self';
         script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://js.stripe.com;
@@ -376,16 +377,18 @@ class SecurityManager {
         base-uri 'self';
         form-action 'self';
       `;
-      
+
       // Only add upgrade-insecure-requests in production
       if (!isDevelopment) {
-        cspContent += 'upgrade-insecure-requests;';
+        cspContent += "upgrade-insecure-requests;";
       }
-      
+
       csp.content = cspContent.replace(/\s+/g, " ").trim();
 
       document.head.appendChild(csp);
-      console.log(` Content Security Policy applied ${isDevelopment ? '(dev mode - HTTP allowed)' : '(production mode - HTTPS enforced)'}`);
+      console.log(
+        ` Content Security Policy applied ${isDevelopment ? "(dev mode - HTTP allowed)" : "(production mode - HTTPS enforced)"}`,
+      );
     }
   }
 

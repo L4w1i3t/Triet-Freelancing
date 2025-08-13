@@ -25,15 +25,15 @@ class EnhancedServiceCalculator {
     );
     if (basePriceElement) {
       const priceText = basePriceElement.textContent;
-      const match = priceText.match(/\$(\d+)/);
+      const match = priceText.match(/\$(\d+(?:\.\d+)?)/);
       // Keep the base price as stated - included features are part of this price
-      this.basePrice = match ? parseInt(match[1]) : 80;
+      this.basePrice = match ? parseFloat(match[1]) : 80;
     }
 
     // Update base price display
     const basePriceDisplay = document.getElementById("basePrice");
     if (basePriceDisplay) {
-      basePriceDisplay.textContent = `$${this.basePrice}`;
+      basePriceDisplay.textContent = `$${this.basePrice.toFixed(2)}`;
     }
   }
 
@@ -52,7 +52,7 @@ class EnhancedServiceCalculator {
       const quantityField = item.querySelector(".quantity-field");
       const minQuantity = parseInt(item.dataset.minQuantity) || 1;
       const defaultQuantity = parseInt(item.dataset.defaultQuantity) || 1;
-      const pricePerUnit = parseInt(item.dataset.pricePerUnit) || 0;
+      const pricePerUnit = parseFloat(item.dataset.pricePerUnit) || 0;
       const maxQuantity = parseInt(quantityField?.getAttribute("max")) || 20;
 
       // Initialize with default quantity
@@ -114,7 +114,8 @@ class EnhancedServiceCalculator {
   updateFeatureTotal(featureId, quantity, pricePerUnit) {
     const totalElement = document.getElementById(`${featureId}-total`);
     if (totalElement) {
-      totalElement.textContent = (quantity * pricePerUnit).toString();
+      const total = quantity * pricePerUnit;
+      totalElement.textContent = total.toFixed(2);
     }
   }
 
@@ -125,7 +126,7 @@ class EnhancedServiceCalculator {
 
       item.addEventListener("click", () => {
         const featureId = item.dataset.featureId;
-        const price = parseInt(item.dataset.price) || 0;
+        const price = parseFloat(item.dataset.price) || 0;
 
         if (this.featureAdjustments.has(featureId)) {
           // Feature is currently removed, so include it back
@@ -271,7 +272,7 @@ class EnhancedServiceCalculator {
           const defaultQuantity =
             parseInt(featureElement.dataset.defaultQuantity) || 1;
           const pricePerUnit =
-            parseInt(featureElement.dataset.pricePerUnit) || 0;
+            parseFloat(featureElement.dataset.pricePerUnit) || 0;
           const adjustment = (value - defaultQuantity) * pricePerUnit;
           this.featureAdjustmentsPrice += adjustment;
         } else {
@@ -288,7 +289,7 @@ class EnhancedServiceCalculator {
         `[data-addon-id="${addonId}"]`,
       );
       if (addonElement) {
-        const price = parseInt(addonElement.dataset.price);
+        const price = parseFloat(addonElement.dataset.price);
         this.addonsPrice += price * quantity;
       }
     });
@@ -313,7 +314,7 @@ class EnhancedServiceCalculator {
     if (this.featureAdjustmentsPrice !== 0) {
       adjustedFeaturesLine.style.display = "flex";
       const sign = this.featureAdjustmentsPrice > 0 ? "+" : "";
-      adjustedFeaturesPrice.textContent = `${sign}$${this.featureAdjustmentsPrice}`;
+      adjustedFeaturesPrice.textContent = `${sign}$${this.featureAdjustmentsPrice.toFixed(2)}`;
     } else {
       adjustedFeaturesLine.style.display = "none";
     }
@@ -324,7 +325,7 @@ class EnhancedServiceCalculator {
 
     if (this.addonsPrice > 0) {
       addonsLine.style.display = "flex";
-      addonsPrice.textContent = `+$${this.addonsPrice}`;
+      addonsPrice.textContent = `+$${this.addonsPrice.toFixed(2)}`;
     } else {
       addonsLine.style.display = "none";
     }
@@ -332,7 +333,7 @@ class EnhancedServiceCalculator {
     // Update total
     const totalPriceElement = document.getElementById("totalPrice");
     if (totalPriceElement) {
-      totalPriceElement.textContent = `$${this.totalPrice}`;
+      totalPriceElement.textContent = `$${this.totalPrice.toFixed(2)}`;
     }
   }
 
@@ -483,7 +484,7 @@ class EnhancedServiceCalculator {
       const featureName =
         element.querySelector(".feature-name")?.textContent || "";
       const defaultQuantity = parseInt(element.dataset.defaultQuantity) || 1;
-      const pricePerUnit = parseInt(element.dataset.pricePerUnit) || 0;
+      const pricePerUnit = parseFloat(element.dataset.pricePerUnit) || 0;
 
       const currentQuantity =
         this.featureAdjustments.get(featureId) || defaultQuantity;
@@ -505,7 +506,7 @@ class EnhancedServiceCalculator {
       const featureId = element.dataset.featureId;
       const featureName =
         element.querySelector(".feature-name")?.textContent || "";
-      const price = parseInt(element.dataset.price) || 0;
+      const price = parseFloat(element.dataset.price) || 0;
 
       const isRemoved = this.featureAdjustments.has(featureId);
       const adjustment = isRemoved ? this.featureAdjustments.get(featureId) : 0;
@@ -570,7 +571,7 @@ class EnhancedServiceCalculator {
           return {
             id: addonId,
             name: element?.querySelector(".addon-name")?.textContent || "",
-            price: parseInt(element?.dataset.price || 0),
+            price: parseFloat(element?.dataset.price || 0),
             quantity: quantity,
           };
         },

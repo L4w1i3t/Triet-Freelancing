@@ -112,7 +112,7 @@ class CartManager {
         <div class="pricing-breakdown">
           <div class="price-line">
             <span>Base Service:</span>
-            <span>$${basePrice}</span>
+            <span>$${basePrice.toFixed(2)}</span>
           </div>
           
           ${
@@ -120,7 +120,7 @@ class CartManager {
               ? `
             <div class="price-line">
               <span>Feature Adjustments:</span>
-              <span>${item.pricing.featureAdjustmentsPrice > 0 ? "+" : ""}$${item.pricing.featureAdjustmentsPrice}</span>
+              <span>${item.pricing.featureAdjustmentsPrice > 0 ? "+" : ""}$${item.pricing.featureAdjustmentsPrice.toFixed(2)}</span>
             </div>
           `
               : ""
@@ -131,7 +131,7 @@ class CartManager {
               ? `
             <div class="price-line">
               <span>Add-ons:</span>
-              <span>+$${item.pricing.addonsPrice}</span>
+              <span>+$${item.pricing.addonsPrice.toFixed(2)}</span>
             </div>
           `
               : ""
@@ -139,7 +139,7 @@ class CartManager {
           
           <div class="price-line total">
             <span>Total:</span>
-            <span>$${totalPrice}</span>
+            <span>$${totalPrice.toFixed(2)}</span>
           </div>
         </div>
 
@@ -260,9 +260,10 @@ class CartManager {
     const taxElement = document.getElementById("cartTax");
     const totalElement = document.getElementById("cartTotal");
 
-    if (subtotalElement) subtotalElement.textContent = `$${subtotal}`;
-    if (taxElement) taxElement.textContent = `$${tax}`;
-    if (totalElement) totalElement.textContent = `$${total}`;
+    if (subtotalElement)
+      subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+    if (taxElement) taxElement.textContent = `$${tax.toFixed(2)}`;
+    if (totalElement) totalElement.textContent = `$${total.toFixed(2)}`;
 
     // Update checkout button state
     const checkoutBtn = document.getElementById("checkoutBtn");

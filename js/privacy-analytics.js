@@ -5,10 +5,11 @@
 class PrivacyAnalytics {
   constructor() {
     // Check if we're in development mode
-    const isDevelopment = window.location.hostname === 'localhost' || 
-                         window.location.hostname === '127.0.0.1' ||
-                         window.location.hostname.includes('github.io') ||
-                         window.location.protocol === 'file:';
+    const isDevelopment =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname.includes("github.io") ||
+      window.location.protocol === "file:";
 
     this.config = {
       trackingEnabled: false, // Requires user consent
@@ -638,11 +639,11 @@ class PrivacyAnalytics {
     try {
       // In development mode, just log the events instead of sending to API
       if (this.config.developmentMode) {
-        console.log(' [DEV MODE] Analytics events (not sent to server):', {
+        console.log(" [DEV MODE] Analytics events (not sent to server):", {
           events: events,
           session_id: this.sessionId,
           timestamp: Date.now(),
-          count: events.length
+          count: events.length,
         });
         return;
       }

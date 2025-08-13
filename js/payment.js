@@ -411,7 +411,7 @@ class PaymentManager {
       paypal
         .Buttons({
           funding: {
-            disallowed: [ paypal.FUNDING.CREDIT, paypal.FUNDING.PAYLATER ]
+            disallowed: [paypal.FUNDING.CREDIT, paypal.FUNDING.PAYLATER],
           },
           style: {
             layout: "vertical",
@@ -603,7 +603,7 @@ class PaymentManager {
             <h4>${item.service?.name || "Unknown Service"}</h4>
             <p>${item.projectDescription || item.service?.description || "Custom service package"}</p>
           </div>
-          <div class="item-price">$${item.pricing?.totalPrice || "0.00"}</div>
+          <div class="item-price">$${(item.pricing?.totalPrice || 0).toFixed(2)}</div>
         `;
         orderItemsContainer.appendChild(itemElement);
       });
@@ -906,7 +906,10 @@ class PaymentManager {
       // Use passed orderData or fall back to this.orderData
       const dataToSend = orderData || this.orderData;
 
-      console.log(" Starting email notifications for order:", dataToSend?.orderId);
+      console.log(
+        " Starting email notifications for order:",
+        dataToSend?.orderId,
+      );
 
       // Send admin notification (detailed order info)
       console.log(" Sending admin notification...");
@@ -925,7 +928,12 @@ class PaymentManager {
         this.showInfo("Order confirmation emails sent successfully!");
       } else if (adminResult.success || customerResult.success) {
         console.log(" One email sent successfully, one failed");
-        console.log("Admin success:", adminResult.success, "Customer success:", customerResult.success);
+        console.log(
+          "Admin success:",
+          adminResult.success,
+          "Customer success:",
+          customerResult.success,
+        );
         this.showInfo("Order confirmation email sent (partial success).");
       } else {
         console.error(" Both emails failed to send");

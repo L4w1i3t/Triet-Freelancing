@@ -10,8 +10,7 @@ window.PAYMENT_CONFIG = {
 
   // PayPal Configuration (for automated payments)
   paypal: {
-    clientId:
-      PP_CLIENT_ID, // Loaded from .env
+    clientId: PP_CLIENT_ID, // Loaded from .env
     environment: "production", // 'sandbox' or 'production'
     currency: "USD",
     intent: "capture", // 'capture' for immediate payment, 'authorize' for authorization only

@@ -1,12 +1,12 @@
-const fs = require('fs-extra');
-const path = require('path');
-const JavaScriptObfuscator = require('javascript-obfuscator');
-const { minify: htmlMinify } = require('html-minifier-terser');
-const CleanCSS = require('clean-css');
-const { execSync } = require('child_process');
+const fs = require("fs-extra");
+const path = require("path");
+const JavaScriptObfuscator = require("javascript-obfuscator");
+const { minify: htmlMinify } = require("html-minifier-terser");
+const CleanCSS = require("clean-css");
+const { execSync } = require("child_process");
 
 const SRC_DIR = __dirname;
-const DIST_DIR = path.join(__dirname, 'dist');
+const DIST_DIR = path.join(__dirname, "dist");
 
 // Configuration for JavaScript obfuscation
 const jsObfuscatorOptions = {
@@ -20,18 +20,18 @@ const jsObfuscatorOptions = {
   stringArrayThreshold: 1,
   transformObjectKeys: true,
   unicodeEscapeSequence: false,
-  identifierNamesGenerator: 'hexadecimal',
+  identifierNamesGenerator: "hexadecimal",
   renameGlobals: false,
   selfDefending: true,
   stringArray: true,
   rotateStringArray: true,
   shuffleStringArray: true,
-  stringArrayEncoding: ['base64'],
+  stringArrayEncoding: ["base64"],
   stringArrayIndexShift: true,
   stringArrayWrappersCount: 5,
   stringArrayWrappersChainedCalls: true,
   stringArrayWrappersParametersMaxCount: 5,
-  stringArrayWrappersType: 'function',
+  stringArrayWrappersType: "function",
   stringArrayThreshold: 1,
   deadCodeInjection: true,
   deadCodeInjectionThreshold: 0.4,
@@ -39,17 +39,17 @@ const jsObfuscatorOptions = {
   debugProtectionInterval: 0,
   disableConsoleOutput: true,
   domainLock: [],
-  domainLockRedirectUrl: 'about:blank',
+  domainLockRedirectUrl: "about:blank",
   forceTransformStrings: [],
   reservedNames: [],
   reservedStrings: [],
   seed: 0,
   sourceMap: false,
-  sourceMapBaseUrl: '',
-  sourceMapFileName: '',
-  sourceMapMode: 'separate',
+  sourceMapBaseUrl: "",
+  sourceMapFileName: "",
+  sourceMapMode: "separate",
   splitStringsChunkLength: 5,
-  target: 'browser'
+  target: "browser",
 };
 
 // HTML minification options
@@ -76,85 +76,92 @@ const htmlMinifyOptions = {
   caseSensitive: false,
   minifyJS: true,
   minifyCSS: true,
-  minifyURLs: false
+  minifyURLs: false,
 };
 
 // CSS minification options
 const cssMinifyOptions = {
   level: 2,
-  compatibility: 'ie8'
+  compatibility: "ie8",
 };
 
 // Files and directories to exclude from processing
 const EXCLUDE_PATTERNS = [
-  'node_modules',
-  '.git',
-  'dist',
-  'build-production.js',
-  'build-env.js',
-  'package.json',
-  'package-lock.json',
-  '.env',
-  'README.md',
-  'SECURITY.md',
-  '.gitignore',
-  'run_dev.bat',
-  'open_code.bat',
-  'remove_empty_files.py',
-  'removeemojis.py',
-  'postcss.config.js',
-  'scss',
-  'email-template.html',
-  'build_production.bat',
+  "node_modules",
+  ".git",
+  "dist",
+  "build-production.js",
+  "build-env.js",
+  "package.json",
+  "package-lock.json",
+  ".env",
+  "README.md",
+  "SECURITY.md",
+  ".gitignore",
+  "run_dev.bat",
+  "open_code.bat",
+  "remove_empty_files.py",
+  "removeemojis.py",
+  "postcss.config.js",
+  "scss",
+  "email-template.html",
+  "build_production.bat",
 ];
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
 // Add filenames here to preserve readability of inline scripts while still minifying HTML
-const HTML_INLINE_JS_IGNORE_LIST = [
-  'payment.html'
-];
+const HTML_INLINE_JS_IGNORE_LIST = ["payment.html"];
 
 // Check if a file should be excluded
 function shouldExclude(filePath) {
   const relativePath = path.relative(SRC_DIR, filePath);
-  return EXCLUDE_PATTERNS.some(pattern => 
-    relativePath.includes(pattern) || 
-    relativePath.startsWith(pattern)
+  return EXCLUDE_PATTERNS.some(
+    (pattern) =>
+      relativePath.includes(pattern) || relativePath.startsWith(pattern),
   );
 }
 
 // Clean and create dist directory
 async function setupDistDirectory() {
-  console.log(' Cleaning and setting up dist directory...');
+  console.log(" Cleaning and setting up dist directory...");
   await fs.remove(DIST_DIR);
   await fs.ensureDir(DIST_DIR);
 }
 
 // Generate environment configuration
 async function generateEnvConfig() {
-  console.log('  Generating environment configuration...');
-  execSync('node build-env.js', { cwd: SRC_DIR, stdio: 'inherit' });
+  console.log("  Generating environment configuration...");
+  execSync("node build-env.js", { cwd: SRC_DIR, stdio: "inherit" });
 }
 
 // Compile SCSS to CSS
 async function compileSCSS() {
-  console.log(' Compiling SCSS...');
-  execSync('sass scss/main.scss:css/main.css --style compressed', { cwd: SRC_DIR, stdio: 'inherit' });
+  console.log(" Compiling SCSS...");
+  execSync("sass scss/main.scss:css/main.css --style compressed", {
+    cwd: SRC_DIR,
+    stdio: "inherit",
+  });
 }
 
 // Obfuscate JavaScript file
 async function obfuscateJavaScript(inputPath, outputPath) {
   try {
-    const code = await fs.readFile(inputPath, 'utf8');
-    
+    const code = await fs.readFile(inputPath, "utf8");
+
     // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === 'DUMMY.js') { // named something else for now.
-      console.log(`    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`);
+    if (path.basename(inputPath) === "DUMMY.js") {
+      // named something else for now.
+      console.log(
+        `    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`,
+      );
       await fs.copy(inputPath, outputPath);
       return;
     }
-    
-    const obfuscated = JavaScriptObfuscator.obfuscate(code, jsObfuscatorOptions);
+
+    const obfuscated = JavaScriptObfuscator.obfuscate(
+      code,
+      jsObfuscatorOptions,
+    );
     await fs.outputFile(outputPath, obfuscated.getObfuscatedCode());
     console.log(`   Obfuscated: ${path.relative(SRC_DIR, inputPath)}`);
   } catch (error) {
@@ -167,29 +174,43 @@ async function obfuscateJavaScript(inputPath, outputPath) {
 // Minify and obfuscate HTML file with an ignore list for inline javascript
 async function processHTML(inputPath, outputPath) {
   try {
-    let html = await fs.readFile(inputPath, 'utf8');
+    let html = await fs.readFile(inputPath, "utf8");
     const fileName = path.basename(inputPath);
-    const shouldObfuscateInlineJS = !HTML_INLINE_JS_IGNORE_LIST.includes(fileName);
-    
+    const shouldObfuscateInlineJS =
+      !HTML_INLINE_JS_IGNORE_LIST.includes(fileName);
+
     // Extract and process inline JavaScript
-    html = html.replace(/<script(?:\s[^>]*)?>([^]*?)<\/script>/gi, (match, scriptContent) => {
-      if (scriptContent.trim()) {
-        if (shouldObfuscateInlineJS) {
-          try {
-            const obfuscated = JavaScriptObfuscator.obfuscate(scriptContent, jsObfuscatorOptions);
-            return match.replace(scriptContent, obfuscated.getObfuscatedCode());
-          } catch (error) {
-            console.warn(`Warning: Could not obfuscate inline script in ${inputPath}`);
-            return match;
+    html = html.replace(
+      /<script(?:\s[^>]*)?>([^]*?)<\/script>/gi,
+      (match, scriptContent) => {
+        if (scriptContent.trim()) {
+          if (shouldObfuscateInlineJS) {
+            try {
+              const obfuscated = JavaScriptObfuscator.obfuscate(
+                scriptContent,
+                jsObfuscatorOptions,
+              );
+              return match.replace(
+                scriptContent,
+                obfuscated.getObfuscatedCode(),
+              );
+            } catch (error) {
+              console.warn(
+                `Warning: Could not obfuscate inline script in ${inputPath}`,
+              );
+              return match;
+            }
+          } else {
+            console.log(
+              `    Skipping inline JS obfuscation for ${fileName} (in ignore list)`,
+            );
+            return match; // Keep original inline script, will be minified by HTML minifier
           }
-        } else {
-          console.log(`    Skipping inline JS obfuscation for ${fileName} (in ignore list)`);
-          return match; // Keep original inline script, will be minified by HTML minifier
         }
-      }
-      return match;
-    });
-    
+        return match;
+      },
+    );
+
     const minified = await htmlMinify(html, htmlMinifyOptions);
     await fs.outputFile(outputPath, minified);
     console.log(`   Processed HTML: ${path.relative(SRC_DIR, inputPath)}`);
@@ -202,13 +223,13 @@ async function processHTML(inputPath, outputPath) {
 // Minify CSS file
 async function processCSS(inputPath, outputPath) {
   try {
-    const css = await fs.readFile(inputPath, 'utf8');
+    const css = await fs.readFile(inputPath, "utf8");
     const minified = new CleanCSS(cssMinifyOptions).minify(css);
-    
+
     if (minified.errors.length > 0) {
       console.warn(`CSS warnings for ${inputPath}:`, minified.errors);
     }
-    
+
     await fs.outputFile(outputPath, minified.styles);
     console.log(`   Minified CSS: ${path.relative(SRC_DIR, inputPath)}`);
   } catch (error) {
@@ -226,31 +247,31 @@ async function copyFile(inputPath, outputPath) {
 // Process all files recursively
 async function processFiles(srcPath = SRC_DIR, distPath = DIST_DIR) {
   const items = await fs.readdir(srcPath);
-  
+
   for (const item of items) {
     const fullSrcPath = path.join(srcPath, item);
     const fullDistPath = path.join(distPath, item);
-    
+
     if (shouldExclude(fullSrcPath)) {
       continue;
     }
-    
+
     const stats = await fs.stat(fullSrcPath);
-    
+
     if (stats.isDirectory()) {
       await fs.ensureDir(fullDistPath);
       await processFiles(fullSrcPath, fullDistPath);
     } else {
       const ext = path.extname(item).toLowerCase();
-      
+
       switch (ext) {
-        case '.js':
+        case ".js":
           await obfuscateJavaScript(fullSrcPath, fullDistPath);
           break;
-        case '.html':
+        case ".html":
           await processHTML(fullSrcPath, fullDistPath);
           break;
-        case '.css':
+        case ".css":
           await processCSS(fullSrcPath, fullDistPath);
           break;
         default:
@@ -265,47 +286,46 @@ async function processFiles(srcPath = SRC_DIR, distPath = DIST_DIR) {
 async function createBuildInfo() {
   const buildInfo = {
     buildDate: new Date().toISOString(),
-    version: require('./package.json').version,
-    buildType: 'production',
+    version: require("./package.json").version,
+    buildType: "production",
     obfuscated: true,
-    note: 'This is a production build with obfuscated code. Source code is available in the repository.'
+    note: "This is a production build with obfuscated code. Source code is available in the repository.",
   };
-  
+
   await fs.outputFile(
-    path.join(DIST_DIR, 'build-info.json'), 
-    JSON.stringify(buildInfo, null, 2)
+    path.join(DIST_DIR, "build-info.json"),
+    JSON.stringify(buildInfo, null, 2),
   );
-  console.log(' Created build info file');
+  console.log(" Created build info file");
 }
 
 // Main build function
 async function build() {
-  console.log(' Starting production build...\n');
-  
+  console.log(" Starting production build...\n");
+
   try {
     await setupDistDirectory();
     await generateEnvConfig();
     await compileSCSS();
-    
-    console.log('\n Processing files...');
+
+    console.log("\n Processing files...");
     await processFiles();
-    
+
     await createBuildInfo();
-    
-    console.log('\n Production build completed successfully!');
+
+    console.log("\n Production build completed successfully!");
     console.log(` Output directory: ${DIST_DIR}`);
-    
+
     // Show build summary
     const stats = await getBuildStats();
-    console.log('\n Build Summary:');
+    console.log("\n Build Summary:");
     console.log(`  Files processed: ${stats.total}`);
     console.log(`  JavaScript files obfuscated: ${stats.js}`);
     console.log(`  HTML files processed: ${stats.html}`);
     console.log(`  CSS files minified: ${stats.css}`);
     console.log(`  Other files copied: ${stats.other}`);
-    
   } catch (error) {
-    console.error(' Build failed:', error);
+    console.error(" Build failed:", error);
     process.exit(1);
   }
 }
@@ -313,28 +333,28 @@ async function build() {
 // Get build statistics
 async function getBuildStats() {
   const stats = { total: 0, js: 0, html: 0, css: 0, other: 0 };
-  
+
   async function countFiles(dir) {
     const items = await fs.readdir(dir);
-    
+
     for (const item of items) {
       const fullPath = path.join(dir, item);
       const stat = await fs.stat(fullPath);
-      
+
       if (stat.isDirectory()) {
         await countFiles(fullPath);
       } else {
         stats.total++;
         const ext = path.extname(item).toLowerCase();
-        
+
         switch (ext) {
-          case '.js':
+          case ".js":
             stats.js++;
             break;
-          case '.html':
+          case ".html":
             stats.html++;
             break;
-          case '.css':
+          case ".css":
             stats.css++;
             break;
           default:
@@ -344,7 +364,7 @@ async function getBuildStats() {
       }
     }
   }
-  
+
   await countFiles(DIST_DIR);
   return stats;
 }

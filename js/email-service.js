@@ -36,7 +36,10 @@ class EmailService {
 
     // Use more lenient validation for admin notifications
     if (!this.validateOrderDataForAdmin(orderData)) {
-      return { success: false, error: "Invalid order data for admin notification" };
+      return {
+        success: false,
+        error: "Invalid order data for admin notification",
+      };
     }
 
     try {
@@ -47,7 +50,7 @@ class EmailService {
         serviceId: this.config.serviceId,
         templateId: this.config.templateId,
         recipient: emailParams.customer_email,
-        orderId: emailParams.order_id
+        orderId: emailParams.order_id,
       });
 
       const response = await emailjs.send(
@@ -82,7 +85,7 @@ class EmailService {
         serviceId: this.config.serviceId,
         templateId: this.config.customerTemplateId,
         recipient: emailParams.customer_email,
-        orderId: emailParams.order_id
+        orderId: emailParams.order_id,
       });
 
       // Use the customer-specific template
@@ -96,7 +99,10 @@ class EmailService {
       return { success: true, response };
     } catch (error) {
       console.error(" Failed to send customer confirmation:", error);
-      console.error("Customer template ID used:", this.config.customerTemplateId);
+      console.error(
+        "Customer template ID used:",
+        this.config.customerTemplateId,
+      );
       console.error("Service ID used:", this.config.serviceId);
       return { success: false, error: error.message || error };
     }
@@ -428,10 +434,10 @@ class EmailService {
 window.EmailService = EmailService;
 
 // Add global test functions for debugging
-window.testAdminEmail = async function() {
+window.testAdminEmail = async function () {
   console.log(" Running admin email test...");
   const emailService = new EmailService();
-  
+
   // Wait for initialization
   setTimeout(async () => {
     const result = await emailService.testAdminEmail();
@@ -445,16 +451,18 @@ window.testAdminEmail = async function() {
   }, 1000);
 };
 
-window.testCustomerEmail = async function() {
+window.testCustomerEmail = async function () {
   console.log(" Running customer email test...");
   const emailService = new EmailService();
-  
+
   // Wait for initialization
   setTimeout(async () => {
     const result = await emailService.testCustomerEmail();
     if (result.success) {
       console.log(" Customer test email sent successfully!");
-      alert("Customer test email sent successfully! Check your customer inbox.");
+      alert(
+        "Customer test email sent successfully! Check your customer inbox.",
+      );
     } else {
       console.error(" Customer test email failed:", result.error);
       alert("Customer test email failed. Check console for details.");
@@ -462,26 +470,36 @@ window.testCustomerEmail = async function() {
   }, 1000);
 };
 
-window.testBothEmails = async function() {
+window.testBothEmails = async function () {
   console.log(" Running both email tests...");
   const emailService = new EmailService();
-  
+
   // Wait for initialization
   setTimeout(async () => {
     console.log("Testing admin email...");
     const adminResult = await emailService.testAdminEmail();
-    
+
     console.log("Testing customer email...");
     const customerResult = await emailService.testCustomerEmail();
-    
+
     console.log("Results:");
-    console.log("Admin:", adminResult.success ? " Success" : " Failed", adminResult.error || "");
-    console.log("Customer:", customerResult.success ? " Success" : " Failed", customerResult.error || "");
-    
+    console.log(
+      "Admin:",
+      adminResult.success ? " Success" : " Failed",
+      adminResult.error || "",
+    );
+    console.log(
+      "Customer:",
+      customerResult.success ? " Success" : " Failed",
+      customerResult.error || "",
+    );
+
     if (adminResult.success && customerResult.success) {
       alert("Both test emails sent successfully!");
     } else {
-      alert(`Email test results:\nAdmin: ${adminResult.success ? 'Success' : 'Failed'}\nCustomer: ${customerResult.success ? 'Success' : 'Failed'}\n\nCheck console for details.`);
+      alert(
+        `Email test results:\nAdmin: ${adminResult.success ? "Success" : "Failed"}\nCustomer: ${customerResult.success ? "Success" : "Failed"}\n\nCheck console for details.`,
+      );
     }
   }, 1000);
 };

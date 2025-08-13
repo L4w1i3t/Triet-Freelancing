@@ -3,41 +3,41 @@
     {
       "id": "budget",
       "name": "Budget",
-      "priceRange": "Starting from $60",
+      "priceRange": "Starting from $65",
       "description": "Perfect for startups and small projects.",
       "services": [
         {
           "id": "static-site",
           "title": "Basic Website",
-          "price": "Starting at $200",
+          "price": "Starting at $210",
           "duration": "4-7 days",
           "description": "A simple, 5-page website made from scratch with custom design, basic functionality, and instructions on hosting."
         },
         {
           "id": "digital-portfolio",
           "title": "Digital Portfolio",
-          "price": "Starting at $120",
+          "price": "Starting at $130",
           "duration": "2-4 days",
           "description": "A static portfolio platform made from scratch to showcase your work and skills. Complete with custom design and hosting instructions."
         },
         {
           "id": "digital-business-card",
           "title": "Digital Business Card",
-          "price": "Starting at $60",
-          "duration": "1-3 days",
+          "price": "Starting at $85",
+          "duration": "2-4 days",
           "description": "A modern, mobile-first digital business card made from scratch to share your contact information professionally."
         },
         {
           "id": "landing-page",
           "title": "Landing Page",
-          "price": "Starting at $60",
+          "price": "Starting at $65",
           "duration": "2-4 days",
           "description": "A single-page website designed to convert visitors into leads or customers."
         },
         {
           "id": "discord-bot",
           "title": "Discord Bot",
-          "price": "Starting at $80",
+          "price": "Starting at $90",
           "duration": "3-7 days",
           "description": "A custom Discord bot tailored to your server's needs. Includes instructions for setup, deployment, and functionality."
         }

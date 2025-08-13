@@ -3,7 +3,7 @@
     {
       "id": "triet-dev",
       "title": "Triet",
-      "category": "tools",
+      "category": "websites",
       "year": "2024",
       "description": "This website (duh.)",
       "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript", "PayPal SDK"],
@@ -70,7 +70,20 @@
         "live": "https://ddmc.site",
         "github": null
       },
-      "icon": "fas fa-book"
+      "icon": "fas fa-globe"
+    },
+    {
+      "id": "ddmt",
+      "title": "Doki Doki Modding Template",
+      "category": "tools",
+      "year": "2024",
+      "description": "A template for creating Doki Doki Literature Club mods.",
+      "technologies": ["Python", "Ren'Py"],
+      "links": {
+        "live": "https://ddmc.site/pages/template/template.html",
+        "github": "https://github.com/L4w1i3t/Doki-Doki-Modding-Template"
+      },
+      "icon": "fas fa-tools"
     },
     {
       "id": "societal-ai",
