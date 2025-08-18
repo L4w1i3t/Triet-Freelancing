@@ -300,20 +300,9 @@ class PaymentManager {
     // Handle payment method selector for manual mode
     const paymentSelector = document.querySelector(".payment-method-selector");
     if (paymentSelector) {
-      // Hide all automated payment options and show only manual
-      const allOptions = paymentSelector.querySelectorAll(".payment-option");
-      allOptions.forEach((option) => {
-        const method = option.dataset.method;
-        if (method === "manual") {
-          option.style.display = "block";
-        } else {
-          option.style.display = "none";
-        }
-      });
-
-      // Show the selector (so manual option is visible)
-      paymentSelector.style.display = "block";
-      console.log(" Showing manual payment option only");
+      // In manual mode, hide the entire payment selector since we're showing dedicated manual UI
+      paymentSelector.style.display = "none";
+      console.log(" Hidden payment method selector (manual mode uses dedicated UI)");
     }
 
     // Hide automated payment forms
