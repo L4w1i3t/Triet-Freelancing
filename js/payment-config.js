@@ -12,7 +12,7 @@ const createPaymentConfig = async () => {
   
   return {
     // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
-    mode: "manual", // Options: 'manual', 'paypal', or 'stripe'
+    mode: "stripe", // Options: 'manual', 'paypal', or 'stripe'
 
     // Stripe Configuration (for stripe payments)
     stripe: {
