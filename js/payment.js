@@ -1615,3 +1615,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error('Failed to initialize payment system:', error);
   }
 });
+
+// Global navigation function for the home page button
+window.navigateToHome = () => {
+  try {
+    // Check if we're in a subdirectory (like /pages/)
+    const currentPath = window.location.pathname;
+    let homePath = '/';
+    
+    // If we're in the pages directory, go up one level
+    if (currentPath.includes('/pages/')) {
+      homePath = '../index.html';
+    }
+    
+    console.log('Navigating to home page:', homePath);
+    window.location.href = homePath;
+  } catch (error) {
+    console.error('Navigation error:', error);
+    // Fallback navigation
+    window.location.href = '/';
+  }
+};

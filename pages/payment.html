@@ -527,7 +527,7 @@
           Order #: <span id="finalOrderNumber"></span>
         </div>
         <div class="modal-actions">
-          <button class="btn btn-primary" onclick="window.location.href='/'">
+          <button class="btn btn-primary" onclick="navigateToHome()">
             Return to Home Page
           </button>
         </div>
@@ -535,6 +535,18 @@
     </div>
 
     <!-- Scripts -->
+    <script>
+      // Add global error handling to catch any syntax errors
+      window.addEventListener('error', function(e) {
+        console.error('Global JavaScript error:', e.error);
+        console.error('Error in file:', e.filename, 'line:', e.lineno);
+      });
+      
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled promise rejection:', e.reason);
+      });
+    </script>
+    
     <script src="/components/addComponents.js"></script>
 
     <!-- Security & Privacy Scripts -->

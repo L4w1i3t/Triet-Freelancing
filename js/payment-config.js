@@ -12,7 +12,7 @@ const createPaymentConfig = async () => {
   
   return {
     // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
-    mode: "stripe", // Options: 'manual', 'paypal', or 'stripe'
+    mode: "manual", // Options: 'manual', 'paypal', or 'stripe'
 
     // Stripe Configuration (for stripe payments)
     stripe: {
@@ -103,11 +103,17 @@ const initializePaymentConfig = async () => {
 };
 
 // Auto-initialize when the script loads
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializePaymentConfig);
-} else {
-  initializePaymentConfig();
-}
+(function() {
+  try {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializePaymentConfig);
+    } else {
+      initializePaymentConfig();
+    }
+  } catch (error) {
+    console.error('Failed to auto-initialize payment config:', error);
+  }
+})();
 
 // Export for manual initialization if needed
 window.initializePaymentConfig = initializePaymentConfig;

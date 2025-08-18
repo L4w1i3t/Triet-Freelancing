@@ -38,11 +38,14 @@ class EnvConfig {
 
   async _fetchConfig() {
     try {
+      console.log('Fetching configuration from /api/config...');
       const response = await fetch('/api/config');
       if (!response.ok) {
         throw new Error(`Failed to fetch config: ${response.status}`);
       }
-      return response.json();
+      const config = await response.json();
+      console.log('Configuration fetched successfully:', Object.keys(config));
+      return config;
     } catch (error) {
       console.warn('API config not available, trying static env-config.js fallback');
       throw error; // This will trigger the fallback
