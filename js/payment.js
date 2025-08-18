@@ -40,41 +40,47 @@ class PaymentManager {
 
   async loadConfig() {
     if (this.configLoaded) return;
-    
+
     try {
       // Wait for payment configuration to be available
-      if (typeof window.initializePaymentConfig === 'function') {
+      if (typeof window.initializePaymentConfig === "function") {
         await window.initializePaymentConfig();
       }
-      
+
       this.config = window.PAYMENT_CONFIG || {
         mode: "manual",
         manualMethods: [{ name: "PayPal", icon: "fas fa-check" }],
       };
-      
+
       // Set configuration properties
-      this.paypalClientId = this.config.paypal?.clientId || "your-paypal-client-id";
+      this.paypalClientId =
+        this.config.paypal?.clientId || "your-paypal-client-id";
       this.paypalEnvironment = this.config.paypal?.environment || "sandbox";
       this.paypalCurrency = this.config.paypal?.currency || "USD";
 
       // Stripe Configuration
-      this.stripePublishableKey = this.config.stripe?.publishableKey || "your-stripe-publishable-key";
+      this.stripePublishableKey =
+        this.config.stripe?.publishableKey || "your-stripe-publishable-key";
       this.stripeCurrency = this.config.stripe?.currency || "usd";
 
       // Bitcoin Configuration
-      this.bitcoinWalletAddress = this.config.bitcoin?.walletAddress || "your-bitcoin-wallet-address";
-      this.bitcoinApiKey = this.config.bitcoin?.apiKey || "your-bitcoin-api-key";
+      this.bitcoinWalletAddress =
+        this.config.bitcoin?.walletAddress || "your-bitcoin-wallet-address";
+      this.bitcoinApiKey =
+        this.config.bitcoin?.apiKey || "your-bitcoin-api-key";
 
       this.paymentMode = this.config.mode;
       this.configLoaded = true;
-      
-      console.log('Payment configuration loaded successfully:', this.paymentMode);
-      
+
+      console.log(
+        "Payment configuration loaded successfully:",
+        this.paymentMode,
+      );
     } catch (error) {
-      console.error('Failed to load payment configuration:', error);
+      console.error("Failed to load payment configuration:", error);
       // Set fallback values
-      this.paymentMode = 'manual';
-      this.config = { mode: 'manual' };
+      this.paymentMode = "manual";
+      this.config = { mode: "manual" };
     }
   }
 
@@ -82,7 +88,7 @@ class PaymentManager {
     try {
       // Wait for configuration to load
       await this.loadConfig();
-      
+
       this.loadOrderData();
       await this.initializeEmailService();
       this.setupEventListeners();
@@ -100,9 +106,8 @@ class PaymentManager {
       // Debug: Log order data structure and payment mode
       console.log("Order Data:", this.orderData);
       console.log("Payment Mode:", this.paymentMode);
-      
     } catch (error) {
-      console.error('Failed to initialize PaymentManager:', error);
+      console.error("Failed to initialize PaymentManager:", error);
     }
   }
 
@@ -150,29 +155,33 @@ class PaymentManager {
     // Helper function to safely get order total
     if (!this.orderData) {
       console.warn("No order data available, using default amount");
-      return 10.00; // Default fallback amount ($10)
+      return 10.0; // Default fallback amount ($10)
     }
-    
+
     let total = 0;
-    
+
     // Try different possible total fields
     if (this.orderData.total && !isNaN(this.orderData.total)) {
       total = parseFloat(this.orderData.total);
-    } else if (this.orderData.summary && this.orderData.summary.total && !isNaN(this.orderData.summary.total)) {
+    } else if (
+      this.orderData.summary &&
+      this.orderData.summary.total &&
+      !isNaN(this.orderData.summary.total)
+    ) {
       total = parseFloat(this.orderData.summary.total);
     } else if (this.orderData.grandTotal && !isNaN(this.orderData.grandTotal)) {
       total = parseFloat(this.orderData.grandTotal);
     } else {
       console.warn("Could not find valid total in order data:", this.orderData);
-      total = 10.00; // Default fallback amount
+      total = 10.0; // Default fallback amount
     }
-    
+
     // Ensure total is positive
     if (total <= 0) {
       console.warn("Invalid total amount:", total, "using default");
-      total = 10.00;
+      total = 10.0;
     }
-    
+
     console.log("Order total calculated as:", total);
     return total;
   }
@@ -222,11 +231,14 @@ class PaymentManager {
     const heroDescription = document.querySelector(".payment-description");
     if (heroDescription) {
       if (this.paymentMode === "paypal") {
-        heroDescription.textContent = "Review your order details and complete your payment securely with PayPal";
+        heroDescription.textContent =
+          "Review your order details and complete your payment securely with PayPal";
       } else if (this.paymentMode === "stripe") {
-        heroDescription.textContent = "Review your order details and complete your payment securely with Stripe";
+        heroDescription.textContent =
+          "Review your order details and complete your payment securely with Stripe";
       } else {
-        heroDescription.textContent = "Review your order details and complete your payment securely";
+        heroDescription.textContent =
+          "Review your order details and complete your payment securely";
       }
     }
 
@@ -235,15 +247,17 @@ class PaymentManager {
     if (paymentSelector) {
       paymentSelector.style.display = "block";
       console.log(" Showing payment method selector");
-      
+
       // Hide all payment options first
       const allOptions = paymentSelector.querySelectorAll(".payment-option");
-      allOptions.forEach(option => {
+      allOptions.forEach((option) => {
         option.style.display = "none";
       });
-      
+
       // Show only the relevant payment option based on mode
-      const relevantOption = paymentSelector.querySelector(`[data-method="${this.paymentMode}"]`);
+      const relevantOption = paymentSelector.querySelector(
+        `[data-method="${this.paymentMode}"]`,
+      );
       if (relevantOption) {
         relevantOption.style.display = "block";
         console.log(` Showing ${this.paymentMode} payment option`);
@@ -252,7 +266,9 @@ class PaymentManager {
 
     // Hide manual payment elements
     const manualNotice = document.getElementById("manualPaymentNotice");
-    const confirmContainer = document.getElementById("orderConfirmationContainer");
+    const confirmContainer = document.getElementById(
+      "orderConfirmationContainer",
+    );
 
     if (manualNotice) {
       manualNotice.style.display = "none";
@@ -286,7 +302,7 @@ class PaymentManager {
     if (paymentSelector) {
       // Hide all automated payment options and show only manual
       const allOptions = paymentSelector.querySelectorAll(".payment-option");
-      allOptions.forEach(option => {
+      allOptions.forEach((option) => {
         const method = option.dataset.method;
         if (method === "manual") {
           option.style.display = "block";
@@ -294,7 +310,7 @@ class PaymentManager {
           option.style.display = "none";
         }
       });
-      
+
       // Show the selector (so manual option is visible)
       paymentSelector.style.display = "block";
       console.log(" Showing manual payment option only");
@@ -308,7 +324,7 @@ class PaymentManager {
       paypalForm.style.display = "none";
       console.log(" Hidden PayPal payment form");
     }
-    
+
     if (stripeForm) {
       stripeForm.style.display = "none";
       console.log(" Hidden Stripe payment form");
@@ -316,7 +332,9 @@ class PaymentManager {
 
     // Show manual payment elements
     const manualNotice = document.getElementById("manualPaymentNotice");
-    const confirmContainer = document.getElementById("orderConfirmationContainer");
+    const confirmContainer = document.getElementById(
+      "orderConfirmationContainer",
+    );
 
     if (manualNotice) {
       manualNotice.style.display = "block";
@@ -347,8 +365,9 @@ class PaymentManager {
     this.updateUIForManualPayment();
 
     // Show a user-friendly message
-    const paymentContainer = document.querySelector("#paypalPaymentForm") || 
-                           document.querySelector("#stripePaymentForm");
+    const paymentContainer =
+      document.querySelector("#paypalPaymentForm") ||
+      document.querySelector("#stripePaymentForm");
     if (paymentContainer) {
       paymentContainer.innerHTML = `
         <div class="payment-fallback-notice">
@@ -650,44 +669,48 @@ class PaymentManager {
       };
 
       await waitForStripe();
-      
+
       // Initialize Stripe instance
       this.stripe = Stripe(this.stripePublishableKey);
-      
+
       // Get order total safely
       const orderTotal = this.getOrderTotal();
       const amountInCents = Math.round(orderTotal * 100);
-      
-      console.log(`Initializing Stripe with amount: $${orderTotal} (${amountInCents} cents)`);
-      
+
+      console.log(
+        `Initializing Stripe with amount: $${orderTotal} (${amountInCents} cents)`,
+      );
+
       // Create Elements instance (without payment mode since we don't have server-side Payment Intents)
       this.stripeElements = this.stripe.elements();
 
       // Create individual card element instead of payment element
-      this.stripeCardElement = this.stripeElements.create('card', {
+      this.stripeCardElement = this.stripeElements.create("card", {
         style: {
           base: {
-            fontSize: '16px',
-            color: '#ffffff',
-            fontFamily: 'Inter, sans-serif',
-            '::placeholder': {
-              color: '#aab7c4',
+            fontSize: "16px",
+            color: "#ffffff",
+            fontFamily: "Inter, sans-serif",
+            "::placeholder": {
+              color: "#aab7c4",
             },
           },
           invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a',
+            color: "#fa755a",
+            iconColor: "#fa755a",
           },
         },
       });
 
       // Mount the card element
-      this.stripeCardElement.mount('#stripe-payment-element');
+      this.stripeCardElement.mount("#stripe-payment-element");
 
       // Set up form submission
       this.setupStripeForm();
 
-      console.log(` Stripe initialized in ${this.config.stripe?.environment || 'test'} mode`);
+      console.log(
+        ` Stripe initialized in ${this.config.stripe?.environment || "test"} mode`,
+      );
     } catch (error) {
       console.error("Failed to initialize Stripe:", error);
       console.log("Falling back to manual payment mode...");
@@ -712,7 +735,7 @@ class PaymentManager {
 
           const checkStripe = () => {
             if (typeof Stripe !== "undefined") {
-              console.log("✅ Stripe SDK loaded successfully");
+              console.log(" Stripe SDK loaded successfully");
               resolve();
             } else if (Date.now() - startTime > timeout) {
               reject(new Error("Stripe SDK failed to load within timeout"));
@@ -736,65 +759,70 @@ class PaymentManager {
       }
 
       await waitForStripe();
-      
+
       // Initialize Stripe instance
       this.stripe = Stripe(this.stripePublishableKey);
-      
+
       // Clear any existing elements from the container
-      const paymentElementContainer = document.getElementById('stripe-payment-element');
+      const paymentElementContainer = document.getElementById(
+        "stripe-payment-element",
+      );
       if (paymentElementContainer) {
-        paymentElementContainer.innerHTML = '';
+        paymentElementContainer.innerHTML = "";
         console.log("Cleared existing Stripe payment element container");
       } else {
         console.error("Stripe payment element container not found!");
         throw new Error("Stripe payment element container not found");
       }
-      
+
       // Get order total safely
       const orderTotal = this.getOrderTotal();
       const amountInCents = Math.round(orderTotal * 100);
-      
-      console.log(`Initializing Stripe on demand with amount: $${orderTotal} (${amountInCents} cents)`);
-      
+
+      console.log(
+        `Initializing Stripe on demand with amount: $${orderTotal} (${amountInCents} cents)`,
+      );
+
       // Create Elements instance (without payment mode)
       this.stripeElements = this.stripe.elements();
 
       // Create individual card element instead of payment element
-      this.stripeCardElement = this.stripeElements.create('card', {
+      this.stripeCardElement = this.stripeElements.create("card", {
         style: {
           base: {
-            fontSize: '16px',
-            color: '#ffffff',
-            fontFamily: 'Inter, sans-serif',
-            '::placeholder': {
-              color: '#aab7c4',
+            fontSize: "16px",
+            color: "#ffffff",
+            fontFamily: "Inter, sans-serif",
+            "::placeholder": {
+              color: "#aab7c4",
             },
           },
           invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a',
+            color: "#fa755a",
+            iconColor: "#fa755a",
           },
         },
       });
-      
+
       console.log("Created Stripe card element, attempting to mount...");
-      
+
       // Mount the card element with error handling
       try {
-        this.stripeCardElement.mount('#stripe-payment-element');
+        this.stripeCardElement.mount("#stripe-payment-element");
         console.log("Stripe card element mounted successfully");
-        
+
         // Listen for changes to the Card Element
-        this.stripeCardElement.on('change', (event) => {
+        this.stripeCardElement.on("change", (event) => {
           if (event.error) {
             this.showStripeError(event.error.message);
           } else {
             // Clear any previous error messages
-            const messagesElement = document.getElementById('stripe-payment-messages');
-            messagesElement.textContent = '';
+            const messagesElement = document.getElementById(
+              "stripe-payment-messages",
+            );
+            messagesElement.textContent = "";
           }
         });
-        
       } catch (mountError) {
         console.error("Failed to mount Stripe card element:", mountError);
         throw mountError;
@@ -806,83 +834,89 @@ class PaymentManager {
         this.stripeFormInitialized = true;
       }
 
-      console.log(` Stripe initialized on demand in ${this.config.stripe?.environment || 'test'} mode`);
+      console.log(
+        ` Stripe initialized on demand in ${this.config.stripe?.environment || "test"} mode`,
+      );
     } catch (error) {
       console.error("Failed to initialize Stripe on demand:", error);
-      this.showStripeError("Failed to load Stripe payment form. Please try refreshing the page.");
+      this.showStripeError(
+        "Failed to load Stripe payment form. Please try refreshing the page.",
+      );
     }
   }
 
   setupStripeForm() {
-    const form = document.getElementById('stripe-payment-form');
-    const submitButton = document.getElementById('stripe-submit-button');
-    const buttonText = submitButton.querySelector('.button-text');
-    const loadingSpinner = submitButton.querySelector('.loading-spinner');
+    const form = document.getElementById("stripe-payment-form");
+    const submitButton = document.getElementById("stripe-submit-button");
+    const buttonText = submitButton.querySelector(".button-text");
+    const loadingSpinner = submitButton.querySelector(".loading-spinner");
 
     // Check if event listener is already attached to prevent duplicates
-    if (form.hasAttribute('data-stripe-setup')) {
-      console.log('Stripe form already set up, skipping...');
+    if (form.hasAttribute("data-stripe-setup")) {
+      console.log("Stripe form already set up, skipping...");
       return;
     }
-    
-    // Mark form as set up
-    form.setAttribute('data-stripe-setup', 'true');
 
-    form.addEventListener('submit', async (event) => {
+    // Mark form as set up
+    form.setAttribute("data-stripe-setup", "true");
+
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       // Disable submit button and show loading
       submitButton.disabled = true;
-      buttonText.style.display = 'none';
-      loadingSpinner.style.display = 'inline';
+      buttonText.style.display = "none";
+      loadingSpinner.style.display = "inline";
 
       try {
         // First, create a Payment Intent on the server
         const orderTotal = this.getOrderTotal();
-        console.log('Creating Payment Intent for amount:', orderTotal);
-        
-        const response = await fetch('/api/create-payment-intent', {
-          method: 'POST',
+        console.log("Creating Payment Intent for amount:", orderTotal);
+
+        const response = await fetch("/api/create-payment-intent", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             amount: orderTotal,
-            currency: this.stripeCurrency || 'usd',
+            currency: this.stripeCurrency || "usd",
             orderData: this.orderData,
           }),
         });
 
-        const { success, clientSecret, paymentIntentId, error } = await response.json();
+        const { success, clientSecret, paymentIntentId, error } =
+          await response.json();
 
         if (!success || !clientSecret) {
-          throw new Error(error || 'Failed to create payment intent');
+          throw new Error(error || "Failed to create payment intent");
         }
 
-        console.log('Payment Intent created successfully:', paymentIntentId);
+        console.log("Payment Intent created successfully:", paymentIntentId);
 
         // Confirm the payment with the client secret
-        const { error: confirmError, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: this.stripeCardElement,
-            billing_details: {
-              name: this.orderData.customerInfo?.name || 'Customer',
-              email: this.orderData.customerInfo?.email || '',
+        const { error: confirmError, paymentIntent } =
+          await this.stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: this.stripeCardElement,
+              billing_details: {
+                name: this.orderData.customerInfo?.name || "Customer",
+                email: this.orderData.customerInfo?.email || "",
+              },
             },
-          },
-        });
+          });
 
         if (confirmError) {
-          console.error('Stripe payment confirmation error:', confirmError);
+          console.error("Stripe payment confirmation error:", confirmError);
           this.showStripeError(confirmError.message);
-        } else if (paymentIntent.status === 'succeeded') {
-          console.log('Payment succeeded!', paymentIntent);
-          
+        } else if (paymentIntent.status === "succeeded") {
+          console.log("Payment succeeded!", paymentIntent);
+
           // Retrieve full payment details from server
-          const detailsResponse = await fetch('/api/retrieve-payment', {
-            method: 'POST',
+          const detailsResponse = await fetch("/api/retrieve-payment", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               paymentIntentId: paymentIntent.id,
@@ -890,20 +924,23 @@ class PaymentManager {
           });
 
           const paymentDetails = await detailsResponse.json();
-          console.log('Payment details retrieved:', paymentDetails);
-          
-          await this.handleStripePaymentSuccess(paymentIntent, paymentDetails.paymentIntent);
+          console.log("Payment details retrieved:", paymentDetails);
+
+          await this.handleStripePaymentSuccess(
+            paymentIntent,
+            paymentDetails.paymentIntent,
+          );
         } else {
-          throw new Error('Payment was not completed successfully');
+          throw new Error("Payment was not completed successfully");
         }
       } catch (error) {
-        console.error('Stripe payment processing error:', error);
-        this.showStripeError('Payment processing failed. Please try again.');
+        console.error("Stripe payment processing error:", error);
+        this.showStripeError("Payment processing failed. Please try again.");
       } finally {
         // Re-enable submit button and hide loading
         submitButton.disabled = false;
-        buttonText.style.display = 'inline';
-        loadingSpinner.style.display = 'none';
+        buttonText.style.display = "inline";
+        loadingSpinner.style.display = "none";
       }
     });
   }
@@ -922,68 +959,82 @@ class PaymentManager {
         paymentMethodId: paymentIntent.payment_method,
         timestamp: new Date().toISOString(),
         customerInfo: {
-          name: paymentDetails?.charges?.billing_details?.name || this.orderData.customerInfo?.name || 'Customer',
-          email: paymentDetails?.metadata?.customer_email || this.orderData.customerInfo?.email || '',
+          name:
+            paymentDetails?.charges?.billing_details?.name ||
+            this.orderData.customerInfo?.name ||
+            "Customer",
+          email:
+            paymentDetails?.metadata?.customer_email ||
+            this.orderData.customerInfo?.email ||
+            "",
         },
         orderInfo: {
           orderId: paymentDetails?.metadata?.order_id || `order_${Date.now()}`,
-          services: paymentDetails?.metadata?.services ? JSON.parse(paymentDetails.metadata.services) : this.orderData.services || [],
-          totalItems: paymentDetails?.metadata?.total_items || (this.orderData.services || []).length,
+          services: paymentDetails?.metadata?.services
+            ? JSON.parse(paymentDetails.metadata.services)
+            : this.orderData.services || [],
+          totalItems:
+            paymentDetails?.metadata?.total_items ||
+            (this.orderData.services || []).length,
         },
-        receiptEmail: paymentDetails?.receipt_email || this.orderData.customerInfo?.email,
+        receiptEmail:
+          paymentDetails?.receipt_email || this.orderData.customerInfo?.email,
       };
 
-      console.log("Processing Stripe payment success with detailed data:", paymentResult);
+      console.log(
+        "Processing Stripe payment success with detailed data:",
+        paymentResult,
+      );
 
       // Store payment details for potential future reference
-      localStorage.setItem('lastStripePayment', JSON.stringify(paymentResult));
+      localStorage.setItem("lastStripePayment", JSON.stringify(paymentResult));
 
       // Handle successful payment
       this.handlePaymentSuccess(paymentResult);
-      
+
       // Show success message with receipt information
       if (paymentResult.receiptUrl) {
         this.showSuccessWithReceipt(paymentResult);
       }
-      
     } catch (error) {
       console.error("Error handling Stripe payment success:", error);
       this.showError(
-        "Payment completed but there was an error processing your order. Please contact support with transaction ID: " + paymentIntent.id,
+        "Payment completed but there was an error processing your order. Please contact support with transaction ID: " +
+          paymentIntent.id,
       );
     }
   }
 
   showStripeError(message) {
-    const messagesElement = document.getElementById('stripe-payment-messages');
+    const messagesElement = document.getElementById("stripe-payment-messages");
     messagesElement.textContent = message;
-    messagesElement.classList.add('error');
+    messagesElement.classList.add("error");
     setTimeout(() => {
-      messagesElement.textContent = '';
-      messagesElement.classList.remove('error');
+      messagesElement.textContent = "";
+      messagesElement.classList.remove("error");
     }, 5000);
   }
 
   showSuccessWithReceipt(paymentResult) {
     // Create a success message with receipt link
-    const messagesElement = document.getElementById('stripe-payment-messages');
+    const messagesElement = document.getElementById("stripe-payment-messages");
     const successHTML = `
       <div class="payment-success">
         <p><strong>Payment Successful!</strong></p>
         <p>Transaction ID: ${paymentResult.transactionId}</p>
         <p>Amount: $${paymentResult.amount} ${paymentResult.currency}</p>
-        ${paymentResult.receiptUrl ? `<p><a href="${paymentResult.receiptUrl}" target="_blank" class="receipt-link">View Receipt</a></p>` : ''}
-        ${paymentResult.receiptEmail ? `<p>Receipt sent to: ${paymentResult.receiptEmail}</p>` : ''}
+        ${paymentResult.receiptUrl ? `<p><a href="${paymentResult.receiptUrl}" target="_blank" class="receipt-link">View Receipt</a></p>` : ""}
+        ${paymentResult.receiptEmail ? `<p>Receipt sent to: ${paymentResult.receiptEmail}</p>` : ""}
       </div>
     `;
-    
+
     messagesElement.innerHTML = successHTML;
-    messagesElement.classList.add('success');
-    
+    messagesElement.classList.add("success");
+
     // Keep success message longer than error messages
     setTimeout(() => {
-      messagesElement.innerHTML = '';
-      messagesElement.classList.remove('success');
+      messagesElement.innerHTML = "";
+      messagesElement.classList.remove("success");
     }, 10000);
   }
 
@@ -1046,7 +1097,7 @@ class PaymentManager {
       if (stripeForm) {
         stripeForm.style.display = "block";
         console.log(" Showing Stripe payment form");
-        
+
         // Initialize Stripe if not already initialized
         if (!this.stripe || !this.stripeElements) {
           this.initializeStripeOnDemand();
@@ -1573,46 +1624,47 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     };
 
-  // Add function to test payment mode switching
-  window.togglePaymentMode = (mode) => {
-    if (window.paymentManager) {
-      window.paymentManager.paymentMode = mode;
-      window.paymentManager.initializePaymentMode();
-      console.log(`Switched to ${mode} mode`);
-    } else {
-      console.error("Payment manager not available");
-    }
-  };
-
-  // Add function to check element visibility
-  window.checkPaymentElements = () => {
-    console.log("=== Payment Elements Status ===");
-    const elements = [
-      "manualPaymentNotice",
-      "orderConfirmationContainer",
-      "paypalPaymentForm",
-      "paymentSectionTitle",
-    ];
-
-    elements.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        console.log(
-          `${id}: Found, display = ${element.style.display || "default"}`,
-        );
+    // Add function to test payment mode switching
+    window.togglePaymentMode = (mode) => {
+      if (window.paymentManager) {
+        window.paymentManager.paymentMode = mode;
+        window.paymentManager.initializePaymentMode();
+        console.log(`Switched to ${mode} mode`);
       } else {
-        console.log(`${id}: NOT FOUND`);
+        console.error("Payment manager not available");
       }
-    });
+    };
 
-    const paymentSelector = document.querySelector(".payment-method-selector");
-    console.log(
-      `payment-method-selector: ${paymentSelector ? "Found" : "NOT FOUND"}, display = ${paymentSelector?.style.display || "default"}`,
-    );
-  };
-  
+    // Add function to check element visibility
+    window.checkPaymentElements = () => {
+      console.log("=== Payment Elements Status ===");
+      const elements = [
+        "manualPaymentNotice",
+        "orderConfirmationContainer",
+        "paypalPaymentForm",
+        "paymentSectionTitle",
+      ];
+
+      elements.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          console.log(
+            `${id}: Found, display = ${element.style.display || "default"}`,
+          );
+        } else {
+          console.log(`${id}: NOT FOUND`);
+        }
+      });
+
+      const paymentSelector = document.querySelector(
+        ".payment-method-selector",
+      );
+      console.log(
+        `payment-method-selector: ${paymentSelector ? "Found" : "NOT FOUND"}, display = ${paymentSelector?.style.display || "default"}`,
+      );
+    };
   } catch (error) {
-    console.error('Failed to initialize payment system:', error);
+    console.error("Failed to initialize payment system:", error);
   }
 });
 
@@ -1621,18 +1673,18 @@ window.navigateToHome = () => {
   try {
     // Check if we're in a subdirectory (like /pages/)
     const currentPath = window.location.pathname;
-    let homePath = '/';
-    
+    let homePath = "/";
+
     // If we're in the pages directory, go up one level
-    if (currentPath.includes('/pages/')) {
-      homePath = '../index.html';
+    if (currentPath.includes("/pages/")) {
+      homePath = "../index.html";
     }
-    
-    console.log('Navigating to home page:', homePath);
+
+    console.log("Navigating to home page:", homePath);
     window.location.href = homePath;
   } catch (error) {
-    console.error('Navigation error:', error);
+    console.error("Navigation error:", error);
     // Fallback navigation
-    window.location.href = '/';
+    window.location.href = "/";
   }
 };

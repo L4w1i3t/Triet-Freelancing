@@ -51,10 +51,10 @@
         try {
           // Wait for payment configuration to be available
           if (!window.PAYMENT_CONFIG && window.initializePaymentConfig) {
-            console.log('Waiting for payment configuration...');
+            console.log("Waiting for payment configuration...");
             await window.initializePaymentConfig();
           }
-          
+
           if (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.paypal) {
             const config = window.PAYMENT_CONFIG.paypal;
             const environment =
@@ -100,10 +100,12 @@
               );
             }
           } else {
-            console.warn("PAYMENT_CONFIG not available. Cannot load PayPal SDK.");
+            console.warn(
+              "PAYMENT_CONFIG not available. Cannot load PayPal SDK.",
+            );
           }
         } catch (error) {
-          console.error('Failed to load PayPal SDK:', error);
+          console.error("Failed to load PayPal SDK:", error);
         }
       };
 
@@ -117,7 +119,7 @@
           if (!window.PAYMENT_CONFIG && window.initializePaymentConfig) {
             await window.initializePaymentConfig();
           }
-          
+
           if (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.stripe) {
             const script = document.createElement("script");
             script.src = "https://js.stripe.com/v3/";
@@ -125,7 +127,9 @@
               console.log("Stripe SDK loaded successfully");
             };
             script.onerror = () => {
-              console.warn("Stripe SDK failed to load. Falling back to manual payment mode.");
+              console.warn(
+                "Stripe SDK failed to load. Falling back to manual payment mode.",
+              );
               if (window.paymentManager) {
                 window.paymentManager.fallbackToManualMode();
               }
@@ -135,7 +139,7 @@
             console.warn("Stripe not configured or not available.");
           }
         } catch (error) {
-          console.error('Failed to load Stripe SDK:', error);
+          console.error("Failed to load Stripe SDK:", error);
         }
       };
 
@@ -385,7 +389,8 @@
                     <div class="payment-info">
                       <h3>Credit Card (Stripe)</h3>
                       <p>
-                        Secure credit card processing with advanced fraud protection
+                        Secure credit card processing with advanced fraud
+                        protection
                       </p>
                     </div>
                     <div class="payment-icons">
@@ -409,7 +414,11 @@
               </div>
 
               <!-- Stripe Payment Form -->
-              <div class="payment-form-container" id="stripePaymentForm" style="display: none;">
+              <div
+                class="payment-form-container"
+                id="stripePaymentForm"
+                style="display: none"
+              >
                 <div class="payment-form-card">
                   <h3>Credit Card Payment</h3>
                   <p class="payment-note">
@@ -419,9 +428,13 @@
                     <div id="stripe-payment-element">
                       <!-- Stripe Elements will create form elements here -->
                     </div>
-                    <button id="stripe-submit-button" type="submit" class="stripe-submit-btn">
+                    <button
+                      id="stripe-submit-button"
+                      type="submit"
+                      class="stripe-submit-btn"
+                    >
                       <span class="button-text">Pay Now</span>
-                      <span class="loading-spinner" style="display: none;">
+                      <span class="loading-spinner" style="display: none">
                         <i class="fas fa-spinner fa-spin"></i>
                       </span>
                     </button>
@@ -537,16 +550,16 @@
     <!-- Scripts -->
     <script>
       // Add global error handling to catch any syntax errors
-      window.addEventListener('error', function(e) {
-        console.error('Global JavaScript error:', e.error);
-        console.error('Error in file:', e.filename, 'line:', e.lineno);
+      window.addEventListener("error", function (e) {
+        console.error("Global JavaScript error:", e.error);
+        console.error("Error in file:", e.filename, "line:", e.lineno);
       });
-      
-      window.addEventListener('unhandledrejection', function(e) {
-        console.error('Unhandled promise rejection:', e.reason);
+
+      window.addEventListener("unhandledrejection", function (e) {
+        console.error("Unhandled promise rejection:", e.reason);
       });
     </script>
-    
+
     <script src="/components/addComponents.js"></script>
 
     <!-- Security & Privacy Scripts -->

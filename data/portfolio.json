@@ -6,7 +6,15 @@
       "category": "websites",
       "year": "2024",
       "description": "This website (duh.)",
-      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript", "PayPal SDK"],
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "SCSS",
+        "JavaScript",
+        "PayPal SDK",
+        "Stripe SDK",
+        "Vercel API"
+      ],
       "links": {
         "live": "/",
         "github": null

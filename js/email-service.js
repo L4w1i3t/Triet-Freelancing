@@ -3,10 +3,10 @@ class EmailService {
   constructor() {
     // EmailJS configuration - will be loaded asynchronously
     this.config = {
-      serviceId: '', // Will be loaded from .env
-      templateId: '', // Will be loaded from .env
-      customerTemplateId: '', // Will be loaded from .env
-      publicKey: '', // Will be loaded from .env
+      serviceId: "", // Will be loaded from .env
+      templateId: "", // Will be loaded from .env
+      customerTemplateId: "", // Will be loaded from .env
+      publicKey: "", // Will be loaded from .env
     };
 
     this.initialized = false;
@@ -21,7 +21,7 @@ class EmailService {
 
   async loadConfig() {
     if (this.configLoaded) return;
-    
+
     try {
       const envConfig = await window.envConfig.load();
       this.config = {
@@ -31,9 +31,9 @@ class EmailService {
         publicKey: envConfig.EMAILJS_PUBLIC_KEY,
       };
       this.configLoaded = true;
-      console.log('Email service configuration loaded successfully');
+      console.log("Email service configuration loaded successfully");
     } catch (error) {
-      console.error('Failed to load email service configuration:', error);
+      console.error("Failed to load email service configuration:", error);
       throw error;
     }
   }
@@ -43,15 +43,15 @@ class EmailService {
       await this.loadConfig();
       await this.initializeEmailJS();
     } catch (error) {
-      console.error('Failed to initialize email service:', error);
+      console.error("Failed to initialize email service:", error);
     }
   }
 
   async initializeEmailJS() {
     if (!this.configLoaded) {
-      throw new Error('Configuration not loaded');
+      throw new Error("Configuration not loaded");
     }
-    
+
     if (typeof emailjs !== "undefined") {
       emailjs.init(this.config.publicKey);
       this.initialized = true;

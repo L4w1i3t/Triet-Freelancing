@@ -9,7 +9,7 @@
 const createPaymentConfig = async () => {
   // Wait for environment configuration to load
   const envConfig = await window.envConfig.load();
-  
+
   return {
     // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
     mode: "stripe", // Options: 'manual', 'paypal', or 'stripe'
@@ -19,7 +19,7 @@ const createPaymentConfig = async () => {
       publishableKey: envConfig.STRIPE_PUBLISHABLE_KEY, // Loaded from .env
       environment: "production", // 'test' or 'production'
       currency: "usd",
-      
+
       // Digital Products Configuration
       digitalProducts: true, // Indicates this is for digital goods/services
       automaticPaymentMethods: {
@@ -68,13 +68,23 @@ const initializePaymentConfig = async () => {
     // Configuration validation
     if (config.mode === "paypal" && config.paypal) {
       // Validate PayPal configuration
-      if (config.paypal.clientId === "your-paypal-client-id" || !config.paypal.clientId) {
-        console.warn("⚠️ PayPal Client ID not configured. Please update environment variables");
+      if (
+        config.paypal.clientId === "your-paypal-client-id" ||
+        !config.paypal.clientId
+      ) {
+        console.warn(
+          " PayPal Client ID not configured. Please update environment variables",
+        );
       }
     } else if (config.mode === "stripe" && config.stripe) {
       // Validate Stripe configuration
-      if (config.stripe.publishableKey === "your-stripe-publishable-key" || !config.stripe.publishableKey) {
-        console.warn("⚠️ Stripe Publishable Key not configured. Please update environment variables");
+      if (
+        config.stripe.publishableKey === "your-stripe-publishable-key" ||
+        !config.stripe.publishableKey
+      ) {
+        console.warn(
+          " Stripe Publishable Key not configured. Please update environment variables",
+        );
       }
     }
 
@@ -83,10 +93,9 @@ const initializePaymentConfig = async () => {
 
     console.log(`Payment system initialized in ${config.mode} mode`);
     return config;
-    
   } catch (error) {
-    console.error('Failed to initialize payment configuration:', error);
-    
+    console.error("Failed to initialize payment configuration:", error);
+
     // Fallback configuration
     window.PAYMENT_CONFIG = {
       mode: "manual",
@@ -96,22 +105,22 @@ const initializePaymentConfig = async () => {
         { name: "Zelle", icon: "fas fa-check" },
       ],
     };
-    
+
     window.PAYMENT_MODE = "manual";
     return window.PAYMENT_CONFIG;
   }
 };
 
 // Auto-initialize when the script loads
-(function() {
+(function () {
   try {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializePaymentConfig);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializePaymentConfig);
     } else {
       initializePaymentConfig();
     }
   } catch (error) {
-    console.error('Failed to auto-initialize payment config:', error);
+    console.error("Failed to auto-initialize payment config:", error);
   }
 })();
 

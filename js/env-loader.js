@@ -21,14 +21,14 @@ class EnvConfig {
 
     // Create new load promise
     this.loadPromise = this._fetchConfig();
-    
+
     try {
       this.config = await this.loadPromise;
       this.isLoaded = true;
-      console.log('Environment configuration loaded successfully');
+      console.log("Environment configuration loaded successfully");
       return this.config;
     } catch (error) {
-      console.error('Failed to load environment configuration:', error);
+      console.error("Failed to load environment configuration:", error);
       // Fallback to static env-config.js if server is not available
       return this._loadFallback();
     } finally {
@@ -38,22 +38,26 @@ class EnvConfig {
 
   async _fetchConfig() {
     try {
-      console.log('Fetching configuration from /api/config...');
-      const response = await fetch('/api/config');
+      console.log("Fetching configuration from /api/config...");
+      const response = await fetch("/api/config");
       if (!response.ok) {
         throw new Error(`Failed to fetch config: ${response.status}`);
       }
       const config = await response.json();
-      console.log('Configuration fetched successfully:', Object.keys(config));
+      console.log("Configuration fetched successfully:", Object.keys(config));
       return config;
     } catch (error) {
-      console.warn('API config not available, trying static env-config.js fallback');
+      console.warn(
+        "API config not available, trying static env-config.js fallback",
+      );
       throw error; // This will trigger the fallback
     }
   }
 
   async _loadFallback() {
-    console.warn('API config not available, using empty fallback configuration');
+    console.warn(
+      "API config not available, using empty fallback configuration",
+    );
     // Return empty config as fallback since env-config.js is removed
     return {
       EMAILJS_SERVICE_ID: "",
@@ -69,15 +73,19 @@ class EnvConfig {
   // Getter methods for easy access
   get(key) {
     if (!this.isLoaded || !this.config) {
-      console.warn('Environment configuration not loaded. Call EnvConfig.load() first.');
-      return '';
+      console.warn(
+        "Environment configuration not loaded. Call EnvConfig.load() first.",
+      );
+      return "";
     }
-    return this.config[key] || '';
+    return this.config[key] || "";
   }
 
   getAll() {
     if (!this.isLoaded || !this.config) {
-      console.warn('Environment configuration not loaded. Call EnvConfig.load() first.');
+      console.warn(
+        "Environment configuration not loaded. Call EnvConfig.load() first.",
+      );
       return {};
     }
     return { ...this.config };
@@ -88,8 +96,11 @@ class EnvConfig {
 window.envConfig = new EnvConfig();
 
 // Initialize environment configuration
-window.envConfig.load().then(config => {
-  console.log('Environment configuration initialized successfully');
-}).catch(error => {
-  console.error('Failed to initialize environment configuration:', error);
-});
+window.envConfig
+  .load()
+  .then((config) => {
+    console.log("Environment configuration initialized successfully");
+  })
+  .catch((error) => {
+    console.error("Failed to initialize environment configuration:", error);
+  });
