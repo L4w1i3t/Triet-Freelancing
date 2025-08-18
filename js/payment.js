@@ -294,7 +294,7 @@ class PaymentManager {
     const heroDescription = document.querySelector(".payment-description");
     if (heroDescription) {
       heroDescription.textContent =
-        "Review your order details and confirm to proceed with manual payment coordination";
+        "Review your order details and confirm to proceed.";
     }
 
     // Handle payment method selector for manual mode
@@ -374,7 +374,7 @@ class PaymentManager {
           <div class="alert alert-info">
             <i class="fas fa-info-circle"></i>
             <strong>Payment Method Update:</strong> 
-            We're experiencing connectivity issues with our automated payment system. 
+            I'm experiencing technical difficulties with the automated payment system. 
             Please use the manual payment coordination below to complete your order.
           </div>
         </div>
@@ -648,6 +648,12 @@ class PaymentManager {
     try {
       console.log("Initializing Stripe integration...");
 
+      // Check if Stripe is already initialized
+      if (this.stripe && this.stripeElements && this.stripeCardElement) {
+        console.log("Stripe already fully initialized, skipping re-initialization");
+        return;
+      }
+
       // Wait for Stripe SDK to be available with timeout
       const waitForStripe = (timeout = 10000) => {
         return new Promise((resolve, reject) => {
@@ -670,8 +676,10 @@ class PaymentManager {
 
       await waitForStripe();
 
-      // Initialize Stripe instance
-      this.stripe = Stripe(this.stripePublishableKey);
+      // Initialize Stripe instance only if not already done
+      if (!this.stripe) {
+        this.stripe = Stripe(this.stripePublishableKey);
+      }
 
       // Get order total safely
       const orderTotal = this.getOrderTotal();
@@ -681,38 +689,57 @@ class PaymentManager {
         `Initializing Stripe with amount: $${orderTotal} (${amountInCents} cents)`,
       );
 
-      // Create Elements instance (without payment mode since we don't have server-side Payment Intents)
-      this.stripeElements = this.stripe.elements();
+      // Create Elements instance only if not already created
+      if (!this.stripeElements) {
+        this.stripeElements = this.stripe.elements();
+      }
 
-      // Create individual card element instead of payment element
-      this.stripeCardElement = this.stripeElements.create("card", {
-        style: {
-          base: {
-            fontSize: "16px",
-            color: "#ffffff",
-            fontFamily: "Inter, sans-serif",
-            "::placeholder": {
-              color: "#aab7c4",
+      // Create individual card element only if not already created
+      if (!this.stripeCardElement) {
+        this.stripeCardElement = this.stripeElements.create("card", {
+          style: {
+            base: {
+              fontSize: "16px",
+              color: "#ffffff",
+              fontFamily: "Inter, sans-serif",
+              "::placeholder": {
+                color: "#aab7c4",
+              },
+            },
+            invalid: {
+              color: "#fa755a",
+              iconColor: "#fa755a",
             },
           },
-          invalid: {
-            color: "#fa755a",
-            iconColor: "#fa755a",
-          },
-        },
-      });
+        });
 
-      // Mount the card element
-      this.stripeCardElement.mount("#stripe-payment-element");
+        // Mount the card element
+        this.stripeCardElement.mount("#stripe-payment-element");
+      }
 
-      // Set up form submission
-      this.setupStripeForm();
+      // Set up form submission only if not already done
+      if (!this.stripeFormInitialized) {
+        this.setupStripeForm();
+      }
 
       console.log(
         ` Stripe initialized in ${this.config.stripe?.environment || "test"} mode`,
       );
+      
+      // Log environment warning if running test mode on production domain
+      if (this.config.stripe?.environment === "test" && window.location.hostname !== "localhost") {
+        console.warn(" Note: Stripe is in test mode. Switch to production for live payments.");
+      }
     } catch (error) {
       console.error("Failed to initialize Stripe:", error);
+      
+      // Check if it's an HTTPS error
+      if (error.message && error.message.includes("HTTPS")) {
+        console.error(" HTTPS Error: Stripe requires HTTPS for production mode. Either:");
+        console.error(" 1. Switch to test mode for local development, or");
+        console.error(" 2. Use HTTPS for production deployment");
+      }
+      
       console.log("Falling back to manual payment mode...");
       this.fallbackToManualMode();
     }
@@ -724,7 +751,7 @@ class PaymentManager {
 
       // Check if Stripe is already initialized
       if (this.stripe && this.stripeElements) {
-        console.log("Stripe already initialized");
+        console.log("Stripe already initialized, skipping re-initialization");
         return;
       }
 
@@ -748,20 +775,14 @@ class PaymentManager {
         });
       };
 
-      // Ensure Stripe SDK is loaded
-      if (typeof Stripe === "undefined") {
-        console.log("Loading Stripe SDK...");
-        // Try to load Stripe SDK if not already loaded
-        const script = document.createElement("script");
-        script.src = "https://js.stripe.com/v3/";
-        script.async = true;
-        document.head.appendChild(script);
-      }
-
+      // Wait for Stripe SDK to be loaded by the HTML page (it loads asynchronously)
+      console.log("Waiting for Stripe SDK to be available...");
       await waitForStripe();
 
-      // Initialize Stripe instance
-      this.stripe = Stripe(this.stripePublishableKey);
+      // Initialize Stripe instance only if not already done
+      if (!this.stripe) {
+        this.stripe = Stripe(this.stripePublishableKey);
+      }
 
       // Clear any existing elements from the container
       const paymentElementContainer = document.getElementById(
@@ -839,9 +860,27 @@ class PaymentManager {
       );
     } catch (error) {
       console.error("Failed to initialize Stripe on demand:", error);
-      this.showStripeError(
-        "Failed to load Stripe payment form. Please try refreshing the page.",
-      );
+      
+      // Check if it's an HTTPS error and provide helpful message
+      if (error.message && error.message.includes("HTTPS")) {
+        console.error(" HTTPS Error: Stripe requires HTTPS for production mode");
+        this.showStripeError(
+          "Payment system requires HTTPS for security. Please contact support or try again later."
+        );
+      } else {
+        // Show a user-friendly error message for other errors
+        this.showStripeError(
+          "Unable to load Stripe payment form. Please refresh the page or contact support if the issue persists."
+        );
+      }
+      
+      // Only fall back to manual mode if it's a persistent issue
+      setTimeout(() => {
+        if (!this.stripe || !this.stripeElements) {
+          console.warn("Stripe still not available after timeout, falling back to manual mode");
+          this.fallbackToManualMode();
+        }
+      }, 3000);
     }
   }
 
@@ -1098,9 +1137,12 @@ class PaymentManager {
         stripeForm.style.display = "block";
         console.log(" Showing Stripe payment form");
 
-        // Initialize Stripe if not already initialized
+        // Initialize Stripe if not already initialized - but give the SDK time to load
         if (!this.stripe || !this.stripeElements) {
-          this.initializeStripeOnDemand();
+          // Add a small delay to allow SDK to finish loading
+          setTimeout(() => {
+            this.initializeStripeOnDemand();
+          }, 500);
         }
       }
     } else if (method === "bitcoin") {

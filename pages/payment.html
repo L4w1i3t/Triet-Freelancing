@@ -44,10 +44,21 @@
     <!-- Payment Configuration (Toggle between manual and automated) -->
     <script src="/js/payment-config.js"></script>
 
-    <!-- PayPal SDK - Dynamically loaded based on configuration -->
+    <!-- Payment SDK Loader - Conditionally loads only the required SDK -->
     <script>
-      // Load PayPal SDK with proper configuration - moved here to ensure config is loaded first
-      const loadPayPalSDK = async () => {
+      // Prevent multiple SDK loading
+      let sdkLoadingInProgress = false;
+      let sdkLoaded = { paypal: false, stripe: false };
+
+      // Load Payment SDKs based on configuration
+      const loadPaymentSDKs = async () => {
+        if (sdkLoadingInProgress) {
+          console.log("SDK loading already in progress, skipping...");
+          return;
+        }
+        
+        sdkLoadingInProgress = true;
+
         try {
           // Wait for payment configuration to be available
           if (!window.PAYMENT_CONFIG && window.initializePaymentConfig) {
@@ -55,96 +66,105 @@
             await window.initializePaymentConfig();
           }
 
-          if (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.paypal) {
-            const config = window.PAYMENT_CONFIG.paypal;
-            const environment =
-              config.environment === "production"
-                ? "www.paypal.com"
-                : "www.sandbox.paypal.com";
-            const clientId = config.clientId;
+          const paymentMode = window.PAYMENT_CONFIG?.mode;
+          console.log("Loading SDK for payment mode:", paymentMode);
 
-            // Debug logging for PayPal SDK loading
-            console.group("PayPal SDK Loading Debug");
-            console.log("Config environment setting:", config.environment);
-            console.log("Resolved SDK host:", environment);
-            console.log(
-              "Client ID (first 20 chars):",
-              clientId ? clientId.substring(0, 20) + "..." : "Not configured",
-            );
-            console.groupEnd();
+          // Only load the SDK for the active payment mode
+          if (paymentMode === "paypal" && !sdkLoaded.paypal) {
+            await loadPayPalSDK();
+          } else if (paymentMode === "stripe" && !sdkLoaded.stripe) {
+            await loadStripeSDK();
+          } else {
+            console.log("Manual payment mode or SDK already loaded, skipping SDK loading");
+          }
+        } catch (error) {
+          console.error("Failed to load payment SDKs:", error);
+        } finally {
+          sdkLoadingInProgress = false;
+        }
+      };
 
-            if (clientId && clientId !== "your-paypal-client-id") {
-              const script = document.createElement("script");
-              const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit,paylater`;
-              script.src = sdkUrl;
+      // Load PayPal SDK
+      const loadPayPalSDK = async () => {
+        if (sdkLoaded.paypal) {
+          console.log("PayPal SDK already loaded, skipping...");
+          return;
+        }
 
-              // Log the complete SDK URL for debugging
-              console.log("Loading PayPal SDK from:", sdkUrl);
+        try {
+          const config = window.PAYMENT_CONFIG.paypal;
+          const environment =
+            config.environment === "production"
+              ? "www.paypal.com"
+              : "www.sandbox.paypal.com";
+          const clientId = config.clientId;
 
-              script.setAttribute(
-                "data-sdk-integration-source",
-                "button-factory",
-              );
+          if (clientId && clientId !== "your-paypal-client-id") {
+            const script = document.createElement("script");
+            const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit,paylater`;
+            script.src = sdkUrl;
+            script.setAttribute("data-sdk-integration-source", "button-factory");
+            
+            return new Promise((resolve, reject) => {
+              script.onload = () => {
+                console.log("PayPal SDK loaded successfully");
+                sdkLoaded.paypal = true;
+                resolve();
+              };
               script.onerror = () => {
-                console.warn(
-                  "PayPal SDK failed to load. Falling back to manual payment mode.",
-                );
+                console.warn("PayPal SDK failed to load. Falling back to manual payment mode.");
                 if (window.paymentManager) {
                   window.paymentManager.fallbackToManualMode();
                 }
+                reject(new Error("PayPal SDK failed to load"));
               };
               document.head.appendChild(script);
-            } else {
-              console.warn(
-                "PayPal client ID not configured. Using manual payment mode.",
-              );
-            }
+            });
           } else {
-            console.warn(
-              "PAYMENT_CONFIG not available. Cannot load PayPal SDK.",
-            );
+            console.warn("PayPal client ID not configured.");
+            throw new Error("PayPal not configured");
           }
         } catch (error) {
           console.error("Failed to load PayPal SDK:", error);
+          throw error;
         }
       };
-
-      // Load PayPal SDK after configuration is ready
-      loadPayPalSDK();
 
       // Load Stripe SDK
       const loadStripeSDK = async () => {
-        try {
-          // Wait for payment configuration to be available
-          if (!window.PAYMENT_CONFIG && window.initializePaymentConfig) {
-            await window.initializePaymentConfig();
-          }
+        if (sdkLoaded.stripe || window.Stripe) {
+          console.log("Stripe SDK already loaded, skipping...");
+          sdkLoaded.stripe = true;
+          return;
+        }
 
-          if (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.stripe) {
-            const script = document.createElement("script");
-            script.src = "https://js.stripe.com/v3/";
+        try {
+          const script = document.createElement("script");
+          script.src = "https://js.stripe.com/v3/";
+          
+          return new Promise((resolve, reject) => {
             script.onload = () => {
               console.log("Stripe SDK loaded successfully");
+              sdkLoaded.stripe = true;
+              resolve();
             };
             script.onerror = () => {
-              console.warn(
-                "Stripe SDK failed to load. Falling back to manual payment mode.",
-              );
+              console.warn("Stripe SDK failed to load. Falling back to manual payment mode.");
               if (window.paymentManager) {
                 window.paymentManager.fallbackToManualMode();
               }
+              reject(new Error("Stripe SDK failed to load"));
             };
             document.head.appendChild(script);
-          } else {
-            console.warn("Stripe not configured or not available.");
-          }
+          });
         } catch (error) {
           console.error("Failed to load Stripe SDK:", error);
+          throw error;
         }
       };
 
-      // Load Stripe SDK
-      loadStripeSDK();
+      // Load SDKs after configuration is ready
+      loadPaymentSDKs();
     </script>
 
     <!-- Header -->
@@ -316,8 +336,7 @@
                   </span>
                 </button>
                 <p class="confirmation-note">
-                  By confirming this order, you agree to proceed with manual
-                  payment coordination.
+                  By confirming this order, you agree to proceed with payment coordination.
                 </p>
               </div>
 

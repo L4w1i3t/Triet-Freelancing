@@ -10,6 +10,16 @@ const createPaymentConfig = async () => {
   // Wait for environment configuration to load
   const envConfig = await window.envConfig.load();
 
+  // Auto-detect environment based on hostname and protocol
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const isHTTPS = window.location.protocol === 'https:';
+  const isDevelopment = isLocalhost || !isHTTPS;
+
+  // Determine Stripe environment
+  const stripeEnvironment = isDevelopment ? "test" : "production";
+  
+  console.log(`Auto-detected environment: ${stripeEnvironment} (localhost: ${isLocalhost}, https: ${isHTTPS})`);
+
   return {
     // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
     mode: "stripe", // Options: 'manual', 'paypal', or 'stripe'
@@ -17,7 +27,7 @@ const createPaymentConfig = async () => {
     // Stripe Configuration (for stripe payments)
     stripe: {
       publishableKey: envConfig.STRIPE_PUBLISHABLE_KEY, // Loaded from .env
-      environment: "production", // 'test' or 'production'
+      environment: stripeEnvironment, // Auto-detected based on hostname and protocol
       currency: "usd",
 
       // Digital Products Configuration
@@ -60,7 +70,14 @@ const createPaymentConfig = async () => {
 };
 
 // Initialize payment configuration
+let configInitialized = false;
 const initializePaymentConfig = async () => {
+  // Prevent multiple initializations
+  if (configInitialized) {
+    console.log("Payment configuration already initialized, returning existing config");
+    return window.PAYMENT_CONFIG;
+  }
+  
   try {
     const config = await createPaymentConfig();
     window.PAYMENT_CONFIG = config;
@@ -91,6 +108,7 @@ const initializePaymentConfig = async () => {
     // For backward compatibility, set the global PAYMENT_MODE variable
     window.PAYMENT_MODE = config.mode;
 
+    configInitialized = true;
     console.log(`Payment system initialized in ${config.mode} mode`);
     return config;
   } catch (error) {
@@ -107,17 +125,28 @@ const initializePaymentConfig = async () => {
     };
 
     window.PAYMENT_MODE = "manual";
+    configInitialized = true;
     return window.PAYMENT_CONFIG;
   }
 };
 
-// Auto-initialize when the script loads
+// Auto-initialize when the script loads (only once)
 (function () {
+  // Prevent multiple auto-initializations
+  if (window.paymentConfigAutoInitialized) {
+    console.log("Payment config auto-initialization already completed");
+    return;
+  }
+  
   try {
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initializePaymentConfig);
+      document.addEventListener("DOMContentLoaded", () => {
+        initializePaymentConfig();
+        window.paymentConfigAutoInitialized = true;
+      });
     } else {
       initializePaymentConfig();
+      window.paymentConfigAutoInitialized = true;
     }
   } catch (error) {
     console.error("Failed to auto-initialize payment config:", error);
