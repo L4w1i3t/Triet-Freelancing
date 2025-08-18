@@ -1,0 +1,16 @@
+{
+  "functions": {
+    "api/create-payment-intent.js": {
+      "maxDuration": 10
+    },
+    "api/retrieve-payment.js": {
+      "maxDuration": 10
+    },
+    "api/config.js": {
+      "maxDuration": 5
+    },
+    "api/analytics.js": {
+      "maxDuration": 5
+    }
+  }
+}

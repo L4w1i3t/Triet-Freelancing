@@ -37,38 +37,30 @@ class EnvConfig {
   }
 
   async _fetchConfig() {
-    const response = await fetch('/api/config');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch config: ${response.status}`);
+    try {
+      const response = await fetch('/api/config');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch config: ${response.status}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.warn('API config not available, trying static env-config.js fallback');
+      throw error; // This will trigger the fallback
     }
-    return response.json();
   }
 
   async _loadFallback() {
-    try {
-      // Try to load the static env-config.js as fallback
-      const script = document.createElement('script');
-      script.src = '/js/env-config.js';
-      document.head.appendChild(script);
-      
-      return new Promise((resolve, reject) => {
-        script.onload = () => {
-          if (window.ENV_CONFIG) {
-            console.log('Loaded fallback environment configuration');
-            this.config = window.ENV_CONFIG;
-            this.isLoaded = true;
-            resolve(this.config);
-          } else {
-            reject(new Error('Fallback env-config.js not found'));
-          }
-        };
-        script.onerror = () => reject(new Error('Failed to load fallback configuration'));
-      });
-    } catch (error) {
-      console.error('Fallback configuration failed:', error);
-      // Return empty config as last resort
-      return {};
-    }
+    console.warn('API config not available, using empty fallback configuration');
+    // Return empty config as fallback since env-config.js is removed
+    return {
+      EMAILJS_SERVICE_ID: "",
+      EMAILJS_TEMPLATE_ID_ADMIN: "",
+      EMAILJS_TEMPLATE_ID_CUSTOMER: "",
+      EMAILJS_PUBLIC_KEY: "",
+      PP_CLIENT_ID: "",
+      PP_API_BASE: "https://api.paypal.com",
+      STRIPE_PUBLISHABLE_KEY: "",
+    };
   }
 
   // Getter methods for easy access
@@ -92,9 +84,9 @@ class EnvConfig {
 // Create global instance
 window.envConfig = new EnvConfig();
 
-// For backward compatibility, also expose as ENV_CONFIG after loading
+// Initialize environment configuration
 window.envConfig.load().then(config => {
-  window.ENV_CONFIG = config;
+  console.log('Environment configuration initialized successfully');
 }).catch(error => {
   console.error('Failed to initialize environment configuration:', error);
 });

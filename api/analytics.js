@@ -1,18 +1,15 @@
-// Mock Analytics Endpoint for Development
-// This is a simple endpoint that handles analytics data
+// Analytics Endpoint for Vercel Deployment
+// This endpoint handles analytics data from the client
 
 export default function handler(req, res) {
-  // Only allow this endpoint on localhost/development
-  const host = req.headers.host || "";
-  const isLocalhost =
-    host.includes("localhost") ||
-    host.includes("127.0.0.1") ||
-    host.startsWith("192.168.") ||
-    host.startsWith("10.0.") ||
-    process.env.NODE_ENV === "development";
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (!isLocalhost) {
-    return res.status(404).json({ error: "Not found" });
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
   // Only accept POST requests
