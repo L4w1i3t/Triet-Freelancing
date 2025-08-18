@@ -128,12 +128,6 @@ async function setupDistDirectory() {
   await fs.ensureDir(DIST_DIR);
 }
 
-// Generate environment configuration
-async function generateEnvConfig() {
-  console.log("  Generating environment configuration...");
-  execSync("node build-env.js", { cwd: SRC_DIR, stdio: "inherit" });
-}
-
 // Compile SCSS to CSS
 async function compileSCSS() {
   console.log(" Compiling SCSS...");
@@ -305,7 +299,6 @@ async function build() {
 
   try {
     await setupDistDirectory();
-    await generateEnvConfig();
     await compileSCSS();
 
     console.log("\n Processing files...");

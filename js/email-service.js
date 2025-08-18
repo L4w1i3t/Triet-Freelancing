@@ -1,15 +1,16 @@
 // Email Service for Order Notifications
 class EmailService {
   constructor() {
-    // EmailJS configuration
+    // EmailJS configuration - will be loaded asynchronously
     this.config = {
-      serviceId: EMAILJS_SERVICE_ID, // Loaded from .env
-      templateId: EMAILJS_TEMPLATE_ID_ADMIN, // Loaded from .env
-      customerTemplateId: EMAILJS_TEMPLATE_ID_CUSTOMER, // Loaded from .env
-      publicKey: EMAILJS_PUBLIC_KEY, // Loaded from .env
+      serviceId: '', // Will be loaded from .env
+      templateId: '', // Will be loaded from .env
+      customerTemplateId: '', // Will be loaded from .env
+      publicKey: '', // Will be loaded from .env
     };
 
     this.initialized = false;
+    this.configLoaded = false;
 
     // Security integration
     this.inputValidator = window.inputValidator;
@@ -18,7 +19,39 @@ class EmailService {
     this.init();
   }
 
-  init() {
+  async loadConfig() {
+    if (this.configLoaded) return;
+    
+    try {
+      const envConfig = await window.envConfig.load();
+      this.config = {
+        serviceId: envConfig.EMAILJS_SERVICE_ID,
+        templateId: envConfig.EMAILJS_TEMPLATE_ID_ADMIN,
+        customerTemplateId: envConfig.EMAILJS_TEMPLATE_ID_CUSTOMER,
+        publicKey: envConfig.EMAILJS_PUBLIC_KEY,
+      };
+      this.configLoaded = true;
+      console.log('Email service configuration loaded successfully');
+    } catch (error) {
+      console.error('Failed to load email service configuration:', error);
+      throw error;
+    }
+  }
+
+  async init() {
+    try {
+      await this.loadConfig();
+      await this.initializeEmailJS();
+    } catch (error) {
+      console.error('Failed to initialize email service:', error);
+    }
+  }
+
+  async initializeEmailJS() {
+    if (!this.configLoaded) {
+      throw new Error('Configuration not loaded');
+    }
+    
     if (typeof emailjs !== "undefined") {
       emailjs.init(this.config.publicKey);
       this.initialized = true;
