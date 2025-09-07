@@ -145,7 +145,7 @@ async function obfuscateJavaScript(inputPath, outputPath) {
     const code = await fs.readFile(inputPath, "utf8");
 
     // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === "admin/dashboard.js") {
+    if (path.basename(inputPath) === "DUMMY.js") {
       // named something else for now.
       console.log(
         `    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`,
