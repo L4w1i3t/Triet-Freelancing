@@ -108,6 +108,7 @@ const EXCLUDE_PATTERNS = [
   "email-template.html",
   "build_production.bat",
   "admin-setup.js",
+  "admin/dashboard.js" //for debug purpose.
 ];
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
