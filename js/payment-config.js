@@ -11,14 +11,18 @@ const createPaymentConfig = async () => {
   const envConfig = await window.envConfig.load();
 
   // Auto-detect environment based on hostname and protocol
-  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const isHTTPS = window.location.protocol === 'https:';
+  const isLocalhost =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+  const isHTTPS = window.location.protocol === "https:";
   const isDevelopment = isLocalhost || !isHTTPS;
 
   // Determine Stripe environment
   const stripeEnvironment = isDevelopment ? "test" : "production";
-  
-  console.log(`Auto-detected environment: ${stripeEnvironment} (localhost: ${isLocalhost}, https: ${isHTTPS})`);
+
+  console.log(
+    `Auto-detected environment: ${stripeEnvironment} (localhost: ${isLocalhost}, https: ${isHTTPS})`,
+  );
 
   return {
     // CHANGE THIS VALUE TO SWITCH PAYMENT MODES
@@ -74,10 +78,12 @@ let configInitialized = false;
 const initializePaymentConfig = async () => {
   // Prevent multiple initializations
   if (configInitialized) {
-    console.log("Payment configuration already initialized, returning existing config");
+    console.log(
+      "Payment configuration already initialized, returning existing config",
+    );
     return window.PAYMENT_CONFIG;
   }
-  
+
   try {
     const config = await createPaymentConfig();
     window.PAYMENT_CONFIG = config;
@@ -137,7 +143,7 @@ const initializePaymentConfig = async () => {
     console.log("Payment config auto-initialization already completed");
     return;
   }
-  
+
   try {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => {

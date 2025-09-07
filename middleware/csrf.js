@@ -1,5 +1,5 @@
 // CSRF Protection Middleware
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 class CSRFProtection {
   constructor() {
@@ -8,9 +8,9 @@ class CSRFProtection {
   }
 
   generateToken() {
-    const token = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString("hex");
     const timestamp = Date.now();
-    
+
     this.tokens.set(token, timestamp);
     return token;
   }
@@ -22,7 +22,7 @@ class CSRFProtection {
 
     const timestamp = this.tokens.get(token);
     const maxAge = 60 * 60 * 1000; // 1 hour
-    
+
     if (Date.now() - timestamp > maxAge) {
       this.tokens.delete(token);
       return false;
@@ -42,7 +42,7 @@ class CSRFProtection {
   cleanup() {
     const now = Date.now();
     const maxAge = 60 * 60 * 1000; // 1 hour
-    
+
     for (const [token, timestamp] of this.tokens.entries()) {
       if (now - timestamp > maxAge) {
         this.tokens.delete(token);
@@ -53,15 +53,15 @@ class CSRFProtection {
   middleware() {
     return (req, res, next) => {
       // Skip CSRF for GET requests and OPTIONS
-      if (req.method === 'GET' || req.method === 'OPTIONS') {
+      if (req.method === "GET" || req.method === "OPTIONS") {
         return next();
       }
 
-      const token = req.headers['x-csrf-token'] || req.body._csrf;
-      
+      const token = req.headers["x-csrf-token"] || req.body._csrf;
+
       if (!this.consumeToken(token)) {
         return res.status(403).json({
-          error: 'Invalid or missing CSRF token'
+          error: "Invalid or missing CSRF token",
         });
       }
 

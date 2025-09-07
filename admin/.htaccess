@@ -1,0 +1,25 @@
+# Protect admin directory with IP whitelist
+<RequireAll>
+    # Allow only specific IPs
+    Require ip 127.0.0.1
+    Require ip ::1
+    Require ip 24.131.15.81
+</RequireAll>
+
+# Add security headers
+Header always set X-Frame-Options "DENY"
+Header always set X-Content-Type-Options "nosniff" 
+Header always set Referrer-Policy "strict-origin"
+Header always set X-XSS-Protection "1; mode=block"
+
+# Prevent access to sensitive files
+<Files ~ "\.(env|json|log|bak)$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent access to backup files
+<Files ~ "backup-.*\.json$">
+    Order allow,deny
+    Deny from all
+</Files>

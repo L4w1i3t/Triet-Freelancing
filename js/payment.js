@@ -302,7 +302,9 @@ class PaymentManager {
     if (paymentSelector) {
       // In manual mode, hide the entire payment selector since we're showing dedicated manual UI
       paymentSelector.style.display = "none";
-      console.log(" Hidden payment method selector (manual mode uses dedicated UI)");
+      console.log(
+        " Hidden payment method selector (manual mode uses dedicated UI)",
+      );
     }
 
     // Hide automated payment forms
@@ -639,7 +641,9 @@ class PaymentManager {
 
       // Check if Stripe is already initialized
       if (this.stripe && this.stripeElements && this.stripeCardElement) {
-        console.log("Stripe already fully initialized, skipping re-initialization");
+        console.log(
+          "Stripe already fully initialized, skipping re-initialization",
+        );
         return;
       }
 
@@ -714,21 +718,28 @@ class PaymentManager {
       console.log(
         ` Stripe initialized in ${this.config.stripe?.environment || "test"} mode`,
       );
-      
+
       // Log environment warning if running test mode on production domain
-      if (this.config.stripe?.environment === "test" && window.location.hostname !== "localhost") {
-        console.warn(" Note: Stripe is in test mode. Switch to production for live payments.");
+      if (
+        this.config.stripe?.environment === "test" &&
+        window.location.hostname !== "localhost"
+      ) {
+        console.warn(
+          " Note: Stripe is in test mode. Switch to production for live payments.",
+        );
       }
     } catch (error) {
       console.error("Failed to initialize Stripe:", error);
-      
+
       // Check if it's an HTTPS error
       if (error.message && error.message.includes("HTTPS")) {
-        console.error(" HTTPS Error: Stripe requires HTTPS for production mode. Either:");
+        console.error(
+          " HTTPS Error: Stripe requires HTTPS for production mode. Either:",
+        );
         console.error(" 1. Switch to test mode for local development, or");
         console.error(" 2. Use HTTPS for production deployment");
       }
-      
+
       console.log("Falling back to manual payment mode...");
       this.fallbackToManualMode();
     }
@@ -849,24 +860,28 @@ class PaymentManager {
       );
     } catch (error) {
       console.error("Failed to initialize Stripe on demand:", error);
-      
+
       // Check if it's an HTTPS error and provide helpful message
       if (error.message && error.message.includes("HTTPS")) {
-        console.error(" HTTPS Error: Stripe requires HTTPS for production mode");
+        console.error(
+          " HTTPS Error: Stripe requires HTTPS for production mode",
+        );
         this.showStripeError(
-          "Payment system requires HTTPS for security. Please contact support or try again later."
+          "Payment system requires HTTPS for security. Please contact support or try again later.",
         );
       } else {
         // Show a user-friendly error message for other errors
         this.showStripeError(
-          "Unable to load Stripe payment form. Please refresh the page or contact support if the issue persists."
+          "Unable to load Stripe payment form. Please refresh the page or contact support if the issue persists.",
         );
       }
-      
+
       // Only fall back to manual mode if it's a persistent issue
       setTimeout(() => {
         if (!this.stripe || !this.stripeElements) {
-          console.warn("Stripe still not available after timeout, falling back to manual mode");
+          console.warn(
+            "Stripe still not available after timeout, falling back to manual mode",
+          );
           this.fallbackToManualMode();
         }
       }, 3000);

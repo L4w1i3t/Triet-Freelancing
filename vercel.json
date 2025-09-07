@@ -11,6 +11,19 @@
     },
     "api/analytics.js": {
       "maxDuration": 5
+    },
+    "api/admin.js": {
+      "maxDuration": 10
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/admin",
+      "dest": "/admin/index.html"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/admin/$1"
+    }
+  ]
 }

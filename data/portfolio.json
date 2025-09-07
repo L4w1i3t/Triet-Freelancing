@@ -27,7 +27,12 @@
       "category": "websites",
       "year": "2025",
       "description": "A static portfolio website showcasing work, skills, and projects.",
-      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "SCSS",
+        "JavaScript"
+      ],
       "links": {
         "live": null,
         "github": null
@@ -40,7 +45,11 @@
       "category": "websites",
       "year": "2025",
       "description": "A static portfolio website showcasing work, skills, and projects.",
-      "technologies": ["HTML5", "CSS3", "JavaScript"],
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript"
+      ],
       "links": {
         "live": "https://trevordewall.com",
         "github": null
@@ -73,7 +82,11 @@
       "category": "websites",
       "year": "2023",
       "description": "A community-driven platform for Doki Doki Literature Club modding. Features user-friendly tools for creating, sharing, and discovering mods.",
-      "technologies": ["HTML5", "CSS3", "JavaScript"],
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript"
+      ],
       "links": {
         "live": "https://ddmc.site",
         "github": null
@@ -86,7 +99,10 @@
       "category": "tools",
       "year": "2024",
       "description": "A template for creating Doki Doki Literature Club mods.",
-      "technologies": ["Python", "Ren'Py"],
+      "technologies": [
+        "Python",
+        "Ren'Py"
+      ],
       "links": {
         "live": "https://ddmc.site/pages/template/template.html",
         "github": "https://github.com/L4w1i3t/Doki-Doki-Modding-Template"
@@ -99,7 +115,12 @@
       "category": "websites",
       "year": "2025",
       "description": "Official website for Societal AI, a startup organization at the University of Virginia.",
-      "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "SCSS",
+        "JavaScript"
+      ],
       "links": {
         "live": "https://l4w1i3t.github.io/Societal-AI",
         "github": "https://github.com/L4w1i3t/ATIH-UVA"
@@ -112,7 +133,12 @@
       "category": "tools",
       "year": "2025",
       "description": "An open-source platform for training and personalizing modular AI agents using machine learning. Still a work-in-progress.",
-      "technologies": ["TypeScript", "Hugging Face", "Transformers", "PyTorch"],
+      "technologies": [
+        "TypeScript",
+        "Hugging Face",
+        "Transformers",
+        "PyTorch"
+      ],
       "links": {
         "live": null,
         "github": null
@@ -125,7 +151,10 @@
       "category": "tools",
       "year": "2024",
       "description": "An advanced Discord bot for lifelike engagement and moderation in Discord servers.",
-      "technologies": ["TypeScript", "Discord.js"],
+      "technologies": [
+        "TypeScript",
+        "Discord.js"
+      ],
       "links": {
         "live": null,
         "github": "https://github.com/L4w1i3t/Matsuda-Akai-Discord-Bot"

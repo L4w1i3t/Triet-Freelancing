@@ -47,9 +47,7 @@ class EnvConfig {
       console.log("Configuration fetched successfully:", Object.keys(config));
       return config;
     } catch (error) {
-      console.error(
-        "API config not available.",
-      );
+      console.error("API config not available.");
       throw error; // This will trigger the fallback
     }
   }

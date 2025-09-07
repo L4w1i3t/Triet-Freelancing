@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triet Dev - Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .admin-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .admin-nav {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+      }
+
+      .admin-nav button {
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .admin-nav button.active,
+      .admin-nav button:hover {
+        background: var(--accent-color);
+      }
+
+      .admin-section {
+        display: none;
+      }
+
+      .admin-section.active {
+        display: block;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .data-table th {
+        background: rgba(255, 255, 255, 0.08);
+        font-weight: 600;
+        color: var(--accent-color);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .data-table tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .data-table tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .data-table tr:nth-child(even):hover {
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .btn-small {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.875rem;
+        border-radius: 0.25rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .btn-edit {
+        background: #4caf50;
+        color: white;
+      }
+
+      .btn-edit:hover {
+        background: #45a049;
+        transform: translateY(-1px);
+      }
+
+      .btn-delete {
+        background: #f44336;
+        color: white;
+      }
+
+      .btn-delete:hover {
+        background: #da190b;
+        transform: translateY(-1px);
+      }
+
+      .btn-add {
+        background: var(--accent-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        margin-bottom: 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .btn-add:hover {
+        background: #6c5ce7;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(116, 92, 231, 0.3);
+      }
+
+      .form-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+      }
+
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(30, 30, 30, 0.95);
+        padding: 2rem;
+        border-radius: 1rem;
+        backdrop-filter: blur(20px);
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: white;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-family: inherit;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .form-group select option {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      /* Dropdown styles for export menu */
+      .export-dropdown {
+        display: inline-block;
+        position: relative;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background: #1a1a1a;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+        min-width: 200px;
+        z-index: 1000;
+        top: 100%;
+        left: 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .dropdown-content a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: background-color 0.2s ease;
+      }
+
+      .dropdown-content a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--accent-color) !important;
+      }
+
+      .dropdown-content a:last-child {
+        border-bottom: none;
+      }
+
+      /* Audit limit select styling */
+      #auditLimit {
+        padding: 0.5rem;
+        margin-left: 1rem;
+        background: rgba(20, 20, 20, 0.8) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.25rem;
+      }
+
+      #auditLimit option {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .technology-input {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .tech-tag {
+        background: var(--accent-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .tech-tag button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auth-form {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .login-error {
+        color: #f44336;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+      }
+
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .admin-header h1 {
+        margin: 0;
+        color: white;
+      }
+
+      #logoutBtn {
+        margin: 0;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Authentication Form -->
+    <div id="authContainer" class="auth-form">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="adminPassword">Password:</label>
+          <input type="password" id="adminPassword" required />
+        </div>
+        <button type="submit" class="btn-add">Login</button>
+        <div id="loginError" class="login-error" style="display: none"></div>
+      </form>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminContainer" class="admin-container" style="display: none">
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <button id="logoutBtn" class="btn-delete">Logout</button>
+      </div>
+
+      <nav class="admin-nav">
+        <button class="nav-btn active" data-section="portfolio">
+          Portfolio
+        </button>
+        <button class="nav-btn" data-section="services">Services</button>
+        <button class="nav-btn" data-section="audit">Audit Log</button>
+        <button class="nav-btn" data-section="settings">Settings</button>
+      </nav>
+
+      <!-- Portfolio Section -->
+      <section id="portfolio" class="admin-section active">
+        <h2>Portfolio Management</h2>
+        <button class="btn-add" onclick="openModal('portfolioModal')">
+          Add New Project
+        </button>
+        <div id="portfolioTable"></div>
+      </section>
+
+      <!-- Services Section -->
+      <section id="services" class="admin-section">
+        <h2>Services Management</h2>
+        <button class="btn-add" onclick="openModal('serviceModal')">
+          Add New Service
+        </button>
+        <div id="servicesTable"></div>
+      </section>
+
+      <!-- Audit Log Section -->
+      <section id="audit" class="admin-section">
+        <h2>Security & Audit Log</h2>
+
+        <div
+          class="audit-stats"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+          "
+        >
+          <div
+            class="stat-card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              padding: 1.5rem;
+              border-radius: 0.5rem;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <h4 style="margin: 0 0 0.5rem 0; color: #ccc; font-size: 0.9rem">
+              Login Success Rate
+            </h4>
+            <span
+              id="successRate"
+              style="
+                font-size: 1.8rem;
+                color: var(--accent-color);
+                font-weight: bold;
+              "
+              >-</span
+            >
+          </div>
+          <div
+            class="stat-card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              padding: 1.5rem;
+              border-radius: 0.5rem;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <h4 style="margin: 0 0 0.5rem 0; color: #ccc; font-size: 0.9rem">
+              Failed Attempts (24h)
+            </h4>
+            <span
+              id="failedAttempts"
+              style="font-size: 1.8rem; color: #f44336; font-weight: bold"
+              >-</span
+            >
+          </div>
+          <div
+            class="stat-card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              padding: 1.5rem;
+              border-radius: 0.5rem;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <h4 style="margin: 0 0 0.5rem 0; color: #ccc; font-size: 0.9rem">
+              Unique IPs
+            </h4>
+            <span
+              id="uniqueIPs"
+              style="font-size: 1.8rem; color: #4caf50; font-weight: bold"
+              >-</span
+            >
+          </div>
+          <div
+            class="stat-card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              padding: 1.5rem;
+              border-radius: 0.5rem;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            "
+          >
+            <h4 style="margin: 0 0 0.5rem 0; color: #ccc; font-size: 0.9rem">
+              Last Login
+            </h4>
+            <span
+              id="lastLogin"
+              style="font-size: 0.95rem; color: white; font-weight: normal"
+              >-</span
+            >
+          </div>
+        </div>
+
+        <div class="audit-controls" style="margin-bottom: 1rem">
+          <button class="btn-add" onclick="admin.refreshAuditLog()">
+            Refresh Log
+          </button>
+          <div
+            class="export-dropdown"
+            style="display: inline-block; position: relative; margin-left: 1rem"
+          >
+            <button class="btn-add" onclick="toggleExportDropdown()">
+              Export Log ▼
+            </button>
+            <div
+              id="exportDropdown"
+              class="dropdown-content"
+              style="
+                display: none;
+                position: absolute;
+                background: rgba(20, 20, 20, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 0.5rem;
+                min-width: 200px;
+                z-index: 1000;
+                top: 100%;
+                left: 0;
+                backdrop-filter: blur(10px);
+              "
+            >
+              <a
+                href="#"
+                onclick="admin.exportAuditLog('json')"
+                style="
+                  display: block;
+                  padding: 0.75rem 1rem;
+                  color: white;
+                  text-decoration: none;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                "
+                >📄 Export as JSON</a
+              >
+              <a
+                href="#"
+                onclick="admin.exportAuditLog('csv')"
+                style="
+                  display: block;
+                  padding: 0.75rem 1rem;
+                  color: white;
+                  text-decoration: none;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                "
+                >📊 Export as CSV</a
+              >
+              <a
+                href="#"
+                onclick="admin.exportSecurityAlerts()"
+                style="
+                  display: block;
+                  padding: 0.75rem 1rem;
+                  color: white;
+                  text-decoration: none;
+                "
+                >🚨 Security Alerts Only</a
+              >
+            </div>
+          </div>
+          <select
+            id="auditLimit"
+            style="
+              padding: 0.5rem;
+              margin-left: 1rem;
+              background: rgba(255, 255, 255, 0.1);
+              color: white;
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 0.25rem;
+            "
+          >
+            <option value="100">Last 100 entries</option>
+            <option value="500">Last 500 entries</option>
+            <option value="1000">Last 1000 entries</option>
+            <option value="">All entries</option>
+          </select>
+        </div>
+
+        <div id="auditTable"></div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings" class="admin-section">
+        <h2>Settings</h2>
+        <div class="form-group">
+          <div style="margin-bottom: 2rem">
+            <h3 style="color: var(--accent-color); margin-bottom: 1rem">
+              Data Management
+            </h3>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <button
+                class="btn-add"
+                onclick="exportData()"
+                style="width: 100%; margin-bottom: 0.5rem"
+              >
+                📝 Update Live Website Data
+              </button>
+              <p style="color: #ccc; font-size: 0.9rem; margin: 0">
+                Updates the portfolio.json and services.json files that your
+                live website uses. Click this after making changes to portfolio
+                or services.
+              </p>
+            </div>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                margin-bottom: 2rem;
+              "
+            >
+              <button
+                class="btn-add"
+                onclick="backupData()"
+                style="width: 100%; margin-bottom: 0.5rem"
+              >
+                💾 Create Data Backup
+              </button>
+              <p style="color: #ccc; font-size: 0.9rem; margin: 0">
+                Creates a timestamped backup of all your data (portfolio,
+                services, audit logs) for safekeeping.
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem">
+            <h3 style="color: var(--accent-color); margin-bottom: 1rem">
+              Backup Management
+            </h3>
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 1rem;
+                "
+              >
+                <h4 style="margin: 0; color: white">Available Backups</h4>
+                <button
+                  class="btn-add"
+                  onclick="admin.loadBackups()"
+                  style="margin: 0; padding: 0.5rem 1rem; font-size: 0.9rem"
+                >
+                  🔄 Refresh
+                </button>
+              </div>
+              <div id="backupsTable">
+                <p style="color: #ccc">Loading backups...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Portfolio Modal -->
+    <div id="portfolioModal" class="form-modal">
+      <div class="modal-content">
+        <h3 id="portfolioModalTitle">Add New Project</h3>
+        <form id="portfolioForm">
+          <input type="hidden" id="portfolioId" />
+
+          <div class="form-group">
+            <label for="projectTitle">Title:</label>
+            <input type="text" id="projectTitle" required />
+          </div>
+
+          <div class="form-group">
+            <label for="projectCategory">Category:</label>
+            <select id="projectCategory" required>
+              <option value="websites">Websites</option>
+              <option value="pwas">PWAs</option>
+              <option value="tools">Tools & Apps</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="projectYear">Year:</label>
+            <input
+              type="number"
+              id="projectYear"
+              min="2020"
+              max="2030"
+              value="2025"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="projectDescription">Description:</label>
+            <textarea id="projectDescription" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="projectTechnologies">Technologies:</label>
+            <input
+              type="text"
+              id="techInput"
+              placeholder="Type technology and press Enter"
+            />
+            <div id="technologiesList" class="technology-input"></div>
+            <input type="hidden" id="projectTechnologies" />
+          </div>
+
+          <div class="form-group">
+            <label for="projectLiveLink">Live Link:</label>
+            <input type="url" id="projectLiveLink" />
+          </div>
+
+          <div class="form-group">
+            <label for="projectGithubLink">GitHub Link:</label>
+            <input type="url" id="projectGithubLink" />
+          </div>
+
+          <div class="form-group">
+            <label for="projectIcon">Icon:</label>
+            <select id="projectIcon">
+              <option value="fas fa-globe">🌐 Website (fas fa-globe)</option>
+              <option value="fas fa-mobile-alt">📱 Mobile App (fas fa-mobile-alt)</option>
+              <option value="fas fa-tools">🔧 Tool/App (fas fa-tools)</option>
+              <option value="fas fa-robot">🤖 Bot (fas fa-robot)</option>
+              <option value="fas fa-desktop">🖥️ Desktop App (fas fa-desktop)</option>
+              <option value="fas fa-code">💻 Code Project (fas fa-code)</option>
+              <option value="fas fa-gamepad">🎮 Game (fas fa-gamepad)</option>
+              <option value="fas fa-database">💾 Database (fas fa-database)</option>
+              <option value="fas fa-cloud">☁️ Cloud Service (fas fa-cloud)</option>
+              <option value="fas fa-cog">⚙️ System Tool (fas fa-cog)</option>
+            </select>
+          </div>
+
+          <div class="btn-group">
+            <button type="submit" class="btn-add">Save Project</button>
+            <button
+              type="button"
+              class="btn-delete"
+              onclick="closeModal('portfolioModal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="serviceModal" class="form-modal">
+      <div class="modal-content">
+        <h3 id="serviceModalTitle">Add New Service</h3>
+        <form id="serviceForm">
+          <input type="hidden" id="serviceId" />
+          <input type="hidden" id="serviceTierId" />
+
+          <div class="form-group">
+            <label for="serviceTier">Service Tier:</label>
+            <select id="serviceTier" required>
+              <option value="budget">Budget</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceTitle">Title:</label>
+            <input type="text" id="serviceTitle" required />
+          </div>
+
+          <div class="form-group">
+            <label for="servicePrice">Price:</label>
+            <input
+              type="text"
+              id="servicePrice"
+              placeholder="e.g., Starting at $100"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="serviceDuration">Duration:</label>
+            <input
+              type="text"
+              id="serviceDuration"
+              placeholder="e.g., 3-5 days"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="serviceDescription">Description:</label>
+            <textarea id="serviceDescription" required></textarea>
+          </div>
+
+          <div class="btn-group">
+            <button type="submit" class="btn-add">Save Service</button>
+            <button
+              type="button"
+              class="btn-delete"
+              onclick="closeModal('serviceModal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Dropdown toggle function
+      function toggleExportDropdown() {
+        const dropdown = document.getElementById("exportDropdown");
+        dropdown.style.display =
+          dropdown.style.display === "none" ? "block" : "none";
+      }
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("exportDropdown");
+        const exportButton = event.target.closest(".export-dropdown");
+        if (!exportButton && dropdown) {
+          dropdown.style.display = "none";
+        }
+      });
+    </script>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

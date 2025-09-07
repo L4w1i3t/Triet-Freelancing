@@ -107,11 +107,12 @@ const EXCLUDE_PATTERNS = [
   "scss",
   "email-template.html",
   "build_production.bat",
+  "admin-setup.js",
 ];
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
 // Add filenames here to preserve readability of inline scripts while still minifying HTML
-const HTML_INLINE_JS_IGNORE_LIST = ["payment.html"];
+const HTML_INLINE_JS_IGNORE_LIST = ["payment.html", "admin/index.html"];
 
 // Check if a file should be excluded
 function shouldExclude(filePath) {
@@ -171,8 +172,10 @@ async function processHTML(inputPath, outputPath) {
   try {
     let html = await fs.readFile(inputPath, "utf8");
     const fileName = path.basename(inputPath);
+    const relativePath = path.relative(SRC_DIR, inputPath).replace(/\\/g, "/");
     const shouldObfuscateInlineJS =
-      !HTML_INLINE_JS_IGNORE_LIST.includes(fileName);
+      !HTML_INLINE_JS_IGNORE_LIST.includes(fileName) &&
+      !HTML_INLINE_JS_IGNORE_LIST.includes(relativePath);
 
     // Extract and process inline JavaScript
     html = html.replace(

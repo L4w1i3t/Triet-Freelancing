@@ -2,17 +2,17 @@
 export default function handler(req, res) {
   // Set CORS headers for specific domains only
   const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'https://trietdev.com', 
-    'https://www.trietdev.com'
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "https://trietdev.com",
+    "https://www.trietdev.com",
   ];
-  
+
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
-  
+
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token");
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -44,7 +44,7 @@ export default function handler(req, res) {
     console.error("Config API error:", error);
     // Don't expose internal error details to client
     res.status(500).json({
-      error: "Unable to load configuration. Please try again later."
+      error: "Unable to load configuration. Please try again later.",
     });
   }
 }
