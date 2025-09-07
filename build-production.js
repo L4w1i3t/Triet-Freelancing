@@ -108,7 +108,6 @@ const EXCLUDE_PATTERNS = [
   "email-template.html",
   "build_production.bat",
   "admin-setup.js",
-  "admin/dashboard.js" //for debug purpose.
 ];
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
@@ -146,7 +145,7 @@ async function obfuscateJavaScript(inputPath, outputPath) {
     const code = await fs.readFile(inputPath, "utf8");
 
     // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === "DUMMY.js") {
+    if (path.basename(inputPath) === "admin/dashboard.js") {
       // named something else for now.
       console.log(
         `    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`,
