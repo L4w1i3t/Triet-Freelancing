@@ -77,17 +77,6 @@ FileETag None
     Header set X-XSS-Protection "1; mode=block"
 </FilesMatch>
 
-# Ensure correct MIME types for JavaScript files
-<FilesMatch "\.(js)$">
-    Header set Content-Type "application/javascript; charset=utf-8"
-</FilesMatch>
-
-# Force correct MIME type for admin.js specifically
-<Files "admin.js">
-    ForceType application/javascript
-    Header set Content-Type "application/javascript; charset=utf-8"
-</Files>
-
 # Disable server signature
 ServerSignature Off
 
