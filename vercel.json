@@ -1,15 +1,4 @@
 {
-  "headers": [
-    {
-      "source": "/admin/dashboard.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
-    }
-  ],
   "functions": {
     "api/create-payment-intent.js": {
       "maxDuration": 10
@@ -26,21 +15,5 @@
     "api/admin.js": {
       "maxDuration": 10
     }
-  },
-  "routes": [
-    {
-      "src": "/admin$",
-      "dest": "/admin/index.html"
-    },
-    {
-      "src": "/admin/dashboard\\.js$",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/admin/$1"
-    }
-  ]
+  }
 }
