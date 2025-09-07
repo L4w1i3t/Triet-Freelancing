@@ -1,10 +1,22 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Set CORS headers for specific domains only
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'https://trietdev.com',
+    'https://www.trietdev.com'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
@@ -18,8 +30,14 @@ export default async function handler(req, res) {
   try {
     const { paymentIntentId } = req.body;
 
-    if (!paymentIntentId) {
-      return res.status(400).json({ error: "Payment Intent ID is required" });
+    // Enhanced validation
+    if (!paymentIntentId || typeof paymentIntentId !== 'string') {
+      return res.status(400).json({ error: "Valid Payment Intent ID is required" });
+    }
+
+    // Validate the format of the payment intent ID (Stripe format: pi_xxxx)
+    if (!/^pi_[a-zA-Z0-9]{24,}$/.test(paymentIntentId)) {
+      return res.status(400).json({ error: "Invalid Payment Intent ID format" });
     }
 
     // Retrieve the Payment Intent to get its current status
@@ -48,9 +66,9 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("Payment Intent retrieval error:", error);
+    // Don't expose internal error details to client
     res.status(500).json({
-      error: "Failed to retrieve payment intent",
-      details: error.message,
+      error: "Unable to retrieve payment information. Please try again later."
     });
   }
 }

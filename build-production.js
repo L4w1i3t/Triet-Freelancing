@@ -95,6 +95,7 @@ const EXCLUDE_PATTERNS = [
   "package.json",
   "package-lock.json",
   ".env",
+  ".env.example",
   "README.md",
   "SECURITY.md",
   ".gitignore",

@@ -24,6 +24,8 @@
     "cors": "^2.8.5",
     "emailjs": "^4.0.3",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
     "marked": "^15.0.12",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",

@@ -1,7 +1,7 @@
 {
   "projects": [
     {
-      "id": "triet-dev",
+      "id": "trietdev",
       "title": "Triet",
       "category": "websites",
       "year": "2024",
@@ -101,7 +101,7 @@
       "description": "Official website for Societal AI, a startup organization at the University of Virginia.",
       "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
       "links": {
-        "live": null,
+        "live": "https://l4w1i3t.github.io/Societal-AI",
         "github": "https://github.com/L4w1i3t/ATIH-UVA"
       },
       "icon": "fas fa-globe"

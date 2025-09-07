@@ -105,8 +105,8 @@
       "(base64_decode|file_get_contents|curl|wget)"
     ],
     "trusted_domains": [
-      "triet-dev.com",
-      "www.triet-dev.com",
+      "trietdev.com",
+      "www.trietdev.com",
       "api.emailjs.com",
       "www.paypal.com",
       "api.paypal.com",
@@ -120,7 +120,7 @@
     "emergency": {
       "lockdown_mode": false,
       "maintenance_mode": false,
-      "security_contact": "security@triet-dev.com",
+      "security_contact": "security@trietdev.com",
       "incident_response": true
     },
     "commission_specific": {

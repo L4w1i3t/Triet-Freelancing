@@ -1,9 +1,21 @@
 // Vercel serverless function for environment configuration
 export default function handler(req, res) {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Set CORS headers for specific domains only
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'https://trietdev.com', 
+    'https://www.trietdev.com'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
@@ -30,9 +42,9 @@ export default function handler(req, res) {
     res.status(200).json(config);
   } catch (error) {
     console.error("Config API error:", error);
+    // Don't expose internal error details to client
     res.status(500).json({
-      error: "Failed to load configuration",
-      details: error.message,
+      error: "Unable to load configuration. Please try again later."
     });
   }
 }

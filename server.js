@@ -1,18 +1,109 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const csrfProtection = require("./middleware/csrf");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 // Import Stripe with secret key
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:8080', 
+    'https://trietdev.com',
+    'https://www.trietdev.com'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static("."));
+
+// Rate limiting configuration
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: "Too many requests from this IP, please try again later."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // limit each IP to 30 API requests per windowMs
+  message: {
+    error: "Too many API requests from this IP, please try again later."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 payment requests per windowMs
+  message: {
+    error: "Too many payment requests from this IP, please try again later."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting
+app.use(generalLimiter);
+app.use('/api/', apiLimiter);
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'", // Consider removing this and using nonce
+        "https://cdn.jsdelivr.net",
+        "https://www.paypal.com",
+        "https://js.stripe.com"
+      ],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
+        "https://cdnjs.cloudflare.com"
+      ],
+      fontSrc: [
+        "'self'",
+        "https://fonts.gstatic.com",
+        "https://cdnjs.cloudflare.com"
+      ],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: [
+        "'self'",
+        "https://api.emailjs.com",
+        "https://api.paypal.com",
+        "https://api.stripe.com"
+      ],
+      frameSrc: ["https://www.paypal.com", "https://js.stripe.com"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"]
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
 
 // Serve static files
 app.get("/", (req, res) => {
@@ -33,20 +124,40 @@ app.get("/api/config", (req, res) => {
   });
 });
 
+// CSRF token endpoint
+app.get("/api/csrf-token", csrfProtection.getTokenEndpoint());
+
 // Create Payment Intent endpoint
-app.post("/api/create-payment-intent", async (req, res) => {
+app.post("/api/create-payment-intent", paymentLimiter, csrfProtection.middleware(), async (req, res) => {
   try {
     const { amount, currency = "usd", orderData } = req.body;
 
-    // Validate required fields
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ error: "Valid amount is required" });
+    // Enhanced validation
+    if (!amount || typeof amount !== 'number' || amount <= 0 || amount > 50000) {
+      return res.status(400).json({ error: "Invalid amount. Must be between $0.01 and $50,000" });
     }
 
-    if (!orderData || !orderData.customerInfo) {
-      return res
-        .status(400)
-        .json({ error: "Customer information is required" });
+    if (!currency || typeof currency !== 'string' || !/^[a-z]{3}$/i.test(currency)) {
+      return res.status(400).json({ error: "Invalid currency code" });
+    }
+
+    if (!orderData || typeof orderData !== 'object') {
+      return res.status(400).json({ error: "Order data is required" });
+    }
+
+    if (!orderData.customerInfo || typeof orderData.customerInfo !== 'object') {
+      return res.status(400).json({ error: "Customer information is required" });
+    }
+
+    // Validate customer info
+    const { name, email } = orderData.customerInfo;
+    if (!name || typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 50) {
+      return res.status(400).json({ error: "Valid customer name is required" });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || typeof email !== 'string' || !emailRegex.test(email) || email.length > 254) {
+      return res.status(400).json({ error: "Valid email address is required" });
     }
 
     console.log("Creating Payment Intent:", {
@@ -79,15 +190,15 @@ app.post("/api/create-payment-intent", async (req, res) => {
     });
   } catch (error) {
     console.error("Payment Intent creation error:", error);
+    // Don't expose internal error details to client
     res.status(500).json({
-      error: "Failed to create payment intent",
-      details: error.message,
+      error: "Unable to process payment request. Please try again later."
     });
   }
 });
 
 // Retrieve Payment endpoint
-app.post("/api/retrieve-payment", async (req, res) => {
+app.post("/api/retrieve-payment", paymentLimiter, csrfProtection.middleware(), async (req, res) => {
   try {
     const { paymentIntentId } = req.body;
 
@@ -129,9 +240,9 @@ app.post("/api/retrieve-payment", async (req, res) => {
     });
   } catch (error) {
     console.error("Payment Intent retrieval error:", error);
+    // Don't expose internal error details to client
     res.status(500).json({
-      error: "Failed to retrieve payment intent",
-      details: error.message,
+      error: "Unable to retrieve payment information. Please try again later."
     });
   }
 });
