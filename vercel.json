@@ -14,6 +14,18 @@
     },
     "api/admin.js": {
       "maxDuration": 10
+    },
+    "api/admin/login.js": {
+      "maxDuration": 10
+    },
+    "api/admin/verify.js": {
+      "maxDuration": 5
+    },
+    "api/admin/portfolio.js": {
+      "maxDuration": 10
+    },
+    "api/admin/services.js": {
+      "maxDuration": 10
     }
   }
 }
