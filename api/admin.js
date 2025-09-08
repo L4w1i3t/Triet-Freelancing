@@ -477,7 +477,7 @@ router.get("/audit-log", authenticateToken, async (req, res) => {
 router.get("/export/audit-logs/json", authenticateToken, async (req, res) => {
   try {
     const logs = await auditLogger.getAuditLog();
-    await auditLogger.logAction(req.user.username, "audit_export", {
+    await auditLogger.logAction(req, "audit_export", {
       format: "json",
       ip: req.ip,
       userAgent: req.get("User-Agent"),
@@ -498,7 +498,7 @@ router.get("/export/audit-logs/json", authenticateToken, async (req, res) => {
 router.get("/export/audit-logs/csv", authenticateToken, async (req, res) => {
   try {
     const logs = await auditLogger.getAuditLog();
-    await auditLogger.logAction(req.user.username, "audit_export", {
+    await auditLogger.logAction(req, "audit_export", {
       format: "csv",
       ip: req.ip,
       userAgent: req.get("User-Agent"),
@@ -536,7 +536,7 @@ router.get(
           log.action === "suspicious_activity",
       );
 
-      await auditLogger.logAction(req.user.username, "security_export", {
+      await auditLogger.logAction(req, "security_export", {
         format: "json",
         alertsCount: securityAlerts.length,
         ip: req.ip,

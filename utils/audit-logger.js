@@ -15,7 +15,7 @@ class AuditLogger {
         event: "admin_login",
         success: success,
         ip: this.getClientIP(req),
-        userAgent: req.headers["user-agent"] || "Unknown",
+        userAgent: req?.headers?.["user-agent"] || "Unknown",
         country: this.getCountryFromIP(req),
         reason: reason, // For failed attempts
         sessionId: this.generateSessionId(),
@@ -44,7 +44,7 @@ class AuditLogger {
         action: action, // 'create_portfolio', 'delete_service', etc.
         success: true,
         ip: this.getClientIP(req),
-        userAgent: req.headers["user-agent"] || "Unknown",
+        userAgent: req?.headers?.["user-agent"] || "Unknown",
         details: details,
         sessionId: this.getSessionId(req),
       };
@@ -241,12 +241,14 @@ class AuditLogger {
   }
 
   getClientIP(req) {
+    const r = req && typeof req === "object" ? req : { headers: {} };
+    const headers = r.headers || {};
     return (
-      req.headers["x-forwarded-for"] ||
-      req.headers["x-real-ip"] ||
-      req.connection?.remoteAddress ||
-      req.socket?.remoteAddress ||
-      req.ip ||
+      headers["x-forwarded-for"] ||
+      headers["x-real-ip"] ||
+      r.connection?.remoteAddress ||
+      r.socket?.remoteAddress ||
+      r.ip ||
       "unknown"
     );
   }
@@ -271,8 +273,8 @@ class AuditLogger {
 
   generateFingerprint(req) {
     // Simple fingerprint based on User-Agent and accept headers
-    const ua = req.headers["user-agent"] || "";
-    const accept = req.headers["accept"] || "";
+    const ua = req?.headers?.["user-agent"] || "";
+    const accept = req?.headers?.["accept"] || "";
     return Buffer.from(ua + accept)
       .toString("base64")
       .substring(0, 16);

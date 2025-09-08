@@ -96,7 +96,7 @@
     {
       "id": "ddmt",
       "title": "Doki Doki Modding Template",
-      "category": "tools",
+      "category": "templates",
       "year": "2024",
       "description": "A template for creating Doki Doki Literature Club mods.",
       "technologies": [
@@ -107,7 +107,7 @@
         "live": "https://ddmc.site/pages/template/template.html",
         "github": "https://github.com/L4w1i3t/Doki-Doki-Modding-Template"
       },
-      "icon": "fas fa-tools"
+      "icon": "fas fa-copy"
     },
     {
       "id": "societal-ai",
@@ -130,7 +130,7 @@
     {
       "id": "ema",
       "title": "EMA (Expeditionary Modular Agents)",
-      "category": "tools",
+      "category": "ai-ml",
       "year": "2025",
       "description": "An open-source platform for training and personalizing modular AI agents using machine learning. Still a work-in-progress.",
       "technologies": [
@@ -143,12 +143,12 @@
         "live": null,
         "github": null
       },
-      "icon": "fas fa-tools"
+      "icon": "fas fa-brain"
     },
     {
       "id": "matsuda-akai-bot",
       "title": "Matsuda Akai Discord Bot",
-      "category": "tools",
+      "category": "bots",
       "year": "2024",
       "description": "An advanced Discord bot for lifelike engagement and moderation in Discord servers.",
       "technologies": [
@@ -159,7 +159,7 @@
         "live": null,
         "github": "https://github.com/L4w1i3t/Matsuda-Akai-Discord-Bot"
       },
-      "icon": "fas fa-tools"
+      "icon": "fas fa-robot"
     }
   ],
   "categories": [
@@ -182,6 +182,26 @@
       "id": "tools",
       "label": "Tools & Apps",
       "icon": "fas fa-tools"
+    },
+    {
+      "id": "templates",
+      "label": "Templates",
+      "icon": "fas fa-copy"
+    },
+    {
+      "id": "bots",
+      "label": "Bots",
+      "icon": "fas fa-robot"
+    },
+    {
+      "id": "ai-ml",
+      "label": "AI & ML",
+      "icon": "fas fa-brain"
+    },
+    {
+      "id": "libraries",
+      "label": "Libraries",
+      "icon": "fas fa-cubes"
     }
   ]
 }

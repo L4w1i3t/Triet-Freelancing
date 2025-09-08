@@ -12,7 +12,7 @@
     "api/analytics.js": {
       "maxDuration": 5
     },
-    "api/admin.js": {
+    "api/admin/[...route].js": {
       "maxDuration": 10
     }
   }

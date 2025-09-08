@@ -5,6 +5,239 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-08T05:40:55.287Z",
+        "event": "admin_action",
+        "action": "create_backup",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "filename": "backup-2025-09-08T05-40-55-286Z.json",
+          "size": 4965
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:40:54.462Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:38:37.203Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:38:31.690Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:35:51.890Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:35:38.791Z",
+        "event": "admin_action",
+        "action": "audit_export",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "format": "json",
+          "ip": "::1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+          "timestamp": "2025-09-08T05:35:38.791Z"
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:34:31.974Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:31:22.940Z",
+        "event": "security_alert",
+        "alerts": [
+          {
+            "type": "unusual_time",
+            "hour": 1,
+            "message": "Login at unusual time: 1:00"
+          }
+        ],
+        "triggerEntry": {
+          "timestamp": "2025-09-08T05:31:22.938Z",
+          "event": "admin_login",
+          "success": true,
+          "ip": "::1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+          "country": "Local",
+          "reason": null,
+          "sessionId": "mfaooz3ut8ajyc0cgw",
+          "fingerprint": "TW96aWxsYS81LjAg"
+        },
+        "severity": "low"
+      },
+      {
+        "timestamp": "2025-09-08T05:31:22.938Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfaooz3ut8ajyc0cgw",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T05:31:21.997Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfaoomwt91g0eghhlq7"
+      },
+      {
+        "timestamp": "2025-09-08T05:31:07.135Z",
+        "event": "security_alert",
+        "alerts": [
+          {
+            "type": "unusual_time",
+            "hour": 1,
+            "message": "Login at unusual time: 1:00"
+          }
+        ],
+        "triggerEntry": {
+          "timestamp": "2025-09-08T05:31:07.134Z",
+          "event": "admin_login",
+          "success": true,
+          "ip": "::1",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+          "country": "Local",
+          "reason": null,
+          "sessionId": "mfaoomwu2ajfen3ikk4",
+          "fingerprint": "TW96aWxsYS81LjAg"
+        },
+        "severity": "low"
+      },
+      {
+        "timestamp": "2025-09-08T05:31:07.134Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfaoomwu2ajfen3ikk4",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T05:30:55.253Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T05:30:48.960Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T05:30:39.946Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T05:30:37.182Z",
+        "event": "admin_action",
+        "action": "delete_portfolio",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "projectId": "mfaon6zirzyyhm2qeuq",
+          "title": "penis"
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T05:30:03.885Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T05:29:59.865Z",
+        "event": "admin_action",
+        "action": "create_portfolio",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "projectId": "mfaon6zirzyyhm2qeuq",
+          "title": "penis",
+          "category": "websites"
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
         "timestamp": "2025-09-08T02:57:09.026Z",
         "event": "admin_action",
         "action": "delete_portfolio",

@@ -573,7 +573,7 @@ class AdminDashboard {
     }
   }
 
-  async backupData() {
+  async createBackup() {
     try {
       // Show loading state
       const button = document.querySelector('button[onclick="backupData()"]');
@@ -888,7 +888,7 @@ class AdminDashboard {
       });
 
       if (response.ok) {
-        this.backupData = await response.json();
+        this.backups = await response.json();
         this.renderBackupsTable();
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -903,7 +903,7 @@ class AdminDashboard {
   renderBackupsTable() {
     const tableContainer = document.getElementById("backupsTable");
 
-    if (!this.backupData || this.backupData.length === 0) {
+    if (!this.backups || this.backups.length === 0) {
       tableContainer.innerHTML =
         '<p style="color: #ccc;">No backups found.</p>';
       return;
@@ -921,7 +921,7 @@ class AdminDashboard {
                     </tr>
                 </thead>
                 <tbody>
-                    ${this.backupData
+                    ${this.backups
                       .map(
                         (backup) => `
                         <tr>
@@ -1037,7 +1037,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.openModal = (modalId) => admin.openModal(modalId);
 window.closeModal = (modalId) => admin.closeModal(modalId);
 window.exportData = () => admin.exportData();
-window.backupData = () => admin.backupData();
+window.backupData = () => admin.createBackup();
 
 // Close modals when clicking outside
 window.addEventListener("click", (e) => {
