@@ -5,6 +5,55 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-08T05:49:08.696Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::ffff:127.0.0.1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 2
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:49:07.917Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::ffff:127.0.0.1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 2
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:49:05.662Z",
+        "event": "admin_action",
+        "action": "create_backup",
+        "success": true,
+        "ip": "::ffff:127.0.0.1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "filename": "backup-2025-09-08T05-49-05-652Z.json",
+          "size": 5194
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
+        "timestamp": "2025-09-08T05:49:01.390Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::ffff:127.0.0.1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 1
+        },
+        "sessionId": "mfaooz3t6ue0fgu0jqf"
+      },
+      {
         "timestamp": "2025-09-08T05:40:55.287Z",
         "event": "admin_action",
         "action": "create_backup",
