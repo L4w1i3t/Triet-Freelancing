@@ -5,6 +5,57 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-08T00:14:35.230Z",
+        "event": "admin_login",
+        "success": false,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": "Invalid password",
+        "sessionId": "mfaddknz5cue3qe6bmc",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T00:14:31.196Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfad98n7v648ztjpn6"
+      },
+      {
+        "timestamp": "2025-09-08T00:11:13.028Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfad98n8d9cy9t9v46",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T00:11:03.080Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfad90yw062z7z9gik1",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T00:10:58.886Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfad8xqeo4pasazgb9q",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
         "timestamp": "2025-09-08T00:03:55.463Z",
         "event": "admin_logout",
         "success": true,
