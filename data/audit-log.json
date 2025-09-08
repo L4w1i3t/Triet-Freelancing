@@ -5,6 +5,43 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-08T00:03:55.463Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfaczqnm8c2p5rr2iyp"
+      },
+      {
+        "timestamp": "2025-09-08T00:03:51.289Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 0
+        },
+        "sessionId": "mfaczqnm8c2p5rr2iyp"
+      },
+      {
+        "timestamp": "2025-09-08T00:03:49.812Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfaczqnoh6c7g1ibkk4",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T00:03:39.205Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfabj5lo39q44mbvgxd"
+      },
+      {
         "timestamp": "2025-09-07T23:22:56.415Z",
         "event": "admin_login",
         "success": true,
