@@ -5,6 +5,87 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-08T02:57:09.026Z",
+        "event": "admin_action",
+        "action": "delete_portfolio",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "projectId": "mfaj4mtxd0lnpch2n0j",
+          "title": "DUMMY"
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T02:56:29.384Z",
+        "event": "admin_action",
+        "action": "update_portfolio",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "projectId": "mfaj4mtxd0lnpch2n0j",
+          "title": "DUMMY",
+          "category": "websites"
+        },
+        "sessionId": "mfaj53r70x2kkg2935j"
+      },
+      {
+        "timestamp": "2025-09-08T02:55:57.763Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfaj53r7w4atyin4d",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T02:55:56.502Z",
+        "event": "admin_logout",
+        "success": true,
+        "ip": "::1",
+        "sessionId": "mfaj484v1mczgjkw10z"
+      },
+      {
+        "timestamp": "2025-09-08T02:55:35.835Z",
+        "event": "admin_action",
+        "action": "create_portfolio",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "projectId": "mfaj4mtxd0lnpch2n0j",
+          "title": "DUMMY",
+          "category": "websites"
+        },
+        "sessionId": "mfaj484v1mczgjkw10z"
+      },
+      {
+        "timestamp": "2025-09-08T02:55:16.784Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mfaj484w6b89nh56mj8",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
+        "timestamp": "2025-09-08T02:55:05.307Z",
+        "event": "admin_login",
+        "success": false,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": "Invalid password",
+        "sessionId": "mfaj3za3mtssxt5qp1l",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
         "timestamp": "2025-09-08T02:49:10.368Z",
         "event": "admin_login",
         "success": true,
