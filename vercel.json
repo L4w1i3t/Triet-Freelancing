@@ -15,5 +15,9 @@
     "api/admin.js": {
       "maxDuration": 10
     }
-  }
+  },
+  "redirects": [
+    { "source": "/admin", "destination": "/admin/", "statusCode": 308 }
+  ]
+
 }
