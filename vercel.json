@@ -19,5 +19,4 @@
   "redirects": [
     { "source": "/admin", "destination": "/admin/", "statusCode": 308 }
   ]
-
 }
