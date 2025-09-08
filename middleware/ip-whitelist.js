@@ -47,6 +47,12 @@ class IPWhitelist {
   isIPAllowed(ip) {
     const normalizedIP = this.normalizeIP(ip);
 
+    // Temporary bypass for production testing (REMOVE IN PRODUCTION!)
+    if (process.env.DISABLE_IP_WHITELIST === "true") {
+      console.log(`[IP Whitelist] BYPASS ENABLED - Allowing IP: ${normalizedIP}`);
+      return true;
+    }
+
     // In development, always allow localhost
     if (this.isDevelopment) {
       if (
