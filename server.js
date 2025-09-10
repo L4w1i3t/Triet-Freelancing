@@ -91,7 +91,6 @@ app.use(
           "'self'",
           "'unsafe-inline'", // Consider removing this and using nonce
           "https://cdn.jsdelivr.net",
-          "https://www.paypal.com",
           "https://js.stripe.com",
         ],
         styleSrc: [
@@ -109,10 +108,9 @@ app.use(
         connectSrc: [
           "'self'",
           "https://api.emailjs.com",
-          "https://api.paypal.com",
           "https://api.stripe.com",
         ],
-        frameSrc: ["https://www.paypal.com", "https://js.stripe.com"],
+        frameSrc: ["https://js.stripe.com"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         formAction: ["'self'"],
@@ -139,8 +137,6 @@ app.get("/api/config", (req, res) => {
     EMAILJS_TEMPLATE_ID_CUSTOMER:
       process.env.EMAILJS_TEMPLATE_ID_CUSTOMER || "",
     EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY || "",
-    PP_CLIENT_ID: process.env.PP_CLIENT_ID || "",
-    PP_API_BASE: process.env.PP_API_BASE || "https://api.paypal.com",
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || "",
   });
 });

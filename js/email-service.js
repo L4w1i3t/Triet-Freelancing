@@ -297,13 +297,11 @@ class EmailService {
       tax: `$${orderData.summary.tax.toFixed(2)}`,
       total: `$${orderData.summary.total.toFixed(2)}`,
       payment_method: this.sanitizeText(
-        orderData.paymentInfo?.paymentMethod === "paypal"
-          ? "PayPal"
+        orderData.paymentInfo?.paymentMethod === "stripe"
+          ? "Stripe"
           : orderData.paymentInfo?.paymentMethod === "bitcoin"
             ? "Bitcoin"
-            : orderData.paymentInfo?.paymentMethod === "manual"
-              ? "Manual Payment (To be arranged)"
-              : "Manual Payment (To be arranged)",
+            : "Manual Payment (To be arranged)",
       ),
       transaction_id: this.sanitizeText(
         orderData.paymentInfo?.transactionId || "Not available",

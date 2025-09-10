@@ -367,12 +367,12 @@ class SecurityManager {
 
       let cspContent = `
         default-src 'self';
-        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://js.stripe.com;
+        script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://js.stripe.com;
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
         font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
         img-src 'self' data: https: blob:;
-        connect-src 'self' https://api.emailjs.com https://api.paypal.com https://api.stripe.com;
-        frame-src https://www.paypal.com https://js.stripe.com;
+        connect-src 'self' https://api.emailjs.com https://api.stripe.com;
+        frame-src https://js.stripe.com;
         object-src 'none';
         base-uri 'self';
         form-action 'self';

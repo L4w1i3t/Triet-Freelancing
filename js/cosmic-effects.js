@@ -68,16 +68,18 @@ class CosmicBackground {
   }
 
   setupEventListeners() {
-    window.addEventListener("resize", () => this.resize());
+    window.addEventListener("resize", () => this.resize(), { passive: true });
     window.addEventListener("mousemove", (e) => {
       this.mouse.x = e.clientX;
       this.mouse.y = e.clientY;
-    });
+    }, { passive: true });
   }
 
   resize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+    this.canvas.width = Math.floor(window.innerWidth * scale);
+    this.canvas.height = Math.floor(window.innerHeight * scale);
+    this.ctx.setTransform(scale, 0, 0, scale, 0, 0);
   }
 
   createParticles() {
@@ -439,16 +441,37 @@ class AuroraWaves {
 }
 
 // Initialize all background effects
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   // Check if user prefers reduced motion
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
-  if (!prefersReducedMotion) {
-    new CosmicBackground();
-    new FloatingGeometry();
-    new AuroraWaves();
+  const startEffects = () => {
+    if (!prefersReducedMotion) {
+      const bg = new CosmicBackground();
+      // Pause when tab is hidden
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.hidden && bg.animationId) {
+            cancelAnimationFrame(bg.animationId);
+            bg.animationId = null;
+          } else if (!document.hidden && !bg.animationId) {
+            bg.animate();
+          }
+        },
+        { passive: true },
+      );
+      new FloatingGeometry();
+      new AuroraWaves();
+    }
+  };
+
+  if (typeof requestIdleCallback === "function") {
+    requestIdleCallback(startEffects, { timeout: 1000 });
+  } else {
+    setTimeout(startEffects, 150);
   }
 });
 

@@ -72,6 +72,28 @@ async function writeJsonFile(filename, data) {
   }
 }
 
+// Helper to validate admin password
+async function validatePassword(plainPassword) {
+  try {
+    // Prefer hashed password if provided
+    if (
+      process.env.ADMIN_PASSWORD_HASH &&
+      !process.env.ADMIN_PASSWORD_HASH.includes("examples.hash.here")
+    ) {
+      return await bcrypt.compare(plainPassword, ADMIN_PASSWORD_HASH);
+    }
+
+    // Fallback to plain password from env (development only)
+    if (process.env.ADMIN_PASSWORD) {
+      return plainPassword === process.env.ADMIN_PASSWORD;
+    }
+
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
 // Login endpoint
 router.post("/login", async (req, res) => {
   try {
@@ -82,10 +104,8 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Password required" });
     }
 
-    // For development, you can use a simple password check
-    // In production, use bcrypt.compare with a hashed password
-    const isValidPassword =
-      password === process.env.ADMIN_PASSWORD || password === "admin123"; // Change this!
+    // Validate password using hash (preferred) or env fallback
+    const isValidPassword = await validatePassword(password);
 
     if (!isValidPassword) {
       await auditLogger.logLogin(req, false, "Invalid password");

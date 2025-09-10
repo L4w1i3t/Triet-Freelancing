@@ -16,6 +16,7 @@
   let container = null;
   let stars = [];
   let supernovaScheduled = false;
+  let initialized = false;
 
   // Device check: skip on mobile or tablet
   function isMobileOrTablet() {
@@ -62,7 +63,8 @@
         position: fixed;
         top: 0; left: 0; width: 100vw; height: 100vh;
         pointer-events: none;
-        z-index: var(--z-background, 0);
+        z-index: -4; /* keep well behind nebula and content */
+        opacity: 0; transition: opacity 400ms ease;
       `;
       document.body.appendChild(container);
     }
@@ -93,17 +95,47 @@
   // Initialize stars
   function initializeStars() {
     stars = [];
-    for (let i = 0; i < STAR_COUNT; i++) {
-      stars.push(createStar());
-    }
+    // Gradually ramp up stars to avoid main-thread spike
+    const target = STAR_COUNT;
+    let created = 0;
+    const batch = 8;
+
+    const addBatch = () => {
+      const count = Math.min(batch, target - created);
+      for (let i = 0; i < count; i++) {
+        stars.push(createStar());
+      }
+      created += count;
+      if (created < target) {
+        if (typeof requestIdleCallback === "function") {
+          requestIdleCallback(addBatch, { timeout: 200 });
+        } else {
+          setTimeout(addBatch, 50);
+        }
+      } else {
+        // Fade in once initial stars are ready
+        requestAnimationFrame(() => {
+          if (container) container.style.opacity = "1";
+        });
+      }
+    };
+
+    addBatch();
   }
 
   // Initial setup
   function initialize() {
+    if (initialized) return;
+    // Respect Low Detail Mode if available
+    if (window.LowDetailMode && window.LowDetailMode.isLowDetailActive()) {
+      return;
+    }
+
     createContainer();
     if (handleDeviceChange()) {
       initializeStars();
       startSupernova();
+      initialized = true;
     }
   }
 
@@ -112,9 +144,17 @@
     handleDeviceChange();
   }
 
-  // Initial check
-  if (!isMobileOrTablet()) {
-    initialize();
+  // Defer initialization until after full page load to reduce pop-in
+  const onLoad = () => {
+    if (!isMobileOrTablet()) {
+      // Small delay to allow above-the-fold paint to settle
+      setTimeout(initialize, 250);
+    }
+  };
+  if (document.readyState === "complete") {
+    onLoad();
+  } else {
+    window.addEventListener("load", onLoad);
   }
 
   // Supernova effect

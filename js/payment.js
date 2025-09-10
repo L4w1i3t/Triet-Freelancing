@@ -8,10 +8,7 @@ class PaymentManager {
     this.config = null;
     this.configLoaded = false;
 
-    // PayPal Configuration - will be set after config loads
-    this.paypalClientId = null;
-    this.paypalEnvironment = null;
-    this.paypalCurrency = null;
+    // PayPal removed
 
     // Stripe Configuration - will be set after config loads
     this.stripePublishableKey = null;
@@ -20,7 +17,7 @@ class PaymentManager {
     this.bitcoinWalletAddress = null;
     this.bitcoinApiKey = null;
 
-    this.paypal = null;
+    // PayPal removed
     this.stripe = null;
     this.stripeElements = null;
     this.stripeCardElement = null;
@@ -47,16 +44,9 @@ class PaymentManager {
         await window.initializePaymentConfig();
       }
 
-      this.config = window.PAYMENT_CONFIG || {
-        mode: "manual",
-        manualMethods: [{ name: "PayPal", icon: "fas fa-check" }],
-      };
+      this.config = window.PAYMENT_CONFIG || { mode: "manual", manualMethods: [] };
 
-      // Set configuration properties
-      this.paypalClientId =
-        this.config.paypal?.clientId || "your-paypal-client-id";
-      this.paypalEnvironment = this.config.paypal?.environment || "sandbox";
-      this.paypalCurrency = this.config.paypal?.currency || "USD";
+      // Set configuration properties (PayPal removed)
 
       // Stripe Configuration
       this.stripePublishableKey =
@@ -192,11 +182,6 @@ class PaymentManager {
 
     if (this.paymentMode === "manual") {
       this.updateUIForManualPayment();
-    } else if (this.paymentMode === "paypal") {
-      this.initializePayPal();
-      this.setupPaymentMethodSwitcher();
-      this.updateUIForAutomatedPayment();
-      this.currentPaymentMethod = "paypal";
     } else if (this.paymentMode === "stripe") {
       this.initializeStripe();
       this.setupPaymentMethodSwitcher();
@@ -209,9 +194,7 @@ class PaymentManager {
 
     // Add a small indicator in the console for developers
     if (this.paymentMode !== "manual") {
-      console.log(
-        " Automated payment processing active - PayPal integration enabled",
-      );
+      console.log(" Automated payment processing active");
     } else {
       console.log(
         " Manual payment coordination active - Order confirmation only",
@@ -230,10 +213,7 @@ class PaymentManager {
     // Update hero description based on payment mode
     const heroDescription = document.querySelector(".payment-description");
     if (heroDescription) {
-      if (this.paymentMode === "paypal") {
-        heroDescription.textContent =
-          "Review your order details and complete your payment securely with PayPal";
-      } else if (this.paymentMode === "stripe") {
+      if (this.paymentMode === "stripe") {
         heroDescription.textContent =
           "Review your order details and complete your payment securely with Stripe";
       } else {
@@ -308,13 +288,7 @@ class PaymentManager {
     }
 
     // Hide automated payment forms
-    const paypalForm = document.getElementById("paypalPaymentForm");
     const stripeForm = document.getElementById("stripePaymentForm");
-
-    if (paypalForm) {
-      paypalForm.style.display = "none";
-      console.log(" Hidden PayPal payment form");
-    }
 
     if (stripeForm) {
       stripeForm.style.display = "none";
@@ -356,9 +330,7 @@ class PaymentManager {
     this.updateUIForManualPayment();
 
     // Show a user-friendly message
-    const paymentContainer =
-      document.querySelector("#paypalPaymentForm") ||
-      document.querySelector("#stripePaymentForm");
+    const paymentContainer = document.querySelector("#stripePaymentForm");
     if (paymentContainer) {
       paymentContainer.innerHTML = `
         <div class="payment-fallback-notice">
@@ -453,187 +425,7 @@ class PaymentManager {
     }
   }
 
-  async initializePayPal() {
-    try {
-      console.log("Initializing PayPal integration...");
-
-      // Wait for PayPal SDK to be available with timeout
-      const waitForPayPal = (timeout = 10000) => {
-        return new Promise((resolve, reject) => {
-          const startTime = Date.now();
-
-          const checkPayPal = () => {
-            if (typeof paypal !== "undefined") {
-              console.log(" PayPal SDK loaded successfully");
-              resolve();
-            } else if (Date.now() - startTime > timeout) {
-              reject(new Error("PayPal SDK failed to load within timeout"));
-            } else {
-              setTimeout(checkPayPal, 100);
-            }
-          };
-
-          checkPayPal();
-        });
-      };
-
-      await waitForPayPal();
-      await this.renderPayPalButtons();
-      console.log(` PayPal initialized in ${this.paypalEnvironment} mode`);
-    } catch (error) {
-      console.error("Failed to initialize PayPal:", error);
-      console.log("Falling back to manual payment mode...");
-      this.fallbackToManualMode();
-    }
-  }
-
-  async renderPayPalButtons() {
-    try {
-      console.log("Rendering PayPal payment buttons...");
-
-      const buttonContainer = document.getElementById(
-        "paypal-button-container",
-      );
-      if (!buttonContainer) {
-        console.error("PayPal button container not found");
-        return;
-      }
-
-      // Clear any existing buttons
-      buttonContainer.innerHTML = "";
-
-      // Add troubleshooting info for developers
-      console.group("PayPal Integration Debug Info");
-      console.log("Environment:", this.paypalEnvironment);
-      console.log(
-        "Client ID:",
-        this.paypalClientId
-          ? this.paypalClientId.substring(0, 20) + "..."
-          : "Not configured",
-      );
-      console.log("Currency:", this.paypalCurrency);
-      console.groupEnd();
-
-      // Render PayPal buttons
-      paypal
-        .Buttons({
-          funding: {
-            disallowed: [paypal.FUNDING.CREDIT, paypal.FUNDING.PAYLATER],
-          },
-          style: {
-            layout: "vertical",
-            color: "blue",
-            shape: "rect",
-            label: "pay", // Changed from 'paypal' to 'pay' for better digital product experience
-            tagline: false, // Remove "The safer, easier way to pay" tagline
-          },
-
-          createOrder: (data, actions) => {
-            if (!this.orderData || !this.orderData.summary) {
-              console.error("No order data available for PayPal payment");
-              return;
-            }
-
-            // Prepare items list for PayPal
-            const items = this.orderData.items.map((item) => ({
-              name: item.service?.name || item.serviceName || "Digital Service",
-              description: item.projectDescription
-                ? item.projectDescription.length > 100
-                  ? item.projectDescription.substring(0, 100) + "..."
-                  : item.projectDescription
-                : "Custom digital commission/service",
-              quantity: "1",
-              unit_amount: {
-                currency_code: this.paypalCurrency,
-                value: item.pricing?.totalPrice?.toFixed(2) || "0.00",
-              },
-              category: "DIGITAL_GOODS", // Explicitly mark as digital goods
-            }));
-
-            return actions.order.create({
-              intent: "CAPTURE",
-              application_context: {
-                shipping_preference: "NO_SHIPPING", // Disable shipping for digital products
-                user_action: "PAY_NOW", // Skip review step, go straight to payment
-                brand_name: "Triet - Digital Services", // Your brand name
-                landing_page: "NO_PREFERENCE", // Let PayPal decide the best experience
-              },
-              purchase_units: [
-                {
-                  amount: {
-                    value: this.orderData.summary.total.toFixed(2),
-                    currency_code: this.paypalCurrency,
-                    breakdown: {
-                      item_total: {
-                        currency_code: this.paypalCurrency,
-                        value: this.orderData.summary.subtotal.toFixed(2),
-                      },
-                      tax_total: {
-                        currency_code: this.paypalCurrency,
-                        value: this.orderData.summary.tax.toFixed(2),
-                      },
-                    },
-                  },
-                  items: items,
-                  description: `Digital Commission Order - ${this.orderData.orderId || "N/A"}`,
-                  custom_id: this.orderData.orderId || `ORDER-${Date.now()}`,
-                  soft_descriptor: "TRIET DIGITAL", // What appears on the customer's bank statement
-                },
-              ],
-            });
-          },
-
-          onApprove: async (data, actions) => {
-            try {
-              const order = await actions.order.capture();
-              console.log("PayPal payment completed:", order);
-              await this.handlePayPalPaymentSuccess(order);
-            } catch (error) {
-              console.error("PayPal payment capture error:", error);
-              this.showError("Payment capture failed. Please try again.");
-            }
-          },
-
-          onError: (err) => {
-            console.error("PayPal payment error:", err);
-            this.showError("Payment failed. Please try again.");
-          },
-
-          onCancel: (data) => {
-            console.log("PayPal payment cancelled:", data);
-            this.showInfo("Payment was cancelled.");
-          },
-        })
-        .render("#paypal-button-container");
-    } catch (error) {
-      console.error("Failed to render PayPal buttons:", error);
-    }
-  }
-
-  async handlePayPalPaymentSuccess(paypalOrder) {
-    try {
-      // Create payment result object
-      const paymentResult = {
-        transactionId: paypalOrder.id,
-        paymentMethod: "paypal",
-        amount: paypalOrder.purchase_units[0].amount.value,
-        currency: paypalOrder.purchase_units[0].amount.currency_code,
-        status: paypalOrder.status,
-        payerInfo: paypalOrder.payer,
-        timestamp: new Date().toISOString(),
-      };
-
-      console.log("Processing PayPal payment success:", paymentResult);
-
-      // Handle successful payment
-      this.handlePaymentSuccess(paymentResult);
-    } catch (error) {
-      console.error("Error handling PayPal payment success:", error);
-      this.showError(
-        "Payment completed but there was an error processing your order. Please contact support.",
-      );
-    }
-  }
+  // PayPal integration removed
 
   async initializeStripe() {
     try {
@@ -1102,12 +894,7 @@ class PaymentManager {
     });
 
     // Initialize first payment method based on payment mode
-    let defaultMethod = "manual";
-    if (this.paymentMode === "paypal") {
-      defaultMethod = "paypal";
-    } else if (this.paymentMode === "stripe") {
-      defaultMethod = "stripe";
-    }
+    let defaultMethod = this.paymentMode === "stripe" ? "stripe" : "manual";
 
     this.showPaymentForm(defaultMethod);
     const defaultOption = document.querySelector(
@@ -1121,22 +908,15 @@ class PaymentManager {
   }
 
   showPaymentForm(method) {
-    const paypalForm = document.getElementById("paypalPaymentForm");
     const stripeForm = document.getElementById("stripePaymentForm");
     const bitcoinForm = document.getElementById("bitcoinPaymentForm");
 
     // Hide all forms first
-    if (paypalForm) paypalForm.style.display = "none";
     if (stripeForm) stripeForm.style.display = "none";
     if (bitcoinForm) bitcoinForm.style.display = "none";
 
     // Show the selected form
-    if (method === "paypal") {
-      if (paypalForm) {
-        paypalForm.style.display = "block";
-        console.log(" Showing PayPal payment form");
-      }
-    } else if (method === "stripe") {
+    if (method === "stripe") {
       if (stripeForm) {
         stripeForm.style.display = "block";
         console.log(" Showing Stripe payment form");
@@ -1630,7 +1410,7 @@ class PaymentManager {
       notes: "Test order for email verification",
       paymentInfo: {
         transactionId: "TEST-" + Math.random().toString(36).substr(2, 9),
-        paymentMethod: "paypal",
+        paymentMethod: "stripe",
         paidAt: new Date().toISOString(),
       },
     };
@@ -1687,7 +1467,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const elements = [
         "manualPaymentNotice",
         "orderConfirmationContainer",
-        "paypalPaymentForm",
         "paymentSectionTitle",
       ];
 

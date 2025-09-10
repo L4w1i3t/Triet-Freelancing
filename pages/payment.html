@@ -8,7 +8,7 @@
     <!-- Security Headers -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.paypal.com https://www.sandbox.paypal.com https://js.stripe.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https: https://api.emailjs.com https://api.paypal.com https://www.paypal.com https://api.sandbox.paypal.com https://www.sandbox.paypal.com https://api.stripe.com https://static.cloudflareinsights.com; frame-src https://www.paypal.com https://www.sandbox.paypal.com https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self';"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://js.stripe.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https: https://api.emailjs.com https://api.stripe.com https://static.cloudflareinsights.com; frame-src https://js.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self';"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
@@ -49,7 +49,7 @@
     <script>
       // Prevent multiple SDK loading
       let sdkLoadingInProgress = false;
-      let sdkLoaded = { paypal: false, stripe: false };
+      let sdkLoaded = { stripe: false };
 
       // Load Payment SDKs based on configuration
       const loadPaymentSDKs = async () => {
@@ -71,9 +71,7 @@
           console.log("Loading SDK for payment mode:", paymentMode);
 
           // Only load the SDK for the active payment mode
-          if (paymentMode === "paypal" && !sdkLoaded.paypal) {
-            await loadPayPalSDK();
-          } else if (paymentMode === "stripe" && !sdkLoaded.stripe) {
+          if (paymentMode === "stripe" && !sdkLoaded.stripe) {
             await loadStripeSDK();
           } else {
             console.log(
@@ -84,57 +82,6 @@
           console.error("Failed to load payment SDKs:", error);
         } finally {
           sdkLoadingInProgress = false;
-        }
-      };
-
-      // Load PayPal SDK
-      const loadPayPalSDK = async () => {
-        if (sdkLoaded.paypal) {
-          console.log("PayPal SDK already loaded, skipping...");
-          return;
-        }
-
-        try {
-          const config = window.PAYMENT_CONFIG.paypal;
-          const environment =
-            config.environment === "production"
-              ? "www.paypal.com"
-              : "www.sandbox.paypal.com";
-          const clientId = config.clientId;
-
-          if (clientId && clientId !== "your-paypal-client-id") {
-            const script = document.createElement("script");
-            const sdkUrl = `https://${environment}/sdk/js?client-id=${clientId}&currency=${config.currency}&intent=${config.intent}&disable-funding=credit,paylater`;
-            script.src = sdkUrl;
-            script.setAttribute(
-              "data-sdk-integration-source",
-              "button-factory",
-            );
-
-            return new Promise((resolve, reject) => {
-              script.onload = () => {
-                console.log("PayPal SDK loaded successfully");
-                sdkLoaded.paypal = true;
-                resolve();
-              };
-              script.onerror = () => {
-                console.warn(
-                  "PayPal SDK failed to load. Falling back to manual payment mode.",
-                );
-                if (window.paymentManager) {
-                  window.paymentManager.fallbackToManualMode();
-                }
-                reject(new Error("PayPal SDK failed to load"));
-              };
-              document.head.appendChild(script);
-            });
-          } else {
-            console.warn("PayPal client ID not configured.");
-            throw new Error("PayPal not configured");
-          }
-        } catch (error) {
-          console.error("Failed to load PayPal SDK:", error);
-          throw error;
         }
       };
 
@@ -367,40 +314,12 @@
                     <div class="payment-info">
                       <h3>Manual Payment</h3>
                       <p>
-                        Coordinate payment manually via PayPal, Venmo, or Zelle
+                        Coordinate payment manually via Venmo or Zelle
                       </p>
                     </div>
                     <div class="payment-icons">
                       <i class="fas fa-handshake"></i>
-                      <i class="fab fa-paypal"></i>
                       <i class="fas fa-dollar-sign"></i>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="payment-option" data-method="paypal">
-                  <div class="payment-option-header">
-                    <div class="payment-radio">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="paypal"
-                        id="paypalRadio"
-                        checked
-                      />
-                      <label for="paypalRadio"></label>
-                    </div>
-                    <div class="payment-info">
-                      <h3>PayPal & Cards</h3>
-                      <p>
-                        Pay securely for digital services - no shipping required
-                      </p>
-                    </div>
-                    <div class="payment-icons">
-                      <i class="fab fa-paypal"></i>
-                      <i class="fab fa-cc-visa"></i>
-                      <i class="fab fa-cc-mastercard"></i>
-                      <i class="fab fa-cc-amex"></i>
                     </div>
                   </div>
                 </div>
@@ -433,15 +352,7 @@
                 </div>
               </div>
 
-              <div class="payment-form-container" id="paypalPaymentForm">
-                <div class="payment-form-card">
-                  <h3>Digital Service Payment</h3>
-                  <p class="payment-note">
-                    Secure payment for your custom digital commission
-                  </p>
-                  <div id="paypal-button-container"></div>
-                </div>
-              </div>
+              <!-- PayPal form removed -->
 
               <!-- Stripe Payment Form -->
               <div

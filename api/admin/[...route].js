@@ -5,6 +5,7 @@ const fs = require("fs").promises;
 const path = require("path");
 const jwt = require("jsonwebtoken");
 const auditLogger = require("../../utils/audit-logger");
+const bcrypt = require("bcrypt");
 const IPWhitelist = require("../../middleware/ip-whitelist");
 
 const ipWhitelist = IPWhitelist.create();
@@ -121,8 +122,20 @@ export default async function handler(req, res) {
         await auditLogger.logLogin(req, false, "No password provided");
         return json(res, 400, { error: "Password required" });
       }
-      const isValidPassword =
-        password === process.env.ADMIN_PASSWORD || password === "admin123";
+      // Prefer hashed password if provided, else fallback to plain env password
+      let isValidPassword = false;
+      try {
+        if (process.env.ADMIN_PASSWORD_HASH) {
+          isValidPassword = await bcrypt.compare(
+            password,
+            process.env.ADMIN_PASSWORD_HASH,
+          );
+        } else if (process.env.ADMIN_PASSWORD) {
+          isValidPassword = password === process.env.ADMIN_PASSWORD;
+        }
+      } catch (e) {
+        isValidPassword = false;
+      }
       if (!isValidPassword) {
         await auditLogger.logLogin(req, false, "Invalid password");
         return json(res, 401, { error: "Invalid password" });

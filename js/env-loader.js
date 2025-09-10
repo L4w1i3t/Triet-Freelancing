@@ -62,8 +62,6 @@ class EnvConfig {
       EMAILJS_TEMPLATE_ID_ADMIN: "",
       EMAILJS_TEMPLATE_ID_CUSTOMER: "",
       EMAILJS_PUBLIC_KEY: "",
-      PP_CLIENT_ID: "",
-      PP_API_BASE: "https://api.paypal.com",
       STRIPE_PUBLISHABLE_KEY: "",
     };
   }

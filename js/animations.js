@@ -61,9 +61,28 @@ function initBackgroundEffects() {
 
 // Create animated star field
 function createStarField() {
-  const starField = document.createElement("div");
-  starField.className = "cosmic-starfield";
-  document.body.appendChild(starField);
+  const mount = () => {
+    const starField = document.createElement("div");
+    starField.className = "cosmic-starfield";
+    starField.style.opacity = "0";
+    starField.style.transition = "opacity 400ms ease";
+    document.body.appendChild(starField);
+    requestAnimationFrame(() => (starField.style.opacity = "1"));
+  };
+
+  const schedule = () => {
+    if (typeof requestIdleCallback === "function") {
+      requestIdleCallback(mount, { timeout: 1000 });
+    } else {
+      setTimeout(mount, 150);
+    }
+  };
+
+  if (document.readyState === "complete") {
+    schedule();
+  } else {
+    window.addEventListener("load", schedule, { once: true });
+  }
 }
 
 // Enhanced 3D interactions
