@@ -159,6 +159,22 @@
         "github": "https://github.com/L4w1i3t/Matsuda-Akai-Discord-Bot"
       },
       "icon": "fas fa-robot"
+    },
+    {
+      "id": "mockos",
+      "title": "MockOS",
+      "category": "tools",
+      "year": "2025",
+      "description": "A self-contained operating system mimic/simulator written in C++ with a custom kernel, file system, and user interface.",
+      "technologies": [
+        "C++",
+        "CMake"
+      ],
+      "links": {
+        "live": null,
+        "github": "https://github.com/L4w1i3t/MockOS"
+      },
+      "icon": "fas fa-tools"
     }
   ],
   "categories": [

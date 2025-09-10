@@ -56,7 +56,14 @@ function initScrollAnimations() {
 
 // Dynamic background effects
 function initBackgroundEffects() {
-  createStarField();
+  // Skip the columnized starfield on the homepage
+  const isHomepage =
+    document.documentElement.classList.contains("homepage") ||
+    document.body.classList.contains("homepage");
+
+  if (!isHomepage) {
+    createStarField();
+  }
 }
 
 // Create animated star field
