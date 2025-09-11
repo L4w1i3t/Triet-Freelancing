@@ -220,15 +220,15 @@ class AdminDashboard {
                       .map(
                         (project) => `
                         <tr>
-                            <td style="text-align: center; font-size: 1.2rem;"><i class="${project.icon || 'fas fa-question'}"></i></td>
+                            <td style="text-align: center; font-size: 1.2rem;"><i class="${project.icon || "fas fa-question"}"></i></td>
                             <td><strong>${project.title}</strong></td>
                             <td><span style="text-transform: capitalize;">${project.category}</span></td>
                             <td>${project.year}</td>
                             <td>${project.technologies ? project.technologies.slice(0, 2).join(", ") + (project.technologies.length > 2 ? "..." : "") : ""}</td>
                             <td>
-                                ${project.links?.live ? '<i class="fas fa-external-link-alt" style="color: #4CAF50;" title="Live site"></i>' : ''}
-                                ${project.links?.github ? '<i class="fab fa-github" style="color: #ccc;" title="GitHub"></i>' : ''}
-                                ${!project.links?.live && !project.links?.github ? '<span style="color: #666;">None</span>' : ''}
+                                ${project.links?.live ? '<i class="fas fa-external-link-alt" style="color: #4CAF50;" title="Live site"></i>' : ""}
+                                ${project.links?.github ? '<i class="fab fa-github" style="color: #ccc;" title="GitHub"></i>' : ""}
+                                ${!project.links?.live && !project.links?.github ? '<span style="color: #666;">None</span>' : ""}
                             </td>
                             <td>
                                 <div class="btn-group">

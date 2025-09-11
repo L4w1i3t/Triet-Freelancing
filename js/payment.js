@@ -44,7 +44,10 @@ class PaymentManager {
         await window.initializePaymentConfig();
       }
 
-      this.config = window.PAYMENT_CONFIG || { mode: "manual", manualMethods: [] };
+      this.config = window.PAYMENT_CONFIG || {
+        mode: "manual",
+        manualMethods: [],
+      };
 
       // Set configuration properties (PayPal removed)
 

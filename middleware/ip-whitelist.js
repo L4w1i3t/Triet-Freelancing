@@ -20,19 +20,23 @@ class IPWhitelist {
     const candidates = [];
 
     // 1) CDN/Proxy specific
-    if (headers["cf-connecting-ip"]) candidates.push(headers["cf-connecting-ip"]);
+    if (headers["cf-connecting-ip"])
+      candidates.push(headers["cf-connecting-ip"]);
     if (headers["true-client-ip"]) candidates.push(headers["true-client-ip"]);
     if (headers["x-client-ip"]) candidates.push(headers["x-client-ip"]);
-    if (headers["fastly-client-ip"]) candidates.push(headers["fastly-client-ip"]);
+    if (headers["fastly-client-ip"])
+      candidates.push(headers["fastly-client-ip"]);
     if (headers["fly-client-ip"]) candidates.push(headers["fly-client-ip"]);
     if (headers["x-real-ip"]) candidates.push(headers["x-real-ip"]);
 
     // 2) Vercel / general forwarded-for chains
-    if (headers["x-vercel-forwarded-for"]) candidates.push(headers["x-vercel-forwarded-for"]);
+    if (headers["x-vercel-forwarded-for"])
+      candidates.push(headers["x-vercel-forwarded-for"]);
     if (headers["x-forwarded-for"]) candidates.push(headers["x-forwarded-for"]);
 
     // 3) Connection-derived
-    if (req.connection?.remoteAddress) candidates.push(req.connection.remoteAddress);
+    if (req.connection?.remoteAddress)
+      candidates.push(req.connection.remoteAddress);
     if (req.socket?.remoteAddress) candidates.push(req.socket.remoteAddress);
     if (req.ip) candidates.push(req.ip);
 
@@ -40,7 +44,10 @@ class IPWhitelist {
     for (const value of candidates) {
       if (!value) continue;
       // Some headers may contain a comma-separated chain
-      const parts = value.split(",").map((p) => p.trim()).filter(Boolean);
+      const parts = value
+        .split(",")
+        .map((p) => p.trim())
+        .filter(Boolean);
       for (let raw of parts) {
         const ip = this.normalizeIP(raw);
         if (ip && !this.isPrivateIP(ip)) return ip;

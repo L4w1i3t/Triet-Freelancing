@@ -69,10 +69,14 @@ class CosmicBackground {
 
   setupEventListeners() {
     window.addEventListener("resize", () => this.resize(), { passive: true });
-    window.addEventListener("mousemove", (e) => {
-      this.mouse.x = e.clientX;
-      this.mouse.y = e.clientY;
-    }, { passive: true });
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        this.mouse.x = e.clientX;
+        this.mouse.y = e.clientY;
+      },
+      { passive: true },
+    );
   }
 
   resize() {
@@ -87,8 +91,8 @@ class CosmicBackground {
 
     for (let i = 0; i < particleCount; i++) {
       this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
         z: Math.random() * 1000,
         size: Math.random() * 2 + 1,
         speedX: (Math.random() - 0.5) * 0.5,
@@ -106,8 +110,8 @@ class CosmicBackground {
 
     for (let i = 0; i < starCount; i++) {
       this.stars.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
         size: Math.random() * 1.5 + 0.5,
         twinkle: Math.random() * 0.02 + 0.01,
         brightness: Math.random() * 0.8 + 0.2,
@@ -151,25 +155,32 @@ class CosmicBackground {
         particle.y -= dy * force * 0.01;
       }
 
-      // Reset particle if it goes off screen or too far
-      if (
-        particle.z <= 0 ||
-        particle.x < 0 ||
-        particle.x > this.canvas.width ||
-        particle.y < 0 ||
-        particle.y > this.canvas.height
-      ) {
-        particle.x = Math.random() * this.canvas.width;
-        particle.y = Math.random() * this.canvas.height;
+      // Reset particle if it gets too close or goes too far behind
+      if (particle.z <= 10) {
+        particle.x = Math.random() * window.innerWidth;
+        particle.y = Math.random() * window.innerHeight;
         particle.z = 1000;
+        particle.opacity = Math.random() * 0.8 + 0.2; // Reset opacity
       }
 
       // Calculate 3D projection
       const scale = 200 / (200 + particle.z);
-      const x2d =
-        (particle.x - this.canvas.width / 2) * scale + this.canvas.width / 2;
-      const y2d =
-        (particle.y - this.canvas.height / 2) * scale + this.canvas.height / 2;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const x2d = (particle.x - centerX) * scale + centerX;
+      const y2d = (particle.y - centerY) * scale + centerY;
+
+      // Skip rendering if particle is off-screen (but don't reset it yet)
+      if (x2d < -50 || x2d > window.innerWidth + 50 || 
+          y2d < -50 || y2d > window.innerHeight + 50) {
+        return;
+      }
+
+      // Distance-based fade out effect (fade as particles get closer)
+      let distanceFade = 1;
+      if (particle.z < 100) {
+        distanceFade = particle.z / 100; // Fade out as z approaches 0
+      }
 
       // Pulse effect
       particle.opacity += particle.pulse;
@@ -177,12 +188,19 @@ class CosmicBackground {
         particle.pulse = -particle.pulse;
       }
 
-      // Draw particle
+      // Calculate final opacity combining pulse and distance fade
+      const finalOpacity = particle.opacity * scale * distanceFade;
+
+      // Draw particle with enhanced glow effect for close particles
       this.ctx.save();
-      this.ctx.globalAlpha = particle.opacity * scale;
+      this.ctx.globalAlpha = finalOpacity;
       this.ctx.fillStyle = particle.color;
-      this.ctx.shadowBlur = 10;
+      
+      // Increase glow effect as particles get closer
+      const glowIntensity = Math.max(10, 30 * (1 - particle.z / 1000));
+      this.ctx.shadowBlur = glowIntensity;
       this.ctx.shadowColor = particle.color;
+      
       this.ctx.beginPath();
       this.ctx.arc(x2d, y2d, particle.size * scale, 0, Math.PI * 2);
       this.ctx.fill();

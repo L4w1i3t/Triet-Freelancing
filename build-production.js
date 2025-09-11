@@ -125,14 +125,14 @@ function shouldExclude(filePath) {
 
 // Clean and create dist directory
 async function setupDistDirectory() {
-  console.log(" Cleaning and setting up dist directory...");
+  console.log("Cleaning and setting up dist directory...");
   await fs.remove(DIST_DIR);
   await fs.ensureDir(DIST_DIR);
 }
 
 // Compile SCSS to CSS
 async function compileSCSS() {
-  console.log(" Compiling SCSS...");
+  console.log("Compiling SCSS...");
   execSync("sass scss/main.scss:css/main.css --style compressed", {
     cwd: SRC_DIR,
     stdio: "inherit",
@@ -200,7 +200,7 @@ async function processHTML(inputPath, outputPath) {
             }
           } else {
             console.log(
-              `    Skipping inline JS obfuscation for ${fileName} (in ignore list)`,
+              `   Skipping inline JS obfuscation for ${fileName} (in ignore list)`,
             );
             return match; // Keep original inline script, will be minified by HTML minifier
           }

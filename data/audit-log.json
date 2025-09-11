@@ -5,6 +5,29 @@
     "description": "Admin login audit log for Triet Dev",
     "entries": [
       {
+        "timestamp": "2025-09-11T21:36:23.056Z",
+        "event": "admin_action",
+        "action": "list_backups",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "details": {
+          "count": 2
+        },
+        "sessionId": "mffxhgyjad7cybh18fg"
+      },
+      {
+        "timestamp": "2025-09-11T21:36:20.258Z",
+        "event": "admin_login",
+        "success": true,
+        "ip": "::1",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "country": "Local",
+        "reason": null,
+        "sessionId": "mffxhgyqm7stgbos2km",
+        "fingerprint": "TW96aWxsYS81LjAg"
+      },
+      {
         "timestamp": "2025-09-08T18:20:01.337Z",
         "event": "admin_login",
         "success": true,

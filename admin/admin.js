@@ -1,8 +1,7 @@
 // Dropdown toggle function
 function toggleExportDropdown() {
   const dropdown = document.getElementById("exportDropdown");
-  dropdown.style.display =
-    dropdown.style.display === "none" ? "block" : "none";
+  dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
 }
 
 // Close dropdown when clicking outside

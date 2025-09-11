@@ -10,7 +10,8 @@ const IPWhitelist = require("../../middleware/ip-whitelist");
 
 const ipWhitelist = IPWhitelist.create();
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-super-secret-jwt-key-change-this";
+const JWT_SECRET =
+  process.env.JWT_SECRET || "your-super-secret-jwt-key-change-this";
 const DATA_DIR = path.join(__dirname, "../../data");
 const BACKUP_DIR = path.join(__dirname, "../../data/backup");
 
@@ -105,7 +106,8 @@ export default async function handler(req, res) {
   if (!ipWhitelist.isIPAllowed(clientIP)) {
     await auditLogger.logLogin(req, false, `Blocked IP: ${clientIP}`);
     return json(res, 403, {
-      error: "Access denied. Your IP address is not authorized to access this resource.",
+      error:
+        "Access denied. Your IP address is not authorized to access this resource.",
       code: "IP_NOT_WHITELISTED",
       timestamp: new Date().toISOString(),
     });
@@ -174,23 +176,31 @@ export default async function handler(req, res) {
           return json(res, 400, { error: "Missing required fields" });
         }
         const portfolioData = await readJsonFile("portfolio.json");
-        const idx = portfolioData.projects.findIndex((p) => p.id === newProject.id);
+        const idx = portfolioData.projects.findIndex(
+          (p) => p.id === newProject.id,
+        );
         const isUpdate = idx >= 0;
         if (isUpdate) portfolioData.projects[idx] = newProject;
         else portfolioData.projects.push(newProject);
         await writeJsonFile("portfolio.json", portfolioData);
-        await auditLogger.logAction(req, isUpdate ? "update_portfolio" : "create_portfolio", {
-          projectId: newProject.id,
-          title: newProject.title,
-          category: newProject.category,
-        });
+        await auditLogger.logAction(
+          req,
+          isUpdate ? "update_portfolio" : "create_portfolio",
+          {
+            projectId: newProject.id,
+            title: newProject.title,
+            category: newProject.category,
+          },
+        );
         return json(res, 200, { success: true, project: newProject });
       }
       if (method === "DELETE" && segments[1]) {
         const id = segments[1];
         const portfolioData = await readJsonFile("portfolio.json");
         const deletedProject = portfolioData.projects.find((p) => p.id === id);
-        portfolioData.projects = portfolioData.projects.filter((p) => p.id !== id);
+        portfolioData.projects = portfolioData.projects.filter(
+          (p) => p.id !== id,
+        );
         await writeJsonFile("portfolio.json", portfolioData);
         await auditLogger.logAction(req, "delete_portfolio", {
           projectId: id,
@@ -212,7 +222,9 @@ export default async function handler(req, res) {
           return json(res, 400, { error: "Missing required fields" });
         }
         const servicesData = await readJsonFile("services.json");
-        const tier = servicesData.serviceTiers.find((t) => t.id === newService.tierId);
+        const tier = servicesData.serviceTiers.find(
+          (t) => t.id === newService.tierId,
+        );
         if (!tier) return json(res, 400, { error: "Invalid service tier" });
         if (!tier.services) tier.services = [];
         const idx = tier.services.findIndex((s) => s.id === newService.id);
@@ -252,7 +264,10 @@ export default async function handler(req, res) {
         });
         res.setHeader("Content-Type", "application/json");
         const filename = `audit-logs-${new Date().toISOString().split("T")[0]}.json`;
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
         return res.end(JSON.stringify(logs));
       }
       if (segments[1] === "audit-logs" && segments[2] === "csv") {
@@ -265,12 +280,18 @@ export default async function handler(req, res) {
         });
         let csv = "Timestamp,Action,User,IP,Details\n";
         logs.forEach((log) => {
-          const details = JSON.stringify(log.details || {}).replace(/\"/g, '""');
+          const details = JSON.stringify(log.details || {}).replace(
+            /\"/g,
+            '""',
+          );
           csv += `"${log.timestamp}","${log.action}","${log.user}","${log.ip}","${details}"\n`;
         });
         const filename = `audit-logs-${new Date().toISOString().split("T")[0]}.csv`;
         res.setHeader("Content-Type", "text/csv");
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
         return res.end(csv);
       }
       if (segments[1] === "security-alerts" && segments[2] === "json") {
@@ -290,7 +311,10 @@ export default async function handler(req, res) {
         });
         const filename = `security-alerts-${new Date().toISOString().split("T")[0]}.json`;
         res.setHeader("Content-Type", "application/json");
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
         return res.end(JSON.stringify(securityAlerts));
       }
       // Default export (data snapshot)
@@ -366,7 +390,10 @@ export default async function handler(req, res) {
     // LOGOUT
     if (segments[0] === "logout" && method === "POST") {
       await auditLogger.logLogout(req);
-      return json(res, 200, { success: true, message: "Logged out successfully" });
+      return json(res, 200, {
+        success: true,
+        message: "Logged out successfully",
+      });
     }
 
     // IP STATUS
