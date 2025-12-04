@@ -28,7 +28,7 @@
       "description": "A static portfolio website showcasing work, skills, and projects.",
       "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
       "links": {
-        "live": null,
+        "live": "https://l4w1i3t.github.io/CharlesLMelvin-Personal-Site/",
         "github": null
       },
       "icon": "fas fa-globe"
@@ -128,6 +128,19 @@
       "links": {
         "live": null,
         "github": "https://github.com/L4w1i3t/Matsuda-Akai-Discord-Bot"
+      },
+      "icon": "fas fa-robot"
+    },
+    {
+      "id": "fairy-discord-bot",
+      "title": "Fairy Discord Bot for SAI @ UVA",
+      "category": "bots",
+      "year": "2025",
+      "description": "A multifunctional Discord bot designed for the Societal AI community at the University of Virginia.",
+      "technologies": ["Python", "discord.py"],
+      "links": {
+        "live": null,
+        "github": null
       },
       "icon": "fas fa-robot"
     },
