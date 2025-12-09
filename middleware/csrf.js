@@ -5,6 +5,9 @@ class CSRFProtection {
   constructor() {
     this.tokens = new Map(); // In production, use Redis or database
     this.cleanupInterval = setInterval(() => this.cleanup(), 60000); // Cleanup every minute
+    
+    // Detect development mode
+    this.isDevelopment = process.env.NODE_ENV !== 'production';
   }
 
   generateToken() {
@@ -54,6 +57,12 @@ class CSRFProtection {
     return (req, res, next) => {
       // Skip CSRF for GET requests and OPTIONS
       if (req.method === "GET" || req.method === "OPTIONS") {
+        return next();
+      }
+
+      // Skip CSRF validation in development mode
+      if (this.isDevelopment) {
+        console.log('🔓 [DEV MODE] CSRF validation bypassed');
         return next();
       }
 

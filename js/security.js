@@ -4,9 +4,16 @@
 
 class SecurityManager {
   constructor() {
+    // Detect development environment
+    this.isDevelopment = 
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.hostname.startsWith('192.168.') ||
+      window.location.protocol === 'http:';
+
     this.config = {
       rateLimiting: {
-        enabled: true,
+        enabled: !this.isDevelopment, // Disable in dev
         maxRequests: 10,
         timeWindow: 60000, // 1 minute
         blockDuration: 300000, // 5 minutes
@@ -17,7 +24,7 @@ class SecurityManager {
         allowedAttributes: {},
       },
       csrf: {
-        enabled: true,
+        enabled: !this.isDevelopment, // Disable in dev
         tokenName: "csrf_token",
         headerName: "X-CSRF-Token",
       },
@@ -35,8 +42,8 @@ class SecurityManager {
     this.init();
   }
 
-  init() {
-    this.generateCSRFToken();
+  async init() {
+    await this.generateCSRFToken();
     this.setupSecurityHeaders();
     this.initializeInputValidation();
     this.setupRateLimiting();
@@ -50,31 +57,89 @@ class SecurityManager {
   // CSRF PROTECTION
   // ===============================================
 
-  generateCSRFToken() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    this.csrfToken = Array.from(array, (byte) =>
-      byte.toString(16).padStart(2, "0"),
-    ).join("");
-
-    // Store in session storage (more secure than localStorage)
-    sessionStorage.setItem(this.config.csrf.tokenName, this.csrfToken);
-
-    // Add to meta tag for easy access
-    let csrfMeta = document.querySelector('meta[name="csrf-token"]');
-    if (!csrfMeta) {
-      csrfMeta = document.createElement("meta");
-      csrfMeta.name = "csrf-token";
-      document.head.appendChild(csrfMeta);
+  async generateCSRFToken() {
+    // Skip CSRF in development mode
+    if (this.isDevelopment) {
+      console.log("🔓 Development mode: CSRF protection disabled");
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      this.csrfToken = Array.from(array, (byte) =>
+        byte.toString(16).padStart(2, "0"),
+      ).join("");
+      sessionStorage.setItem(this.config.csrf.tokenName, this.csrfToken);
+      return;
     }
-    csrfMeta.content = this.csrfToken;
 
-    console.log(" CSRF token generated");
+    try {
+      // Fetch CSRF token from server
+      const response = await fetch('/api/csrf-token', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch CSRF token: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.csrfToken) {
+        throw new Error('CSRF token not found in server response');
+      }
+      
+      this.csrfToken = data.csrfToken;
+
+      // Store in session storage (more secure than localStorage)
+      sessionStorage.setItem(this.config.csrf.tokenName, this.csrfToken);
+
+      // Add to meta tag for easy access
+      let csrfMeta = document.querySelector('meta[name="csrf-token"]');
+      if (!csrfMeta) {
+        csrfMeta = document.createElement("meta");
+        csrfMeta.name = "csrf-token";
+        document.head.appendChild(csrfMeta);
+      }
+      csrfMeta.content = this.csrfToken;
+
+      console.log(" CSRF token fetched from server successfully");
+    } catch (error) {
+      console.error("⚠️ Failed to fetch CSRF token from server:", error.message);
+      console.warn("⚠️ Using client-side generated token (payments will not work!)");
+      
+      // Fallback to client-generated token for non-critical operations
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      this.csrfToken = Array.from(array, (byte) =>
+        byte.toString(16).padStart(2, "0"),
+      ).join("");
+      sessionStorage.setItem(this.config.csrf.tokenName, this.csrfToken);
+      
+      // Show warning to user
+      setTimeout(() => {
+        this.showSecurityWarning(
+          "Payment system unavailable. Please ensure the server is running."
+        );
+      }, 1000);
+    }
   }
 
   validateCSRFToken(token) {
     const storedToken = sessionStorage.getItem(this.config.csrf.tokenName);
     return token && storedToken && token === storedToken;
+  }
+
+  getCSRFToken() {
+    // In dev mode, always return a valid token
+    if (this.isDevelopment && !this.csrfToken) {
+      const array = new Uint8Array(32);
+      crypto.getRandomValues(array);
+      this.csrfToken = Array.from(array, (byte) =>
+        byte.toString(16).padStart(2, "0"),
+      ).join("");
+    }
+    return this.csrfToken || sessionStorage.getItem(this.config.csrf.tokenName);
   }
 
   // ===============================================

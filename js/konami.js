@@ -64,13 +64,11 @@
         if (index === sequence.length) {
           index = 0;
           try {
-            // Mark arrival so secret page can decide to play
+            // Mark arrival so secret page can play success sound
             try {
               sessionStorage.setItem("konami-arrival", "1");
             } catch (_) {}
-            // Play success sfx in same gesture context
-            playSfx(successSrc);
-            // Let the sound start, then navigate
+            // Navigate to secret page (sound will play there)
             setTimeout(function () {
               window.location.href = "pages/secret/konami.html";
             }, 120);

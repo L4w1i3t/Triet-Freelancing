@@ -711,10 +711,17 @@ class PaymentManager {
         const orderTotal = this.getOrderTotal();
         console.log("Creating Payment Intent for amount:", orderTotal);
 
+        // Get CSRF token from security manager
+        const csrfToken = window.securityManager?.getCSRFToken();
+        if (!csrfToken) {
+          throw new Error("CSRF token not available. Please refresh the page.");
+        }
+
         const response = await fetch("/api/create-payment-intent", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken,
           },
           body: JSON.stringify({
             amount: orderTotal,
