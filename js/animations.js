@@ -1,12 +1,12 @@
 // Enhanced Animation system for Liquid Glass / Interstellar Theme
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize all animation systems
+  // Initialize lightweight animation systems only
   initOptimizedScrollAnimations();
   initBackgroundEffects();
   init3DInteractions();
   initGlassShimmer();
-  initCosmicParticles();
+  // Removed: initCosmicParticles() - too performance intensive
 
   // Parallax and smooth scrolling
   initParallaxEffects();
@@ -17,10 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize mobile menu
   initMobileMenu();
 
-  // Only enable heavy effects on desktop for performance
-  if (!isMobileDevice() && !isTabletDevice()) {
-    initMagneticButtons();
-  }
+  // Removed: initMagneticButtons() - too performance intensive for average GPUs
 });
 
 // Enhanced scroll animations with intersection observer

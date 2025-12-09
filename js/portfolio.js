@@ -4,6 +4,9 @@ class PortfolioManager {
     this.portfolioData = null;
     this.currentFilter = "all";
     this.filteredProjects = [];
+    this.currentPage = 1;
+    this.itemsPerPage = 6;
+    this.totalPages = 1;
 
     this.init();
   }
@@ -67,12 +70,19 @@ class PortfolioManager {
     if (this.filteredProjects.length === 0) {
       grid.innerHTML = "";
       emptyState.style.display = "flex";
+      this.hidePagination();
       return;
     }
 
     emptyState.style.display = "none";
 
-    const gridHTML = this.filteredProjects
+    // Calculate pagination
+    this.totalPages = Math.ceil(this.filteredProjects.length / this.itemsPerPage);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    const projectsToShow = this.filteredProjects.slice(startIndex, endIndex);
+
+    const gridHTML = projectsToShow
       .map(
         (project, index) => `
       <article class="portfolio-item" data-category="${project.category}" style="animation-delay: ${index * 0.1}s">
@@ -133,6 +143,9 @@ class PortfolioManager {
 
     grid.innerHTML = gridHTML;
 
+    // Update pagination controls
+    this.updatePagination();
+
     // Trigger enter animations
     setTimeout(() => {
       const items = grid.querySelectorAll(".portfolio-item");
@@ -150,6 +163,7 @@ class PortfolioManager {
     }
 
     this.currentFilter = categoryId;
+    this.currentPage = 1; // Reset to page 1 when filtering
     this.updateActiveTab();
     this.renderPortfolioGrid();
   }
@@ -165,6 +179,84 @@ class PortfolioManager {
     });
   }
 
+  updatePagination() {
+    const paginationControls = document.getElementById("paginationControls");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const pageNumbers = document.getElementById("pageNumbers");
+
+    if (!paginationControls || !prevBtn || !nextBtn || !pageNumbers) return;
+
+    // Show/hide pagination based on total pages
+    if (this.totalPages <= 1) {
+      this.hidePagination();
+      return;
+    }
+
+    paginationControls.style.display = "flex";
+
+    // Update button states
+    prevBtn.disabled = this.currentPage === 1;
+    nextBtn.disabled = this.currentPage === this.totalPages;
+
+    // Update page numbers
+    pageNumbers.innerHTML = this.renderPageNumbers();
+
+    // Scroll to top of portfolio grid when page changes
+    const portfolioSection = document.querySelector(".portfolio-grid-section");
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  renderPageNumbers() {
+    let html = "";
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust start if we're near the end
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // First page
+    if (startPage > 1) {
+      html += `<button class="page-number" data-page="1">1</button>`;
+      if (startPage > 2) {
+        html += `<span class="page-ellipsis">...</span>`;
+      }
+    }
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      html += `<button class="page-number ${i === this.currentPage ? "active" : ""}" data-page="${i}">${i}</button>`;
+    }
+
+    // Last page
+    if (endPage < this.totalPages) {
+      if (endPage < this.totalPages - 1) {
+        html += `<span class="page-ellipsis">...</span>`;
+      }
+      html += `<button class="page-number" data-page="${this.totalPages}">${this.totalPages}</button>`;
+    }
+
+    return html;
+  }
+
+  hidePagination() {
+    const paginationControls = document.getElementById("paginationControls");
+    if (paginationControls) {
+      paginationControls.style.display = "none";
+    }
+  }
+
+  goToPage(page) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.renderPortfolioGrid();
+  }
+
   setupEventListeners() {
     // Filter tab clicks
     document.addEventListener("click", (e) => {
@@ -172,6 +264,16 @@ class PortfolioManager {
         const tab = e.target.closest(".filter-tab");
         const filter = tab.dataset.filter;
         this.filterProjects(filter);
+      }
+
+      // Pagination clicks
+      if (e.target.closest("#prevBtn")) {
+        this.goToPage(this.currentPage - 1);
+      } else if (e.target.closest("#nextBtn")) {
+        this.goToPage(this.currentPage + 1);
+      } else if (e.target.closest(".page-number")) {
+        const page = parseInt(e.target.closest(".page-number").dataset.page);
+        this.goToPage(page);
       }
     });
 
