@@ -320,9 +320,9 @@ app.listen(port, () => {
 
   // Show IP whitelist status
   const allowedIPs = process.env.ADMIN_ALLOWED_IPS || "127.0.0.1,::1";
-  console.log(`🔒 Admin IP Whitelist: ${allowedIPs}`);
-  console.log(`🛡️  Admin protected at: http://localhost:${port}/admin`);
-  console.log(`⚡ Rate limiting bypassed for whitelisted IPs`);
+  console.log(` Admin IP Whitelist: ${allowedIPs}`);
+  console.log(`  Admin protected at: http://localhost:${port}/admin`);
+  console.log(` Rate limiting bypassed for whitelisted IPs`);
 });
 
 module.exports = app;

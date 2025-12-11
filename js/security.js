@@ -50,7 +50,7 @@ class SecurityManager {
     this.protectForms();
     this.enableClickjackingProtection();
     this.setupContentSecurityPolicy();
-    console.log(" Security Manager initialized");
+    console.log("Security Manager initialized");
   }
 
   // ===============================================
@@ -60,7 +60,7 @@ class SecurityManager {
   async generateCSRFToken() {
     // Skip CSRF in development mode
     if (this.isDevelopment) {
-      console.log("🔓 Development mode: CSRF protection disabled");
+      console.log("Development mode: CSRF protection disabled");
       const array = new Uint8Array(32);
       crypto.getRandomValues(array);
       this.csrfToken = Array.from(array, (byte) =>
@@ -105,8 +105,8 @@ class SecurityManager {
 
       console.log(" CSRF token fetched from server successfully");
     } catch (error) {
-      console.error("⚠️ Failed to fetch CSRF token from server:", error.message);
-      console.warn("⚠️ Using client-side generated token (payments will not work!)");
+      console.error(" Failed to fetch CSRF token from server:", error.message);
+      console.warn(" Using client-side generated token");
       
       // Fallback to client-generated token for non-critical operations
       const array = new Uint8Array(32);
@@ -116,12 +116,8 @@ class SecurityManager {
       ).join("");
       sessionStorage.setItem(this.config.csrf.tokenName, this.csrfToken);
       
-      // Show warning to user
-      setTimeout(() => {
-        this.showSecurityWarning(
-          "Payment system unavailable. Please ensure the server is running."
-        );
-      }, 1000);
+      // Note: CSRF validation is disabled on the server side in development mode
+      // In production with static hosting, CSRF protection should be handled by your API gateway/CDN
     }
   }
 

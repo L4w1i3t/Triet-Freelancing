@@ -532,7 +532,7 @@ class AdminDashboard {
       // Show loading state
       const button = document.querySelector('button[onclick="exportData()"]');
       const originalText = button.textContent;
-      button.textContent = "⏳ Updating Website Data...";
+      button.textContent = " Updating Website Data...";
       button.disabled = true;
 
       const response = await fetch("/api/admin/export", {
@@ -551,7 +551,7 @@ class AdminDashboard {
         window.URL.revokeObjectURL(url);
 
         this.showNotification(
-          "✅ Live website data updated successfully! Your portfolio and services are now live.",
+          " Live website data updated successfully! Your portfolio and services are now live.",
           "success",
         );
       } else {
@@ -560,14 +560,14 @@ class AdminDashboard {
     } catch (error) {
       console.error("Export error:", error);
       this.showNotification(
-        "❌ Error updating website data: " + error.message,
+        " Error updating website data: " + error.message,
         "error",
       );
     } finally {
       // Restore button state
       const button = document.querySelector('button[onclick="exportData()"]');
       if (button) {
-        button.textContent = "📝 Update Live Website Data";
+        button.textContent = " Update Live Website Data";
         button.disabled = false;
       }
     }
@@ -578,7 +578,7 @@ class AdminDashboard {
       // Show loading state
       const button = document.querySelector('button[onclick="backupData()"]');
       const originalText = button.textContent;
-      button.textContent = "⏳ Creating Backup...";
+      button.textContent = " Creating Backup...";
       button.disabled = true;
 
       const response = await fetch("/api/admin/backup", {
@@ -591,7 +591,7 @@ class AdminDashboard {
       if (response.ok) {
         const result = await response.json();
         this.showNotification(
-          `💾 Backup created successfully: ${result.filename}`,
+          ` Backup created successfully: ${result.filename}`,
           "success",
         );
       } else {
@@ -601,14 +601,14 @@ class AdminDashboard {
     } catch (error) {
       console.error("Backup error:", error);
       this.showNotification(
-        "❌ Error creating backup: " + error.message,
+        " Error creating backup: " + error.message,
         "error",
       );
     } finally {
       // Restore button state
       const button = document.querySelector('button[onclick="backupData()"]');
       if (button) {
-        button.textContent = "💾 Create Data Backup";
+        button.textContent = " Create Data Backup";
         button.disabled = false;
       }
     }
@@ -678,7 +678,7 @@ class AdminDashboard {
                             <td>${this.formatEventType(entry.event)}</td>
                             <td>
                                 <span style="color: ${entry.success ? "#4CAF50" : "#f44336"};">
-                                    ${entry.success ? "✅ Success" : "❌ Failed"}
+                                    ${entry.success ? " Success" : " Failed"}
                                 </span>
                             </td>
                             <td>${entry.ip || "Unknown"}</td>
@@ -696,10 +696,10 @@ class AdminDashboard {
 
   formatEventType(event) {
     const eventMap = {
-      admin_login: "🔐 Login",
-      admin_logout: "🚪 Logout",
-      admin_action: "⚙️ Action",
-      security_alert: "🚨 Alert",
+      admin_login: " Login",
+      admin_logout: " Logout",
+      admin_action: " Action",
+      security_alert: " Alert",
     };
     return eventMap[event] || event;
   }
@@ -716,11 +716,11 @@ class AdminDashboard {
     }
     if (entry.userAgent) {
       const ua = entry.userAgent;
-      if (ua.includes("Chrome")) return "🌐 Chrome";
-      if (ua.includes("Firefox")) return "🦊 Firefox";
-      if (ua.includes("Safari")) return "🍎 Safari";
-      if (ua.includes("Edge")) return "📘 Edge";
-      return "🌐 Browser";
+      if (ua.includes("Chrome")) return " Chrome";
+      if (ua.includes("Firefox")) return " Firefox";
+      if (ua.includes("Safari")) return " Safari";
+      if (ua.includes("Edge")) return " Edge";
+      return " Browser";
     }
     return "-";
   }
@@ -936,8 +936,8 @@ class AdminDashboard {
                             <td style="text-align: center;">${backup.servicesCount}</td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="btn-small btn-edit" onclick="admin.downloadBackup('${backup.filename}')" title="Download backup">💾 Download</button>
-                                    <button class="btn-small btn-delete" onclick="admin.deleteBackup('${backup.filename}')" title="Delete backup">🗑️ Delete</button>
+                                    <button class="btn-small btn-edit" onclick="admin.downloadBackup('${backup.filename}')" title="Download backup"> Download</button>
+                                    <button class="btn-small btn-delete" onclick="admin.deleteBackup('${backup.filename}')" title="Delete backup"> Delete</button>
                                 </div>
                             </td>
                         </tr>
@@ -978,14 +978,14 @@ class AdminDashboard {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        this.showNotification(`📥 Backup downloaded: ${filename}`, "success");
+        this.showNotification(` Backup downloaded: ${filename}`, "success");
       } else {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
       console.error("Download error:", error);
       this.showNotification(
-        "❌ Error downloading backup: " + error.message,
+        " Error downloading backup: " + error.message,
         "error",
       );
     }
@@ -1009,7 +1009,7 @@ class AdminDashboard {
       });
 
       if (response.ok) {
-        this.showNotification(`🗑️ Backup deleted: ${filename}`, "success");
+        this.showNotification(` Backup deleted: ${filename}`, "success");
         await this.loadBackups(); // Refresh the list
       } else {
         const error = await response.json();
@@ -1018,7 +1018,7 @@ class AdminDashboard {
     } catch (error) {
       console.error("Delete error:", error);
       this.showNotification(
-        "❌ Error deleting backup: " + error.message,
+        " Error deleting backup: " + error.message,
         "error",
       );
     }

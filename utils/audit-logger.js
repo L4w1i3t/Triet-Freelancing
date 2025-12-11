@@ -230,7 +230,7 @@ class AuditLogger {
     await this.writeLogEntry(alertEntry);
 
     // In a real implementation, you'd send email/SMS here
-    console.warn("🚨 SECURITY ALERT:", alerts);
+    console.warn(" SECURITY ALERT:", alerts);
   }
 
   calculateSeverity(alerts) {

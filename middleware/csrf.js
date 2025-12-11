@@ -62,7 +62,7 @@ class CSRFProtection {
 
       // Skip CSRF validation in development mode
       if (this.isDevelopment) {
-        console.log('🔓 [DEV MODE] CSRF validation bypassed');
+        console.log(' [DEV MODE] CSRF validation bypassed');
         return next();
       }
 

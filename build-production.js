@@ -294,12 +294,12 @@ async function createBuildInfo() {
     path.join(DIST_DIR, "build-info.json"),
     JSON.stringify(buildInfo, null, 2),
   );
-  console.log(" Created build info file");
+  console.log(Created build info file");
 }
 
 // Main build function
 async function build() {
-  console.log(" Starting production build...\n");
+  console.log(Starting production build...\n");
 
   try {
     await setupDistDirectory();
@@ -322,7 +322,7 @@ async function build() {
     console.log(`  CSS files minified: ${stats.css}`);
     console.log(`  Other files copied: ${stats.other}`);
   } catch (error) {
-    console.error(" Build failed:", error);
+    console.error(Build failed:", error);
     process.exit(1);
   }
 }
