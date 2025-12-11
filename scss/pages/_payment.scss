@@ -173,6 +173,7 @@ body.payment {
           align-items: flex-start;
           padding: 1rem 0;
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          gap: 1rem; // Add gap to prevent overlap
 
           &:last-child {
             border-bottom: none;
@@ -180,17 +181,27 @@ body.payment {
 
           .item-info {
             flex: 1;
+            min-width: 0; // Allow flex item to shrink below content size
+            overflow: hidden; // Prevent overflow
 
             h4 {
               color: var(--text-primary);
               margin-bottom: 0.25rem;
               font-size: 1rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; // Prevent wrapping for item names
             }
 
             p {
               color: var(--text-secondary);
               font-size: 0.9rem;
               margin: 0;
+              word-wrap: break-word; // Break long words
+              word-break: break-word; // Force break on long strings
+              overflow-wrap: break-word; // Modern approach
+              hyphens: auto; // Add hyphens where appropriate
+              line-height: 1.4;
             }
           }
 
@@ -198,6 +209,8 @@ body.payment {
             color: var(--accent-primary);
             font-weight: 600;
             font-size: 1.1rem;
+            white-space: nowrap; // Prevent price from wrapping
+            flex-shrink: 0; // Prevent price from shrinking
           }
         }
       }
