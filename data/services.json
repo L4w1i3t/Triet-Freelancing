@@ -40,6 +40,13 @@
           "price": "Starting at $90",
           "duration": "3-7 days",
           "description": "A custom Discord bot tailored to your server's needs. Includes instructions for setup, deployment, and functionality."
+        },
+        {
+          "id": "simple-application",
+          "title": "Simple Desktop Application",
+          "price": "Starting at $125",
+          "duration": "3-10 days",
+          "description": "Custom desktop applications from simple utilities to comprehensive multi-function apps. Built for Windows, Mac, or Linux with flexible pricing tiers."
         }
       ]
     },

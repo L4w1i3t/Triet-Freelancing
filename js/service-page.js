@@ -7,15 +7,125 @@ class EnhancedServiceCalculator {
     this.featureAdjustmentsPrice = 0;
     this.addonsPrice = 0;
     this.totalPrice = 0;
+    this.selectedTier = null; // For multi-tier services
 
     this.init();
   }
 
   init() {
+    this.setupTierSelection(); // Set up tier selection first
     this.extractBasePrice();
     this.setupEventListeners();
     this.setupProjectDescription();
     this.calculateTotal();
+  }
+
+  setupTierSelection() {
+    // Check if this service has tier options
+    const tierOptions = document.querySelectorAll(".tier-option");
+    if (tierOptions.length === 0) return;
+
+    // Find initially selected tier (first one with selected styling)
+    const initialSelected = document.querySelector('.tier-option[style*="background: rgba(100, 255, 218, 0.05)"]');
+    if (initialSelected) {
+      this.selectedTier = initialSelected.dataset.tier;
+    }
+
+    tierOptions.forEach((tier) => {
+      tier.addEventListener("click", () => {
+        // Update visual selection
+        tierOptions.forEach((t) => {
+          const icon = t.querySelector("i");
+          if (t === tier) {
+            // Selected state
+            t.style.background = "rgba(100, 255, 218, 0.05)";
+            t.style.borderColor = "rgba(100, 255, 218, 0.3)";
+            const priceSpan = t.querySelector("span[style*='font-size: 1.3rem']");
+            if (priceSpan) priceSpan.style.color = "#64ffda";
+            if (icon) {
+              icon.className = "fas fa-circle-dot";
+              icon.style.color = "";
+            }
+          } else {
+            // Unselected state
+            t.style.background = "rgba(255, 255, 255, 0.03)";
+            t.style.borderColor = "rgba(255, 255, 255, 0.15)";
+            const priceSpan = t.querySelector("span[style*='font-size: 1.3rem']");
+            if (priceSpan) priceSpan.style.color = "#ffffff";
+            if (icon) {
+              icon.className = "fas fa-circle";
+              icon.style.color = "rgba(255, 255, 255, 0.3)";
+            }
+          }
+        });
+
+        // Update selected tier and price
+        this.selectedTier = tier.dataset.tier;
+        this.basePrice = parseFloat(tier.dataset.price);
+
+        // Update tier name display
+        const tierNames = {
+          micro: "Micro-Utility Application",
+          basic: "Basic Application",
+          multi: "Multi-Function Application",
+        };
+        const tierNameElement = document.getElementById("selectedTierName");
+        if (tierNameElement) {
+          tierNameElement.textContent = tierNames[this.selectedTier] || "Application";
+        }
+
+        // Update tier price display
+        const tierPriceElement = document.getElementById("selectedTierPrice");
+        if (tierPriceElement) {
+          tierPriceElement.textContent = `$${this.basePrice}`;
+        }
+
+        // Handle tier-dependent features
+        this.updateTierDependentFeatures();
+
+        // Recalculate everything
+        this.calculateTotal();
+      });
+    });
+  }
+
+  updateTierDependentFeatures() {
+    // Features that change based on tier
+    const tierDependentFeatures = document.querySelectorAll(".tier-dependent");
+    
+    tierDependentFeatures.forEach((feature) => {
+      const featureId = feature.dataset.featureId;
+      const includedInTiers = (feature.dataset.tiers || "").split(",");
+      const checkbox = feature.querySelector(".feature-checkbox");
+      
+      // For micro tier, data storage is optional (+$25)
+      // For basic/multi tiers, it's included (free)
+      if (featureId === "local-storage") {
+        if (this.selectedTier === "micro") {
+          // Optional, costs $25
+          feature.dataset.price = "25";
+          feature.querySelector(".feature-price").textContent = "+$25";
+          // Uncheck it by default for micro
+          if (checkbox) {
+            checkbox.classList.remove("fa-check-square", "checked");
+            checkbox.classList.add("fa-square");
+          }
+          feature.classList.remove("removed");
+          this.featureAdjustments.delete(featureId);
+        } else {
+          // Included for basic/multi
+          feature.dataset.price = "0";
+          feature.querySelector(".feature-price").textContent = "Free";
+          // Check it by default
+          if (checkbox) {
+            checkbox.classList.add("fa-check-square", "checked");
+            checkbox.classList.remove("fa-square");
+          }
+          feature.classList.remove("removed");
+          this.featureAdjustments.delete(featureId);
+        }
+      }
+    });
   }
 
   extractBasePrice() {

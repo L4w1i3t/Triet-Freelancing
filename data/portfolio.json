@@ -156,6 +156,19 @@
         "github": "https://github.com/L4w1i3t/MockOS"
       },
       "icon": "fas fa-tools"
+    },
+    {
+      "id": "lehranengine",
+      "title": "Lehran Engine",
+      "category": "tools",
+      "year": "2025",
+      "description": "A 2D Fire Emblem fangame engine built in C++. Currently a work in progress.",
+      "technologies": ["C++", "vcpkg", "CMake"],
+      "links": {
+        "live": null,
+        "github": "https://github.com/L4w1i3t/Lehran-Engine"
+      },
+      "icon": "fas fa-tools"
     }
   ],
   "categories": [

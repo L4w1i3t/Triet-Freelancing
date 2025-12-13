@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en" class="service-template-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Desktop Application - Triet</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site service-template">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="service-main">
+      <!-- Service Hero Section -->
+      <section class="service-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="service-title">Simple Desktop Application</h1>
+            <div class="service-meta">
+              <span class="service-price">Starting at $125</span>
+              <span class="service-duration">
+                <i class="fas fa-clock"></i>
+                3-10 days
+              </span>
+            </div>
+            <p class="service-description">
+              A custom desktop application built to your specifications. From
+              simple single-purpose utilities to comprehensive multi-function
+              applications. Perfect for automating tasks, managing data, or
+              creating tools for your workflow.
+            </p>
+            <p class="service-description" style="font-style: italic">
+              Delivery time depends on complexity: Micro-utilities (3-5 days),
+              Basic apps (5-7 days), Multi-function apps (7-10+ days).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Service Details Section -->
+      <section class="service-details">
+        <div class="container">
+          <div class="details-grid">
+            <!-- Examples Section -->
+            <div class="examples-section">
+              <h2>Examples of this Service</h2>
+              <div class="examples-list">
+                <div class="example-item">
+                  <h4>Micro-Utilities ($125-$175)</h4>
+                  <p>
+                    Single-purpose tools like unit converters, text formatters,
+                    simple calculators, or clipboard managers. Quick to build,
+                    focused functionality.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Basic Applications ($225-$300)</h4>
+                  <p>
+                    Todo lists, note-taking apps, simple inventory trackers, or
+                    basic file organizers with a few screens and local storage.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Multi-Function Apps ($350+)</h4>
+                  <p>
+                    Comprehensive tools with multiple features: data management
+                    systems, task automation suites, or apps with database
+                    integration and reporting.
+                  </p>
+                </div>
+                <div class="example-item">
+                  <h4>Simple Games or Simulations</h4>
+                  <p>
+                    Educational tools, training simulations, or basic games for
+                    learning or entertainment purposes.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pricing Calculator -->
+            <div class="pricing-calculator">
+              <h2>Customize Your Package</h2>
+
+              <!-- Project Description -->
+              <div class="project-description-section">
+                <h3>Describe Your Application</h3>
+                <p class="description-help">
+                  Please describe your application requirements in detail. The
+                  more information you provide, the better I can tailor the
+                  service to your needs. This includes but is not limited to:
+                </p>
+                <ul class="description-hints" style="font-style: italic">
+                  <li>- The purpose of your project (business, blog, etc.)</li>
+                  <li>- Your target audience and industry</li>
+                  <li>- Design preferences and style inspirations</li>
+                  <li>- Specific features or functionality you need (outside of the addon library)</li>
+                  <li>- Preferred operating system (Windows, Mac, Linux)</li>
+                  <li>- Any existing branding or content you have</li>
+                  <li>- Timeline and launch expectations</li>
+                </ul>
+                <div class="description-field-container">
+                  <textarea
+                    id="projectDescription"
+                    class="project-description-field"
+                    placeholder="Example: I need a simple inventory management tool for my small business. It should let me add, edit, and delete product records, track stock levels, and generate basic reports. I want it to work on Windows with a clean, easy-to-use interface. Data should be stored locally in a database file that I can backup..."
+                    rows="6"
+                    maxlength="65535"
+                  ></textarea>
+                  <div class="description-counter">
+                    <span class="char-count">
+                      <span id="descriptionCount">0</span> characters
+                    </span>
+                    <span class="description-encouragement"
+                      >• More details help me serve you better!</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Package Tier Selection -->
+              <div class="base-service">
+                <h3>Choose Your Package Tier</h3>
+                <div class="package-tiers" style="margin-bottom: 1.5rem;">
+                  <div
+                    class="tier-option"
+                    data-tier="micro"
+                    data-price="125"
+                    style="padding: 1rem; border: 2px solid rgba(100, 255, 218, 0.3); border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; background: rgba(100, 255, 218, 0.05);"
+                  >
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <div>
+                        <h4 style="margin: 0 0 0.25rem 0; color: #64ffda; font-size: 1.1rem;">
+                          <i class="fas fa-circle-dot" style="margin-right: 0.5rem;"></i>
+                          Micro-Utility
+                        </h4>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+                          Single-purpose tool, simple interface, minimal features
+                        </p>
+                      </div>
+                      <span style="font-size: 1.3rem; font-weight: 800; color: #64ffda;">$125</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="tier-option"
+                    data-tier="basic"
+                    data-price="225"
+                    style="padding: 1rem; border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.03);"
+                  >
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <div>
+                        <h4 style="margin: 0 0 0.25rem 0; color: #ffffff; font-size: 1.1rem;">
+                          <i class="fas fa-circle" style="margin-right: 0.5rem; color: rgba(255, 255, 255, 0.3);"></i>
+                          Basic Application
+                        </h4>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+                          Multiple features, data storage, 2-3 screens/views
+                        </p>
+                      </div>
+                      <span style="font-size: 1.3rem; font-weight: 800; color: #ffffff;">$225</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="tier-option"
+                    data-tier="multi"
+                    data-price="350"
+                    style="padding: 1rem; border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.03);"
+                  >
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <div>
+                        <h4 style="margin: 0 0 0.25rem 0; color: #ffffff; font-size: 1.1rem;">
+                          <i class="fas fa-circle" style="margin-right: 0.5rem; color: rgba(255, 255, 255, 0.3);"></i>
+                          Multi-Function
+                        </h4>
+                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+                          Comprehensive app, multiple modules, advanced features
+                        </p>
+                      </div>
+                      <span style="font-size: 1.3rem; font-weight: 800; color: #ffffff;">$350</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="base-core">
+                  <div class="base-item-header">
+                    <span class="item-name" id="selectedTierName">Micro-Utility Application</span>
+                    <span class="item-price" id="selectedTierPrice">$125</span>
+                  </div>
+                  <p class="base-description">
+                    Customize below to fit your needs.
+                  </p>
+                </div>
+
+                <!-- Base Features (can be modified) -->
+                <div class="base-features">
+                  <div class="features-header">
+                    <h4>Included Features</h4>
+                    <p class="features-description">
+                      These features are included in your package. You can
+                      remove or reduce them as needed.
+                    </p>
+                  </div>
+                  <div class="base-features-list">
+                    <!-- Core Functionality (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="core-functionality"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Core Functionality</span>
+                          <span class="feature-description"
+                            >Basic application logic and features as
+                            specified</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- User Interface (Required) -->
+                    <div
+                      class="base-feature-item required-feature"
+                      data-feature-id="user-interface"
+                      data-price="0"
+                      data-required="true"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked disabled"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">User Interface</span>
+                          <span class="feature-description"
+                            >Clean, intuitive GUI with basic styling</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Required</span>
+                      </div>
+                    </div>
+
+                    <!-- Local Data Storage (Varies by tier) -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="local-storage"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Local Data Storage</span>
+                          <span class="feature-description"
+                            >Save and load data using local files or simple database</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+
+                    <!-- Basic Error Handling (Optional) -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="error-handling"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name">Error Handling</span>
+                          <span class="feature-description"
+                            >Graceful error messages and validation</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+
+                    <!-- Documentation -->
+                    <div
+                      class="base-feature-item toggle-feature"
+                      data-feature-id="documentation"
+                      data-price="0"
+                      data-required="false"
+                    >
+                      <div class="feature-controls">
+                        <i
+                          class="fas fa-check-square feature-checkbox checked"
+                        ></i>
+                        <div class="feature-info">
+                          <span class="feature-name"
+                            >Basic Documentation</span
+                          >
+                          <span class="feature-description"
+                            >Simple user guide and usage instructions</span
+                          >
+                        </div>
+                      </div>
+                      <div class="feature-pricing">
+                        <span class="feature-price">Free</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add-ons -->
+              <div class="addons-section">
+                <h3>Available Add-ons</h3>
+                <p style="font-style: italic">
+                  More to come. If you do not see a specific add-on, specify
+                  what you need in the project description [FREE!].
+                </p>
+                <div class="addons-list">
+                  <div
+                    class="addon-item"
+                    data-addon-id="multi-platform"
+                    data-price="35"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Multi-Platform Support</span>
+                      </div>
+                      <span class="addon-price">$35</span>
+                    </div>
+                    <div class="addon-description">
+                      Build for multiple operating systems (Windows, macOS,
+                      Linux) instead of just one
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="database-integration"
+                    data-price="40"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Advanced Database</span>
+                      </div>
+                      <span class="addon-price">$40</span>
+                    </div>
+                    <div class="addon-description">
+                      SQLite or similar embedded database with complex queries
+                      and relationships
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="file-operations"
+                    data-price="25"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Advanced File Operations</span>
+                      </div>
+                      <span class="addon-price">$25</span>
+                    </div>
+                    <div class="addon-description">
+                      Import/export to Excel, CSV, PDF, or other file formats
+                      with advanced parsing
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="custom-reports"
+                    data-price="30"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Report Generation</span>
+                      </div>
+                      <span class="addon-price">$30</span>
+                    </div>
+                    <div class="addon-description">
+                      Generate formatted reports, charts, and analytics from
+                      your data
+                    </div>
+                  </div>
+
+                  <div
+                    class="addon-item"
+                    data-addon-id="advanced-ui"
+                    data-price="35"
+                    data-max-quantity="1"
+                  >
+                    <div class="addon-header">
+                      <div class="addon-info">
+                        <i class="fas fa-square addon-checkbox"></i>
+                        <span class="addon-name">Advanced UI/UX</span>
+                      </div>
+                      <span class="addon-price">$35</span>
+                    </div>
+                    <div class="addon-description">
+                      Custom themes, animations, and extra-polished
+                      interface design
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Calculator -->
+              <div class="total-section">
+                <div class="pricing-breakdown">
+                  <div class="breakdown-line">
+                    <span class="breakdown-label">Base Package:</span>
+                    <span class="breakdown-price" id="basePrice">$225</span>
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="adjustedFeaturesLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Feature Adjustments:</span>
+                    <span class="breakdown-price" id="adjustedFeaturesPrice"
+                      >$0</span
+                    >
+                  </div>
+                  <div
+                    class="breakdown-line"
+                    id="addonsLine"
+                    style="display: none"
+                  >
+                    <span class="breakdown-label">Add-ons:</span>
+                    <span class="breakdown-price" id="addonsPrice">+$0</span>
+                  </div>
+                  <div class="breakdown-divider"></div>
+                  <div class="total-line">
+                    <span class="total-label">Total Price:</span>
+                    <span class="total-price" id="totalPrice">$225</span>
+                  </div>
+                </div>
+                <div class="package-summary" id="packageSummary">
+                  <h4>Package Summary:</h4>
+                  <ul id="packageItems"></ul>
+                </div>
+                <button class="add-to-cart-btn" id="addToCartBtn">
+                  <i class="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/cart.js"></script>
+    <script src="../../js/service-page.js"></script>
+  </body>
+</html>
