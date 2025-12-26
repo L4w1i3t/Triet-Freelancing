@@ -11,9 +11,6 @@
     },
     "api/analytics.js": {
       "maxDuration": 5
-    },
-    "api/admin/[...route].js": {
-      "maxDuration": 10
     }
   }
 }

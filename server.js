@@ -26,18 +26,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 
-// Import IP whitelist middleware
-const IPWhitelist = require("./middleware/ip-whitelist");
-const ipWhitelist = IPWhitelist.create();
-
-// Protect admin directory with IP whitelist
-app.use("/admin", ipWhitelist.middleware());
-
 // Serve static files
 app.use(express.static("."));
 
 // Rate limiting configuration
-// Rate limiting configuration with IP whitelist bypass
 const createRateLimiter = (windowMs, max, message) => {
   return rateLimit({
     windowMs: windowMs,
@@ -45,17 +37,6 @@ const createRateLimiter = (windowMs, max, message) => {
     message: { error: message },
     standardHeaders: true,
     legacyHeaders: false,
-    skip: (req) => {
-      // Skip rate limiting for whitelisted IPs
-      const clientIP = ipWhitelist.getClientIP(req);
-      const isWhitelisted = ipWhitelist.isIPAllowed(clientIP);
-
-      if (isWhitelisted) {
-        console.log(`[Rate Limit] Bypassed for whitelisted IP: ${clientIP}`);
-      }
-
-      return isWhitelisted;
-    },
   });
 };
 
@@ -143,10 +124,6 @@ app.get("/api/config", (req, res) => {
 
 // CSRF token endpoint
 app.get("/api/csrf-token", csrfProtection.getTokenEndpoint());
-
-// Admin routes
-const adminRoutes = require("./api/admin");
-app.use("/api/admin", adminRoutes);
 
 // Create Payment Intent endpoint
 app.post(
@@ -317,12 +294,6 @@ app.listen(port, () => {
   console.log(
     `Stripe configured with key: ${process.env.STRIPE_SECRET_KEY ? "sk_****_***" : "NOT SET"}`,
   );
-
-  // Show IP whitelist status
-  const allowedIPs = process.env.ADMIN_ALLOWED_IPS || "127.0.0.1,::1";
-  console.log(`🔒 Admin IP Whitelist: ${allowedIPs}`);
-  console.log(`🛡️  Admin protected at: http://localhost:${port}/admin`);
-  console.log(`⚡ Rate limiting bypassed for whitelisted IPs`);
 });
 
 module.exports = app;
