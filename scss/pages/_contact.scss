@@ -104,19 +104,23 @@
   // Contact methods grid for side-by-side layout
   .contact-methods {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1400px;
     margin: 0 auto 40px;
-    align-items: start;
+    align-items: stretch;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
       grid-template-columns: 1fr;
       gap: 30px;
+      max-width: 600px;
+    }
+
+    @media (max-width: 768px) {
+      gap: 25px;
     }
 
     @media (max-width: 480px) {
-      grid-template-columns: 1fr;
       gap: 20px;
     }
   }
@@ -134,9 +138,15 @@
     opacity: 0;
     animation: cardFadeIn 1s ease-out 0.3s forwards;
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
 
     &:nth-child(2) {
       animation-delay: 0.5s; // Delay for second card
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.7s; // Delay for third card
     }
 
     &::before {
@@ -234,6 +244,7 @@
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
     margin-bottom: 30px;
+    flex-grow: 1;
 
     @media (max-width: 768px) {
       font-size: 0.95rem;
@@ -288,6 +299,31 @@
 
     &:hover {
       box-shadow: 0 15px 40px rgba(13, 189, 139, 0.4);
+    }
+  }
+
+  // Discord-specific styling
+  .discord-link {
+    background: linear-gradient(135deg, #5865f2, #7289da);
+    cursor: default;
+
+    &:hover {
+      box-shadow: 0 15px 40px rgba(88, 101, 242, 0.4);
+      transform: translateY(-3px) scale(1.02);
+    }
+  }
+
+  // Small note for contact cards
+  .contact-note-small {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 15px;
+    margin-bottom: 0;
+
+    i {
+      color: #64ffda;
+      margin-right: 6px;
+      font-size: 0.8rem;
     }
   }
 

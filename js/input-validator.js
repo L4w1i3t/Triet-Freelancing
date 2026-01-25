@@ -46,7 +46,8 @@ class InputValidator {
     try {
       const response = await fetch("/data/profanity.json");
       const data = await response.json();
-      this.profanityList = data.words || [];
+      // Handle both array format and object with 'words' property
+      this.profanityList = Array.isArray(data) ? data : (data.words || []);
       console.log(" Profanity filter loaded");
     } catch (error) {
       console.warn("Could not load profanity list:", error);

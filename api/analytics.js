@@ -2,10 +2,22 @@
 // This endpoint handles analytics data from the client
 
 export default function handler(req, res) {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Set CORS headers for specific domains only (matches other API endpoints)
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "https://trietdev.com",
+    "https://www.trietdev.com",
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {

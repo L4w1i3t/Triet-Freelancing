@@ -256,6 +256,11 @@ app.post(
       });
 
       // Return the payment details
+      // Note: In newer Stripe API versions, use latest_charge instead of charges.data
+      const chargeData = paymentIntent.latest_charge 
+        ? await stripe.charges.retrieve(paymentIntent.latest_charge)
+        : (paymentIntent.charges?.data?.[0] || null);
+      
       res.status(200).json({
         success: true,
         paymentIntent: {
@@ -266,15 +271,13 @@ app.post(
           created: paymentIntent.created,
           metadata: paymentIntent.metadata,
           receipt_email: paymentIntent.receipt_email,
-          charges:
-            paymentIntent.charges.data.length > 0
-              ? {
-                  id: paymentIntent.charges.data[0].id,
-                  receipt_url: paymentIntent.charges.data[0].receipt_url,
-                  billing_details:
-                    paymentIntent.charges.data[0].billing_details,
-                }
-              : null,
+          charges: chargeData
+            ? {
+                id: chargeData.id,
+                receipt_url: chargeData.receipt_url,
+                billing_details: chargeData.billing_details,
+              }
+            : null,
         },
       });
     } catch (error) {

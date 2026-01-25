@@ -47,6 +47,14 @@ export default async function handler(req, res) {
     // Retrieve the Payment Intent to get its current status
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
+    // Handle both new API (latest_charge) and legacy API (charges.data)
+    let chargeData = null;
+    if (paymentIntent.latest_charge) {
+      chargeData = await stripe.charges.retrieve(paymentIntent.latest_charge);
+    } else if (paymentIntent.charges?.data?.[0]) {
+      chargeData = paymentIntent.charges.data[0];
+    }
+
     // Return the payment details
     res.status(200).json({
       success: true,
@@ -58,14 +66,13 @@ export default async function handler(req, res) {
         created: paymentIntent.created,
         metadata: paymentIntent.metadata,
         receipt_email: paymentIntent.receipt_email,
-        charges:
-          paymentIntent.charges.data.length > 0
-            ? {
-                id: paymentIntent.charges.data[0].id,
-                receipt_url: paymentIntent.charges.data[0].receipt_url,
-                billing_details: paymentIntent.charges.data[0].billing_details,
-              }
-            : null,
+        charges: chargeData
+          ? {
+              id: chargeData.id,
+              receipt_url: chargeData.receipt_url,
+              billing_details: chargeData.billing_details,
+            }
+          : null,
       },
     });
   } catch (error) {

@@ -28,7 +28,7 @@
       "description": "A static portfolio website showcasing work, skills, and projects.",
       "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
       "links": {
-        "live": "https://l4w1i3t.github.io/CharlesLMelvin-Personal-Site/",
+        "live": "https://clmelvin2004.github.io/CharlesLMelvin/",
         "github": null
       },
       "icon": "fas fa-globe"
@@ -100,8 +100,8 @@
       "description": "Official website for Societal AI, a startup organization at the University of Virginia.",
       "technologies": ["HTML5", "CSS3", "SCSS", "JavaScript"],
       "links": {
-        "live": "https://l4w1i3t.github.io/Societal-AI",
-        "github": "https://github.com/L4w1i3t/ATIH-UVA"
+        "live": "https://saiuva.com",
+        "github": null
       },
       "icon": "fas fa-globe"
     },
@@ -169,6 +169,19 @@
         "github": "https://github.com/L4w1i3t/Lehran-Engine"
       },
       "icon": "fas fa-tools"
+    },
+    {
+      "id": "jqilin-corner",
+      "title": "Qilin Corner",
+      "category": "websites",
+      "year": "2026",
+      "description": "A one-stop-shop for all things content creator/YouTuber JQilin.",
+      "technologies": ["HTML5", "CSS3", "JavaScript", "SCSS"],
+      "links": {
+        "live": "https://l4w1i3t.github.io/JQilin-Hub-Site/",
+        "github": null
+      },
+      "icon": "fas fa-globe"
     }
   ],
   "categories": [

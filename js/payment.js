@@ -757,11 +757,13 @@ class PaymentManager {
         } else if (paymentIntent.status === "succeeded") {
           console.log("Payment succeeded!", paymentIntent);
 
-          // Retrieve full payment details from server
+          // Retrieve full payment details from server (get fresh CSRF token for the request)
+          const retrieveCsrfToken = window.securityManager?.getCSRFToken();
           const detailsResponse = await fetch("/api/retrieve-payment", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "X-CSRF-Token": retrieveCsrfToken || "",
             },
             body: JSON.stringify({
               paymentIntentId: paymentIntent.id,
