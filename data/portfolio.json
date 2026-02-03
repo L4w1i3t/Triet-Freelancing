@@ -182,6 +182,19 @@
         "github": null
       },
       "icon": "fas fa-globe"
+    },
+    {
+      "id": "dokid-doki-blue-seas",
+      "title": "Doki Doki: The Blue Seas Website",
+      "category": "websites",
+      "year": "2026",
+      "description": "Official website for Doki Doki: The Blue Seas, a DDLC mod.",
+      "technologies": ["HTML5", "CSS3", "JavaScript", "SCSS"],
+      "links": {
+        "live": "https://l4w1i3t.github.io/Doki-Doki-Blue-Seas/",
+        "github": null
+      },
+      "icon": "fas fa-globe"
     }
   ],
   "categories": [
