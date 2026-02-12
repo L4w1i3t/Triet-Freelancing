@@ -16,6 +16,7 @@
       content="camera=(), microphone=(), geolocation=(), payment=()"
     />
 
+    <link rel="preload" href="css/main.css" as="style" />
     <link rel="stylesheet" href="css/main.css" />
     <meta name="description" content="Freelancer who makes things for fun." />
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
@@ -47,9 +48,17 @@
       content="https://trietdev.com/images/logo.webp"
     />
     <link
-      rel="stylesheet"
+      rel="preload"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      />
+    </noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -97,9 +106,6 @@
                   times!
                 </p>
               </div>
-              <div class="hero-actions animate-on-scroll" data-delay="400">
-                <!-- Empty for now, keeping structure -->
-              </div>
             </div>
 
             <!-- Call to Action Area -->
@@ -124,16 +130,16 @@
     </main>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="components/addComponents.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/commission-status.js"></script>
     <script src="js/animations.js"></script>
 
-    <!-- Security & Privacy Scripts -->
-    <script src="js/security.js"></script>
-    <script src="js/input-validator.js"></script>
-    <script src="js/privacy-analytics.js"></script>
-    <script src="js/konami.js"></script>
+    <!-- Deferred: not needed for initial render -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script src="js/security.js" defer></script>
+    <script src="js/input-validator.js" defer></script>
+    <script src="js/privacy-analytics.js" defer></script>
+    <script src="js/konami.js" defer></script>
   </body>
 </html>

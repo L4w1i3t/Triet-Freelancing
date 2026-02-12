@@ -49,7 +49,7 @@
     {
       "id": "alter-ego-pwa",
       "title": "ALTER EGO PWA",
-      "category": "pwas",
+      "category": "ai-ml",
       "year": "2024",
       "description": "A sprite-based artificial intelligence program with plug-and-play personality implementation.",
       "technologies": [
@@ -64,7 +64,7 @@
         "live": "https://alter-ego-pwa.vercel.app",
         "github": null
       },
-      "icon": "fas fa-mobile-alt"
+      "icon": "fas fa-brain"
     },
     {
       "id": "ddmc-site",
@@ -195,6 +195,19 @@
         "github": null
       },
       "icon": "fas fa-globe"
+    },
+    {
+      "id": "almost-heaven-auctions",
+      "title": "Almost Heaven Auctions LLC",
+      "category": "pwas",
+      "year": "2026",
+      "description": "Web app for Almost Heaven Auctions LLC with live bidding and electronic paddles.",
+      "technologies": ["HTML5", "CSS3", "JavaScript", "SQLite", "Socket.IO"],
+      "links": {
+        "live": "https://aha-pwa.onrender.com/",
+        "github": null
+      },
+      "icon": "fas fa-mobile-alt"
     }
   ],
   "categories": [

@@ -5,6 +5,42 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
+// CSS-only entrance animation for homepage hero content.
+// Overrides the default .animate-on-scroll opacity:0 so the hero
+// doesn't depend on JS IntersectionObserver to become visible.
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.homepage {
+  .hero-content .animate-on-scroll,
+  .cta-area.animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    animation: heroEnter 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  // Stagger the entrance timing for each element
+  .hero-content .hero-title.animate-on-scroll {
+    animation-delay: 0s;
+  }
+
+  .hero-content .status-subtitle-row.animate-on-scroll {
+    animation-delay: 0.15s;
+  }
+
+  .cta-area.animate-on-scroll {
+    animation-delay: 0.3s;
+  }
+}
+
 // Site layout adjustments for single viewport - only on homepage
 .site.homepage {
   height: 100vh;

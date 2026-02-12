@@ -65,27 +65,6 @@ class EnvConfig {
       STRIPE_PUBLISHABLE_KEY: "",
     };
   }
-
-  // Getter methods for easy access
-  get(key) {
-    if (!this.isLoaded || !this.config) {
-      console.warn(
-        "Environment configuration not loaded. Call EnvConfig.load() first.",
-      );
-      return "";
-    }
-    return this.config[key] || "";
-  }
-
-  getAll() {
-    if (!this.isLoaded || !this.config) {
-      console.warn(
-        "Environment configuration not loaded. Call EnvConfig.load() first.",
-      );
-      return {};
-    }
-    return { ...this.config };
-  }
 }
 
 // Create global instance

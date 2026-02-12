@@ -17,7 +17,6 @@ const jsObfuscatorOptions = {
   simplify: true,
   stringArrayShuffle: true,
   splitStrings: true,
-  stringArrayThreshold: 1,
   transformObjectKeys: true,
   unicodeEscapeSequence: false,
   identifierNamesGenerator: "hexadecimal",
@@ -99,15 +98,7 @@ const EXCLUDE_PATTERNS = [
   "README.md",
   "SECURITY.md",
   ".gitignore",
-  "run_dev.bat",
-  "open_code.bat",
-  "remove_empty_files.py",
-  "removeemojis.py",
-  "postcss.config.js",
   "scss",
-  "email-template.html",
-  "build_production.bat",
-  "admin-setup.js",
 ];
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
@@ -143,16 +134,6 @@ async function compileSCSS() {
 async function obfuscateJavaScript(inputPath, outputPath) {
   try {
     const code = await fs.readFile(inputPath, "utf8");
-
-    // Skip obfuscation for env-config.js
-    if (path.basename(inputPath) === "DUMMY.js") {
-      // named something else for now.
-      console.log(
-        `    Skipping obfuscation for ${path.relative(SRC_DIR, inputPath)} (preserved)`,
-      );
-      await fs.copy(inputPath, outputPath);
-      return;
-    }
 
     const obfuscated = JavaScriptObfuscator.obfuscate(
       code,

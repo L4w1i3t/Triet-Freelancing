@@ -22,7 +22,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Enhanced scroll animations with intersection observer
 function initScrollAnimations() {
-  const animatedElements = document.querySelectorAll(".animate-on-scroll");
+  const isHomepage =
+    document.documentElement.classList.contains("homepage") ||
+    document.body.classList.contains("homepage");
+
+  // On the homepage, hero elements are animated via CSS @keyframes (no JS needed).
+  // Only observe elements that are NOT already handled by CSS entrance animations.
+  const selector = isHomepage
+    ? ".animate-on-scroll:not(.hero-title):not(.status-subtitle-row):not(.cta-area)"
+    : ".animate-on-scroll";
+
+  const animatedElements = document.querySelectorAll(selector);
 
   const observerOptions = {
     threshold: 0.1,
