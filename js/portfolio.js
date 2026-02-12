@@ -201,12 +201,6 @@ class PortfolioManager {
 
     // Update page numbers
     pageNumbers.innerHTML = this.renderPageNumbers();
-
-    // Scroll to top of portfolio grid when page changes
-    const portfolioSection = document.querySelector(".portfolio-grid-section");
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
   }
 
   renderPageNumbers() {
