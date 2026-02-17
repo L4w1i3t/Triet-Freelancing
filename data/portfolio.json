@@ -208,6 +208,19 @@
         "github": null
       },
       "icon": "fas fa-mobile-alt"
+    },
+    {
+      "id": "yt-dlp-gui",
+      "title": "yt-dlp GUI",
+      "category": "tools",
+      "year": "2025",
+      "description": "A graphical user interface for simplified video downloading using yt-dlp.",
+      "technologies": ["Python", "Tkinter", "yt-dlp", "ffmpeg"],
+      "links": {
+        "live": "https://www.youtube.com/watch?v=qiWHBZV4ymQ",
+        "github": "https://github.com/L4w1i3t/L-s-Youtube-Downloader/releases"
+      },
+      "icon": "fas fa-tools"
     }
   ],
   "categories": [
