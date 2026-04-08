@@ -114,6 +114,16 @@ class PortfolioManager {
           <div class="card-footer">
             <div class="project-links">
               ${
+                project.links.subsite
+                  ? `
+                <a href="${project.links.subsite}" class="project-link subsite-link">
+                  <i class="fas fa-info-circle"></i>
+                  <span>Details</span>
+                </a>
+              `
+                  : ""
+              }
+              ${
                 project.links.live
                   ? `
                 <a href="${project.links.live}" target="_blank" rel="noopener noreferrer" class="project-link live-link">

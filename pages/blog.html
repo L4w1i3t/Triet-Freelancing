@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" class="blog-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog - Triet</title>
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://trietdev.com/pages/blog.html" />
+    <meta property="og:title" content="Blog - Triet" />
+    <meta
+      property="og:description"
+      content="Thoughts, tutorials, and project updates from Triet."
+    />
+    <meta property="og:image" content="https://trietdev.com/images/logo.webp" />
+    <meta property="og:site_name" content="Triet" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://trietdev.com/pages/blog.html" />
+    <meta property="twitter:title" content="Blog - Triet" />
+    <meta
+      property="twitter:description"
+      content="Thoughts, tutorials, and project updates from Triet."
+    />
+    <meta property="twitter:image" content="https://trietdev.com/images/logo.webp" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site blog-page">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main class="blog-main">
+      <!-- Hero Section -->
+      <section class="blog-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-title">Blog</h1>
+            <p class="hero-subtitle">
+              Thoughts, tutorials, and project updates.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Blog Post Listing -->
+      <section class="blog-listing">
+        <div class="container">
+          <div class="blog-grid" id="blogGrid">
+            <!-- Blog post cards populated by JavaScript -->
+          </div>
+
+          <!-- Loading State -->
+          <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading posts...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="emptyState" style="display: none">
+            <i class="fas fa-pen-nib"></i>
+            <h3>No posts yet</h3>
+            <p>Check back soon for new content.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Single Post View (hidden by default, shown when a post is selected) -->
+      <section class="blog-post-view" id="blogPostView" style="display: none">
+        <div class="container">
+          <button class="btn btn-glass back-to-posts" id="backToPosts">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Posts</span>
+          </button>
+          <article class="blog-post-content" id="blogPostContent">
+            <!-- Rendered markdown content goes here -->
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../components/addComponents.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="../js/blog.js"></script>
+  </body>
+</html>

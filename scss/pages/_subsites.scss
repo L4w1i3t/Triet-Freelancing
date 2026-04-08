@@ -1,0 +1,725 @@
+// ==========================================================
+// Subsite Landing Page Styles (shared base + per-page themes)
+// ==========================================================
+
+// ---- Shared base styles ----
+.subsite-page {
+  min-height: 100vh;
+
+  .site {
+    overflow-y: auto;
+  }
+}
+
+.subsite-main {
+  padding-top: 120px;
+  position: relative;
+  z-index: 2;
+}
+
+.subsite-hero {
+  padding: 3rem 0 2rem;
+  text-align: center;
+
+  .hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .subsite-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+.subsite-about {
+  padding: 2rem 0;
+
+  .subsite-card {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    border-radius: 16px;
+
+    h2 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+  }
+}
+
+.subsite-features {
+  padding: 2rem 0;
+
+  .section-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+}
+
+.subsite-tech {
+  padding: 2rem 0;
+  text-align: center;
+
+  .section-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  .tech-tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .tech-tag {
+    padding: 0.5rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 24px;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+}
+
+.subsite-links {
+  padding: 3rem 0 4rem;
+  text-align: center;
+
+  .link-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+// Portfolio card subsite link (shared)
+.project-link.subsite-link {
+  color: var(--accent-aurora-purple, #9775fa);
+  border-color: rgba(151, 117, 250, 0.3);
+
+  &:hover {
+    background: rgba(151, 117, 250, 0.1);
+    border-color: rgba(151, 117, 250, 0.5);
+  }
+}
+
+// ==========================================================
+// YTDUI THEME -- Black & Red / Pipeline Motif
+// ==========================================================
+$yt-red: #e53935;
+$yt-red-bright: #ff5252;
+$yt-red-dark: #b71c1c;
+$yt-black: #0a0a0a;
+$yt-dark: #141414;
+$yt-gray: #1e1e1e;
+
+.ytdui-page {
+  background: $yt-black;
+
+  // Background with subtle red radials
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(
+        ellipse at 15% 85%,
+        rgba($yt-red, 0.12) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at 85% 15%,
+        rgba($yt-red-dark, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 50% 50%,
+        rgba($yt-dark, 0.6) 0%,
+        transparent 70%
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // -- Pipeline background decoration --
+  .pipeline-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+
+    // Horizontal and vertical pipes
+    .pipe {
+      position: absolute;
+      background: rgba($yt-red, 0.06);
+      border: 1px dashed rgba($yt-red, 0.15);
+    }
+
+    .pipe-h {
+      height: 2px;
+      width: 100%;
+    }
+
+    .pipe-v {
+      width: 2px;
+      height: 100%;
+    }
+
+    // Specific pipe positions
+    .pipe-1 {
+      top: 25%;
+      animation: pipeFlow 8s linear infinite;
+    }
+
+    .pipe-2 {
+      left: 20%;
+      animation: pipeFlowV 10s linear infinite;
+    }
+
+    .pipe-3 {
+      top: 70%;
+      animation: pipeFlow 12s linear infinite reverse;
+    }
+
+    .pipe-4 {
+      left: 75%;
+      animation: pipeFlowV 9s linear infinite reverse;
+    }
+
+    // Junction nodes (circles where pipes intersect)
+    .pipe-node {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba($yt-red, 0.25);
+      box-shadow: 0 0 12px rgba($yt-red, 0.3);
+      animation: nodePulse 3s ease-in-out infinite;
+    }
+
+    .node-1 {
+      top: 25%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .node-2 {
+      top: 70%;
+      left: 75%;
+      animation-delay: 1s;
+    }
+
+    .node-3 {
+      top: 25%;
+      left: 75%;
+      animation-delay: 2s;
+    }
+  }
+
+  // -- Hero overrides --
+  .subsite-hero {
+    .subsite-icon {
+      background: linear-gradient(135deg, $yt-red-bright, $yt-red-dark);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 8px rgba($yt-red, 0.4));
+    }
+
+    .hero-title {
+      background: linear-gradient(135deg, #fff 0%, $yt-red-bright 50%, $yt-red-dark 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  // -- Card / glass overrides --
+  .subsite-card,
+  .feature-card {
+    background: rgba($yt-gray, 0.7);
+    border: 1px solid rgba($yt-red, 0.15);
+    backdrop-filter: blur(16px);
+  }
+
+  .feature-card:hover {
+    border-color: rgba($yt-red, 0.4);
+    box-shadow: 0 8px 30px rgba($yt-red, 0.12);
+  }
+
+  .subsite-about .subsite-card {
+    h2 {
+      color: $yt-red-bright;
+    }
+    p {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  .feature-card {
+    .feature-icon {
+      color: $yt-red-bright;
+    }
+    h3 {
+      color: #fff;
+    }
+    p {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  // -- Section titles --
+  .subsite-features .section-title,
+  .subsite-tech .section-title {
+    color: #fff;
+  }
+
+  // -- Tech tags --
+  .subsite-tech .tech-tag {
+    color: $yt-red-bright;
+    background: rgba($yt-red, 0.08);
+    border: 1px solid rgba($yt-red, 0.2);
+
+    &:hover {
+      background: rgba($yt-red, 0.15);
+      border-color: rgba($yt-red, 0.4);
+    }
+  }
+
+  // -- CTA buttons --
+  .subsite-links {
+    .btn-primary {
+      background: linear-gradient(135deg, $yt-red, $yt-red-dark);
+      border: none;
+      color: #fff;
+
+      &:hover {
+        background: linear-gradient(135deg, $yt-red-bright, $yt-red);
+        box-shadow: 0 4px 20px rgba($yt-red, 0.35);
+      }
+    }
+
+    .btn-glass {
+      border-color: rgba($yt-red, 0.3);
+      color: rgba(255, 255, 255, 0.8);
+
+      &:hover {
+        background: rgba($yt-red, 0.1);
+        border-color: rgba($yt-red, 0.5);
+      }
+    }
+  }
+
+  // -- Footer override --
+  .site-footer {
+    background: rgba($yt-black, 0.9);
+    border-top: 1px solid rgba($yt-red, 0.1);
+  }
+}
+
+// Pipeline keyframe animations
+@keyframes pipeFlow {
+  0% {
+    background-position: 0 0;
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    background-position: 100vw 0;
+    opacity: 0.4;
+  }
+}
+
+@keyframes pipeFlowV {
+  0% {
+    background-position: 0 0;
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    background-position: 0 100vh;
+    opacity: 0.4;
+  }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px rgba($yt-red, 0.2);
+  }
+  50% {
+    transform: scale(1.6);
+    box-shadow: 0 0 20px rgba($yt-red, 0.5);
+  }
+}
+
+// ==========================================================
+// ALTER EGO THEME -- Hacker / Retro Green on Black
+// ==========================================================
+$ae-green: #00ff41;
+$ae-green-dim: #00cc33;
+$ae-green-glow: #33ff66;
+$ae-black: #050505;
+$ae-dark: #0a0f0a;
+$ae-panel: #0d120d;
+
+.alter-ego-page {
+  background: $ae-black;
+
+  // Dark green tinted radials
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(
+        ellipse at 20% 80%,
+        rgba($ae-green, 0.06) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 80% 20%,
+        rgba($ae-green-dim, 0.04) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // -- Hacker background effects --
+  .hacker-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  // CRT scanline overlay
+  .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba($ae-green, 0.015) 0px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index: 2;
+  }
+
+  // Matrix rain container
+  .matrix-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .matrix-col {
+    position: absolute;
+    top: -100%;
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba($ae-green, 0.12);
+    white-space: pre;
+    animation: matrixFall linear infinite;
+    user-select: none;
+  }
+
+  // -- Hero overrides --
+  .subsite-hero {
+    .subsite-icon {
+      color: $ae-green;
+      -webkit-text-fill-color: $ae-green;
+      background: none;
+      text-shadow: 0 0 20px rgba($ae-green, 0.6);
+      filter: none;
+    }
+
+    .hero-title {
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      background: none;
+      -webkit-text-fill-color: $ae-green;
+      color: $ae-green;
+      text-shadow: 0 0 10px rgba($ae-green, 0.5), 0 0 40px rgba($ae-green, 0.2);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .hero-subtitle {
+      color: rgba($ae-green-dim, 0.7);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1rem;
+
+      &::before {
+        content: "> ";
+        color: $ae-green;
+      }
+    }
+  }
+
+  // -- Card / glass overrides --
+  .subsite-card,
+  .feature-card {
+    background: rgba($ae-panel, 0.8);
+    border: 1px solid rgba($ae-green, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  .feature-card:hover {
+    border-color: rgba($ae-green, 0.35);
+    box-shadow: 0 0 25px rgba($ae-green, 0.08);
+  }
+
+  .subsite-about .subsite-card {
+    h2 {
+      color: $ae-green;
+      font-family: "JetBrains Mono", monospace;
+    }
+    p {
+      color: rgba($ae-green-dim, 0.75);
+    }
+  }
+
+  .feature-card {
+    .feature-icon {
+      color: $ae-green;
+      text-shadow: 0 0 10px rgba($ae-green, 0.4);
+    }
+    h3 {
+      color: $ae-green-glow;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1rem;
+    }
+    p {
+      color: rgba($ae-green-dim, 0.6);
+    }
+  }
+
+  // -- Section titles --
+  .subsite-features .section-title,
+  .subsite-tech .section-title {
+    color: $ae-green;
+    font-family: "JetBrains Mono", monospace;
+    text-shadow: 0 0 8px rgba($ae-green, 0.3);
+    letter-spacing: 0.08em;
+  }
+
+  // -- Tech tags --
+  .subsite-tech .tech-tag {
+    color: $ae-green;
+    background: rgba($ae-green, 0.06);
+    border: 1px solid rgba($ae-green, 0.18);
+    font-family: "JetBrains Mono", monospace;
+
+    &:hover {
+      background: rgba($ae-green, 0.12);
+      border-color: rgba($ae-green, 0.35);
+      text-shadow: 0 0 6px rgba($ae-green, 0.4);
+    }
+  }
+
+  // -- CTA buttons --
+  .subsite-links {
+    .btn-primary {
+      background: transparent;
+      border: 1px solid $ae-green;
+      color: $ae-green;
+      text-shadow: 0 0 6px rgba($ae-green, 0.4);
+      font-family: "JetBrains Mono", monospace;
+
+      &:hover {
+        background: rgba($ae-green, 0.1);
+        box-shadow: 0 0 20px rgba($ae-green, 0.2);
+      }
+    }
+
+    .btn-glass {
+      border-color: rgba($ae-green, 0.25);
+      color: rgba($ae-green-dim, 0.8);
+      font-family: "JetBrains Mono", monospace;
+
+      &:hover {
+        background: rgba($ae-green, 0.06);
+        border-color: rgba($ae-green, 0.4);
+      }
+    }
+  }
+
+  // -- Footer override --
+  .site-footer {
+    background: rgba($ae-black, 0.95);
+    border-top: 1px solid rgba($ae-green, 0.1);
+    color: rgba($ae-green-dim, 0.5);
+  }
+
+  // -- Native App section --
+  .native-app-section {
+    border-top: 1px solid rgba($ae-green, 0.1);
+    padding-top: 3rem;
+    margin-top: 1rem;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  .native-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgba($ae-green, 0.4);
+    border-radius: 4px;
+    color: $ae-green;
+    background: rgba($ae-green, 0.08);
+    vertical-align: middle;
+    font-family: "JetBrains Mono", monospace;
+    text-shadow: none;
+  }
+
+  .native-app-lead {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.92rem;
+    color: rgba($ae-green-dim, 0.65);
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+
+    &::before {
+      content: "// ";
+      color: rgba($ae-green, 0.4);
+    }
+  }
+}
+
+// Matrix rain fall animation
+@keyframes matrixFall {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+// ==========================================================
+// Responsive (shared)
+// ==========================================================
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subsite-about .subsite-card {
+    padding: 1.5rem;
+  }
+
+  .subsite-links .link-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}

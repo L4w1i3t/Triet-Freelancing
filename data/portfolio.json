@@ -62,7 +62,8 @@
       ],
       "links": {
         "live": "https://alter-ego-pwa.vercel.app",
-        "github": null
+        "github": null,
+        "subsite": "/pages/subsites/alter-ego.html"
       },
       "icon": "fas fa-brain"
     },
@@ -204,7 +205,7 @@
       "description": "Web app for Almost Heaven Auctions LLC with live bidding and electronic paddles.",
       "technologies": ["HTML5", "CSS3", "JavaScript", "SQLite", "Socket.IO"],
       "links": {
-        "live": "https://aha-pwa.onrender.com/",
+        "live": "https://aha-pwa.vercel.app/",
         "github": null
       },
       "icon": "fas fa-mobile-alt"
@@ -217,8 +218,8 @@
       "description": "A graphical user interface for simplified video downloading using yt-dlp.",
       "technologies": ["Python", "Tkinter", "yt-dlp", "ffmpeg"],
       "links": {
-        "live": "https://www.youtube.com/watch?v=qiWHBZV4ymQ",
-        "github": "https://github.com/L4w1i3t/L-s-Youtube-Downloader/releases"
+        "github": "https://github.com/L4w1i3t/L-s-Youtube-Downloader/releases",
+        "subsite": "/pages/subsites/ytdui.html"
       },
       "icon": "fas fa-tools"
     }

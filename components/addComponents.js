@@ -5,7 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const path = window.location.pathname;
   const isInSubdirectory =
     path.includes("/pages/") || path.includes("\\pages\\");
-  const componentPath = isInSubdirectory ? "/components/" : "./components/";
+  const isInSubsite =
+    path.includes("/pages/subsites/") || path.includes("\\pages\\subsites\\");
+  const componentPath = isInSubsite
+    ? "/components/"
+    : isInSubdirectory
+      ? "/components/"
+      : "./components/";
 
   // Load header
   const headerPlaceholder = document.getElementById("header-placeholder");
@@ -129,17 +135,19 @@ function fixNavigationLinks() {
   const path = window.location.pathname;
   const isInSubdirectory =
     path.includes("/pages/") || path.includes("\\pages\\");
+  const isInSubsite =
+    path.includes("/pages/subsites/") || path.includes("\\pages\\subsites\\");
 
   if (isInSubdirectory) {
-    // Use the correct selector for navigation links (.nav-menu instead of .nav-links)
     const navLinks = document.querySelectorAll(".nav-menu a");
+    const prefix = isInSubsite ? "../../" : "../";
     navLinks.forEach((link) => {
       const href = link.getAttribute("href");
       // Fix links that point to pages directory
       if (href.startsWith("pages/")) {
-        link.setAttribute("href", "../" + href);
+        link.setAttribute("href", prefix + href);
       } else if (href === "index.html") {
-        link.setAttribute("href", "../index.html");
+        link.setAttribute("href", prefix + "index.html");
       }
     });
   }
@@ -150,11 +158,14 @@ function fixLogoLink() {
   const path = window.location.pathname;
   const isInSubdirectory =
     path.includes("/pages/") || path.includes("\\pages\\");
+  const isInSubsite =
+    path.includes("/pages/subsites/") || path.includes("\\pages\\subsites\\");
 
   if (isInSubdirectory) {
     const logoLink = document.getElementById("logo-link");
+    const prefix = isInSubsite ? "../../" : "../";
     if (logoLink && logoLink.getAttribute("href") === "index.html") {
-      logoLink.setAttribute("href", "../index.html");
+      logoLink.setAttribute("href", prefix + "index.html");
     }
   }
 }

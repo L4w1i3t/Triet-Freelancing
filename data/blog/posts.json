@@ -1,0 +1,12 @@
+{
+  "posts": [
+    {
+      "slug": "hello-world",
+      "title": "Hello, World!",
+      "date": "2026-04-08",
+      "excerpt": "Welcome to my blog. Here I'll share thoughts on development, project updates, and things I find interesting.",
+      "tags": ["general", "updates"],
+      "file": "hello-world.md"
+    }
+  ]
+}

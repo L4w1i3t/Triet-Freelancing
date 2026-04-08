@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en" class="subsite-page alter-ego-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALTER EGO - Triet</title>
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="icon" href="../../images/favicon.ico" type="image/x-icon" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://trietdev.com/pages/subsites/alter-ego.html" />
+    <meta property="og:title" content="ALTER EGO PWA" />
+    <meta
+      property="og:description"
+      content="A sprite-based artificial intelligence program with plug-and-play personality implementation."
+    />
+    <meta property="og:image" content="https://trietdev.com/images/logo.webp" />
+    <meta property="og:site_name" content="Triet" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://trietdev.com/pages/subsites/alter-ego.html" />
+    <meta property="twitter:title" content="ALTER EGO PWA" />
+    <meta
+      property="twitter:description"
+      content="A sprite-based artificial intelligence program with plug-and-play personality implementation."
+    />
+    <meta property="twitter:image" content="https://trietdev.com/images/logo.webp" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site subsite-page alter-ego-page">
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hacker decoration -->
+    <div class="hacker-bg" aria-hidden="true">
+      <div class="scanlines"></div>
+      <div class="matrix-rain" id="matrixRain"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="subsite-main">
+      <!-- Hero Section -->
+      <section class="subsite-hero">
+        <div class="container">
+          <div class="hero-content">
+            <div class="subsite-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="hero-title">ALTER EGO</h1>
+            <p class="hero-subtitle">
+              A sprite-based artificial intelligence program with plug-and-play personality implementation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="subsite-about">
+        <div class="container">
+          <div class="subsite-card glass-card">
+            <h2>What is ALTER EGO?</h2>
+            <p>
+              ALTER EGO is an AI companion platform available as both a
+              <strong>Progressive Web App</strong> and a <strong>native desktop application</strong>.
+              It brings AI companions to life through animated sprites and customizable personalities,
+              combining OpenAI language models with ElevenLabs voice synthesis for interactive,
+              lifelike characters. The native app goes further &mdash; running fully
+              contained and portable on your local machine, no cloud dependency beyond your API keys.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="subsite-features">
+        <div class="container">
+          <h2 class="section-title">Features</h2>
+          <div class="features-grid">
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-user-circle"></i></div>
+              <h3>Sprite Characters</h3>
+              <p>Animated sprite-based characters with expressive visual states and reactions.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-puzzle-piece"></i></div>
+              <h3>Plug-and-Play Personalities</h3>
+              <p>Swap personality modules to completely change how your AI companion behaves and responds.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+              <h3>Voice Synthesis</h3>
+              <p>ElevenLabs-powered voice output for natural, spoken conversations.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+              <h3>PWA</h3>
+              <p>Install as a native app on any device &mdash; works offline with local data storage via Dexie.js.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Native App Section -->
+      <section class="subsite-features native-app-section">
+        <div class="container">
+          <h2 class="section-title">Native App <span class="native-badge">Desktop Exclusive</span></h2>
+          <p class="native-app-lead">
+            The native desktop build runs fully contained and portable on your local machine.
+            Your API keys never leave your device &mdash; the app communicates directly with
+            AI providers without any intermediary server.
+          </p>
+          <div class="features-grid">
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+              <h3>Desktop Overlay</h3>
+              <p>Renders your companion as a persistent overlay on your desktop, always present without occupying a browser tab.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+              <h3>LAN Support</h3>
+              <p>Expose ALTER EGO over your local network so two instances of the app can communicate and share data seamlessly.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-box"></i></div>
+              <h3>Fully Portable</h3>
+              <p>Self-contained &mdash; runs from any directory with no installation required. Take it anywhere.</p>
+            </div>
+            <div class="feature-card glass-card">
+              <div class="feature-icon"><i class="fas fa-lock"></i></div>
+              <h3>Local & Private</h3>
+              <p>All processing stays on your machine. Only LLM and voice API calls leave your device, using your own keys.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tech Stack Section -->
+      <section class="subsite-tech">
+        <div class="container">
+          <h2 class="section-title">Tech Stack</h2>
+          <div class="tech-tags">
+            <span class="tech-tag">PWA</span>
+            <span class="tech-tag">TypeScript</span>
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Dexie.js</span>
+            <span class="tech-tag">OpenAI API</span>
+            <span class="tech-tag">ElevenLabs API</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Links Section -->
+      <section class="subsite-links">
+        <div class="container">
+          <div class="link-buttons">
+            <a
+              href="https://alter-ego-pwa.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary btn-magnetic btn-large"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              <span>Launch PWA</span>
+            </a>
+            <a
+              href="https://github.com/L4w1i3t/Alter-Ego-PWA/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-glass btn-magnetic"
+            >
+              <i class="fab fa-github"></i>
+              <span>Download Native App</span>
+            </a>
+            <a href="/pages/portfolio.html" class="btn btn-glass btn-magnetic">
+              <i class="fas fa-arrow-left"></i>
+              <span>Back to Portfolio</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/cart.js"></script>
+    <script>
+      // Matrix rain effect for ALTER EGO hacker aesthetic
+      (function () {
+        const container = document.getElementById("matrixRain");
+        if (!container) return;
+        const chars = "01アイウエオカキクケコサシスセソABCDEF>_{}[];";
+        const columnCount = Math.floor(window.innerWidth / 22);
+
+        for (let i = 0; i < columnCount; i++) {
+          const col = document.createElement("div");
+          col.className = "matrix-col";
+          col.style.left = i * 22 + "px";
+          col.style.animationDuration = 4 + Math.random() * 8 + "s";
+          col.style.animationDelay = Math.random() * 6 + "s";
+
+          let text = "";
+          const length = 12 + Math.floor(Math.random() * 20);
+          for (let j = 0; j < length; j++) {
+            text += chars.charAt(Math.floor(Math.random() * chars.length)) + "\n";
+          }
+          col.textContent = text;
+          container.appendChild(col);
+        }
+      })();
+    </script>
+  </body>
+</html>
