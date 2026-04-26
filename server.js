@@ -74,6 +74,7 @@ app.use(
           "'unsafe-inline'", // Consider removing this and using nonce
           "https://cdn.jsdelivr.net",
           "https://js.stripe.com",
+          "https://static.cloudflareinsights.com",
         ],
         styleSrc: [
           "'self'",
