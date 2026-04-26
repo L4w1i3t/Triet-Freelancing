@@ -81,6 +81,19 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Valid email address is required" });
     }
 
+    const orderItems = Array.isArray(orderData.items)
+      ? orderData.items
+      : Array.isArray(orderData.services)
+        ? orderData.services
+        : [];
+    const itemNames = orderItems
+      .map((item) => item.product?.title || item.service?.name || "Item")
+      .join(", ")
+      .slice(0, 500);
+    const hasDigitalProducts = orderItems.some(
+      (item) => item.itemType === "product" || Boolean(item.product),
+    );
+
     // Create the Payment Intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
@@ -89,8 +102,9 @@ export default async function handler(req, res) {
         customer_name: orderData.customerInfo.name || "",
         customer_email: orderData.customerInfo.email || "",
         order_id: `order_${Date.now()}`,
-        services: JSON.stringify(orderData.services || []),
-        total_items: (orderData.services || []).length.toString(),
+        item_names: itemNames,
+        total_items: orderItems.length.toString(),
+        has_digital_products: hasDigitalProducts.toString(),
       },
       receipt_email: orderData.customerInfo.email || null,
     });

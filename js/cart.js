@@ -92,14 +92,20 @@ class CartManager {
     cartItem.className = "cart-item";
     cartItem.dataset.index = index;
 
-    const serviceName = item.service.name;
-    const basePrice = item.service.basePrice;
-    const totalPrice = item.pricing.totalPrice;
+    const isProduct = this.isProductItem(item);
+    const itemName = this.getItemName(item);
+    const basePrice = this.getBasePrice(item);
+    const totalPrice = this.getTotalPrice(item);
     const timestamp = new Date(item.timestamp).toLocaleDateString();
+    const detailTitle = isProduct ? "Delivery:" : "Project Description:";
+    const detailContent = isProduct
+      ? this.getProductDeliveryText(item)
+      : item.projectDescription;
+    const packageTitle = isProduct ? "Files Included:" : "Package Includes:";
 
     cartItem.innerHTML = `
       <div class="cart-item-header">
-        <h3 class="service-name">${serviceName}</h3>
+        <h3 class="service-name">${this.escapeHTML(itemName)}</h3>
         <div class="cart-item-actions">
           <button class="remove-item-btn" data-index="${index}">
             <i class="fas fa-trash"></i>
@@ -111,12 +117,13 @@ class CartManager {
       <div class="cart-item-details">
         <div class="pricing-breakdown">
           <div class="price-line">
-            <span>Base Service:</span>
+            <span>${isProduct ? "Price:" : "Base Service:"}</span>
             <span>$${basePrice.toFixed(2)}</span>
           </div>
           
           ${
-            item.pricing.featureAdjustmentsPrice !== 0
+            !isProduct &&
+            Number(item.pricing?.featureAdjustmentsPrice || 0) !== 0
               ? `
             <div class="price-line">
               <span>Feature Adjustments:</span>
@@ -127,7 +134,7 @@ class CartManager {
           }
           
           ${
-            item.pricing.addonsPrice > 0
+            !isProduct && Number(item.pricing?.addonsPrice || 0) > 0
               ? `
             <div class="price-line">
               <span>Add-ons:</span>
@@ -144,14 +151,14 @@ class CartManager {
         </div>
 
         <div class="project-description">
-          <h4>Project Description:</h4>
+          <h4>${detailTitle}</h4>
           <div class="description-content">
-            ${item.projectDescription ? `<p>${item.projectDescription}</p>` : '<p class="no-description">No description provided</p>'}
+            ${detailContent ? `<p>${this.escapeHTML(detailContent)}</p>` : '<p class="no-description">No details provided</p>'}
           </div>
         </div>
 
         <div class="package-details">
-          <h4>Package Includes:</h4>
+          <h4>${packageTitle}</h4>
           <ul class="package-list">
             ${this.generatePackageList(item)}
           </ul>
@@ -182,11 +189,59 @@ class CartManager {
     return cartItem;
   }
 
+  isProductItem(item) {
+    return item?.itemType === "product" || Boolean(item?.product);
+  }
+
+  getItemName(item) {
+    return item?.product?.title || item?.service?.name || "Cart Item";
+  }
+
+  getBasePrice(item) {
+    return Number(item?.service?.basePrice || item?.pricing?.basePrice || 0);
+  }
+
+  getTotalPrice(item) {
+    return Number(item?.pricing?.totalPrice || this.getBasePrice(item));
+  }
+
+  getProductDeliveryText(item) {
+    const delivery =
+      item?.product?.delivery || "Instant download after checkout";
+    const license = item?.product?.license
+      ? ` License: ${item.product.license}.`
+      : "";
+    return `${delivery}.${license}`;
+  }
+
+  escapeHTML(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   generatePackageList(item) {
+    if (this.isProductItem(item)) {
+      const files = Array.isArray(item?.product?.files)
+        ? item.product.files
+        : [];
+      if (files.length === 0) {
+        return "<li>Digital download file</li>";
+      }
+      return files.map((file) => `<li>${this.escapeHTML(file)}</li>`).join("");
+    }
+
     let packageItems = [];
+    const featureAdjustments = Array.isArray(item.featureAdjustments)
+      ? item.featureAdjustments
+      : [];
+    const addons = Array.isArray(item.addons) ? item.addons : [];
 
     // Add all features from featureAdjustments
-    item.featureAdjustments.forEach((feature) => {
+    featureAdjustments.forEach((feature) => {
       if (feature.type === "flexible") {
         packageItems.push(`${feature.quantity} ${feature.name}`);
       } else if (feature.type === "toggle") {
@@ -203,8 +258,8 @@ class CartManager {
     });
 
     // Add selected addons
-    item.addons.forEach((addon) => {
-      const quantityText = addon.quantity > 1 ? ` (×${addon.quantity})` : "";
+    addons.forEach((addon) => {
+      const quantityText = addon.quantity > 1 ? ` (x${addon.quantity})` : "";
       packageItems.push(`${addon.name}${quantityText}`);
     });
 
@@ -250,7 +305,7 @@ class CartManager {
 
   updateSummary() {
     const subtotal = this.cart.reduce(
-      (sum, item) => sum + item.pricing.totalPrice,
+      (sum, item) => sum + this.getTotalPrice(item),
       0,
     );
     const tax = Math.round(subtotal * this.taxRate * 100) / 100;
@@ -364,25 +419,39 @@ class CartManager {
   }
 
   processCheckout(customerInfo) {
+    const digitalProducts = this.cart
+      .filter((item) => this.isProductItem(item))
+      .map((item) => ({
+        id: item.product?.id,
+        title: item.product?.title || item.service?.name,
+        downloadUrl: item.product?.downloadUrl,
+        files: item.product?.files || [],
+        license: item.product?.license,
+      }));
+
     const orderData = {
       items: this.cart,
       customerInfo: customerInfo,
       notes: this.getOrderNotes(),
+      fulfillment: {
+        hasDigitalProducts: digitalProducts.length > 0,
+        digitalProducts: digitalProducts,
+      },
       summary: {
         subtotal: this.cart.reduce(
-          (sum, item) => sum + item.pricing.totalPrice,
+          (sum, item) => sum + this.getTotalPrice(item),
           0,
         ),
         tax:
           Math.round(
-            this.cart.reduce((sum, item) => sum + item.pricing.totalPrice, 0) *
+            this.cart.reduce((sum, item) => sum + this.getTotalPrice(item), 0) *
               this.taxRate *
               100,
           ) / 100,
         total:
-          this.cart.reduce((sum, item) => sum + item.pricing.totalPrice, 0) +
+          this.cart.reduce((sum, item) => sum + this.getTotalPrice(item), 0) +
           Math.round(
-            this.cart.reduce((sum, item) => sum + item.pricing.totalPrice, 0) *
+            this.cart.reduce((sum, item) => sum + this.getTotalPrice(item), 0) *
               this.taxRate *
               100,
           ) /

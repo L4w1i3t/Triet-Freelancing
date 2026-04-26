@@ -141,6 +141,13 @@ body.cart {
         color: var(--text-secondary);
         margin-bottom: 2rem;
       }
+
+      .empty-cart-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
     }
 
     .cart-items-container {

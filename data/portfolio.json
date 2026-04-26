@@ -222,6 +222,19 @@
         "subsite": "/pages/subsites/ytdui.html"
       },
       "icon": "fas fa-tools"
+    },
+    {
+      "id": "thenetwork",
+      "title": "The Network",
+      "category": "tools",
+      "year": "2026",
+      "description": "A terminal-based fidget toy based on the machine network and YoRHa server from the Nier: Automata video game.",
+      "technologies": ["Python"],
+      "links": {
+        "github": null,
+        "subsite": null
+      },
+      "icon": "fas fa-tools"
     }
   ],
   "categories": [

@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "id": "the-network",
+      "title": "The Network",
+      "price": 0,
+      "summary": "A terminal-based fidget toy inspired by the machine network and YoRHa server from NieR: Automata.",
+      "description": "The Network is currently listed as the first catalog item while the storefront is being populated. The temporary download points to the public 0.1.0 GitHub release.",
+      "image": "/images/yorha.webp",
+      "imageAlt": "YoRHa-style project mark",
+      "badge": "Terminal Tool",
+      "delivery": "Temporary GitHub release download",
+      "files": ["The Network 0.1.0 release", "Terminal-based Python tool"],
+      "downloadUrl": "https://github.com/L4w1i3t/The-Network/releases/tag/0.1.0",
+      "license": "See release notes",
+      "purchaseMode": "external",
+      "ctaLabel": "Download"
+    }
+  ]
+}

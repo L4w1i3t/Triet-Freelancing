@@ -817,12 +817,10 @@ class PaymentManager {
         },
         orderInfo: {
           orderId: paymentDetails?.metadata?.order_id || `order_${Date.now()}`,
-          services: paymentDetails?.metadata?.services
-            ? JSON.parse(paymentDetails.metadata.services)
-            : this.orderData.services || [],
+          itemNames: paymentDetails?.metadata?.item_names || "",
           totalItems:
             paymentDetails?.metadata?.total_items ||
-            (this.orderData.services || []).length,
+            (this.orderData.items || []).length,
         },
         receiptEmail:
           paymentDetails?.receipt_email || this.orderData.customerInfo?.email,
@@ -970,12 +968,20 @@ class PaymentManager {
       this.orderData.items.forEach((item) => {
         const itemElement = document.createElement("div");
         itemElement.className = "order-item";
+        const itemName = this.getOrderItemName(item);
+        const itemDescription = this.getOrderItemDescription(item);
+        const itemPrice = this.getOrderItemPrice(item);
+        const itemTypeLabel = this.isDigitalProductItem(item)
+          ? "Instant download"
+          : "Commission";
+
         itemElement.innerHTML = `
           <div class="item-info">
-            <h4>${item.service?.name || "Unknown Service"}</h4>
-            <p>${item.projectDescription || item.service?.description || "Custom service package"}</p>
+            <h4>${this.escapeHTML(itemName)}</h4>
+            <p>${this.escapeHTML(itemDescription)}</p>
+            <span class="order-item-type">${itemTypeLabel}</span>
           </div>
-          <div class="item-price">$${(item.pricing?.totalPrice || 0).toFixed(2)}</div>
+          <div class="item-price">$${itemPrice.toFixed(2)}</div>
         `;
         orderItemsContainer.appendChild(itemElement);
       });
@@ -991,6 +997,43 @@ class PaymentManager {
     if (totalElement && this.orderData.summary) {
       totalElement.textContent = `$${(this.orderData.summary.total || 0).toFixed(2)}`;
     }
+  }
+
+  isDigitalProductItem(item) {
+    return item?.itemType === "product" || Boolean(item?.product);
+  }
+
+  getOrderItemName(item) {
+    return item?.product?.title || item?.service?.name || "Unknown Item";
+  }
+
+  getOrderItemDescription(item) {
+    if (this.isDigitalProductItem(item)) {
+      return (
+        item?.product?.summary ||
+        item?.service?.description ||
+        "Digital download"
+      );
+    }
+
+    return (
+      item?.projectDescription ||
+      item?.service?.description ||
+      "Custom service package"
+    );
+  }
+
+  getOrderItemPrice(item) {
+    return Number(item?.pricing?.totalPrice || item?.service?.basePrice || 0);
+  }
+
+  escapeHTML(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   displayCustomerInfo() {
@@ -1054,7 +1097,7 @@ class PaymentManager {
       this.clearOrderData();
 
       // Show success
-      this.showPaymentSuccess(orderCompletionData.orderId);
+      this.showPaymentSuccess(orderCompletionData.orderId, orderCompletionData);
     } catch (error) {
       console.error("Order confirmation error:", error);
       this.showError("Failed to confirm order. Please try again.");
@@ -1216,16 +1259,23 @@ class PaymentManager {
       this.analytics.trackOrderCompleted(this.orderData);
     }
 
+    const completedOrderData = {
+      ...this.orderData,
+      paymentInfo: this.orderData.paymentInfo,
+      status: "paid",
+      confirmedAt: new Date().toISOString(),
+    };
+
     // Save completed order to localStorage for reference
     const completedOrders = JSON.parse(
       localStorage.getItem("completedOrders") || "[]",
     );
-    completedOrders.push(this.orderData);
+    completedOrders.push(completedOrderData);
     localStorage.setItem("completedOrders", JSON.stringify(completedOrders));
 
     // Send order confirmation email after a brief delay to ensure data is properly set
     setTimeout(() => {
-      this.sendOrderConfirmationEmail();
+      this.sendOrderConfirmationEmail(completedOrderData);
     }, 500);
 
     // Clear cart and order data securely
@@ -1238,7 +1288,7 @@ class PaymentManager {
     }
 
     // Show success modal
-    this.showPaymentSuccess();
+    this.showPaymentSuccess(completedOrderData.orderId, completedOrderData);
   }
 
   saveCompletedOrder(orderData) {
@@ -1283,34 +1333,14 @@ class PaymentManager {
         dataToSend?.orderId,
       );
 
-      // Send admin notification (detailed order info)
-      console.log(" Sending admin notification...");
-      const adminResult =
-        await this.emailService.sendOrderNotification(dataToSend);
-      console.log(" Admin result:", adminResult);
+      const emailResult = await this.emailService.sendOrderEmails(dataToSend);
+      console.log(" Order email result:", emailResult);
 
-      // Send customer confirmation (using customer template)
-      console.log(" Sending customer confirmation...");
-      const customerResult =
-        await this.emailService.sendCustomerConfirmation(dataToSend);
-      console.log(" Customer result:", customerResult);
-
-      if (adminResult.success && customerResult.success) {
-        console.log(" Both admin and customer emails sent successfully");
+      if (emailResult.success) {
+        console.log("Order emails sent successfully");
         this.showInfo("Order confirmation emails sent successfully!");
-      } else if (adminResult.success || customerResult.success) {
-        console.log(" One email sent successfully, one failed");
-        console.log(
-          "Admin success:",
-          adminResult.success,
-          "Customer success:",
-          customerResult.success,
-        );
-        this.showInfo("Order confirmation email sent (partial success).");
       } else {
-        console.error(" Both emails failed to send");
-        console.error("Admin error:", adminResult.error);
-        console.error("Customer error:", customerResult.error);
+        console.error("Order emails failed to send:", emailResult.error);
         this.showInfo(
           "Payment successful! Note: Confirmation emails could not be sent.",
         );
@@ -1324,13 +1354,15 @@ class PaymentManager {
     }
   }
 
-  showPaymentSuccess(orderId = null) {
+  showPaymentSuccess(orderId = null, orderData = null) {
     const modal = document.getElementById("paymentSuccessModal");
     const orderNumberElement = document.getElementById("finalOrderNumber");
+    const deliveryData = orderData || this.orderData;
 
     if (modal && orderNumberElement) {
       orderNumberElement.textContent =
-        orderId || this.orderData?.orderId || "N/A";
+        orderId || deliveryData?.orderId || "N/A";
+      this.populateDigitalDelivery(deliveryData);
       modal.style.display = "flex";
 
       // Add fade-in animation
@@ -1338,6 +1370,52 @@ class PaymentManager {
         modal.classList.add("show");
       }, 10);
     }
+  }
+
+  populateDigitalDelivery(orderData) {
+    const deliveryContainer = document.getElementById("digitalDelivery");
+    const deliveryList = document.getElementById("digitalDeliveryList");
+    if (!deliveryContainer || !deliveryList) return;
+
+    const products = this.getDigitalDeliveryProducts(orderData);
+    if (products.length === 0) {
+      deliveryContainer.style.display = "none";
+      deliveryList.innerHTML = "";
+      return;
+    }
+
+    deliveryList.innerHTML = products
+      .map((product) => {
+        const title = this.escapeHTML(product.title);
+        const license = product.license
+          ? `<span>${this.escapeHTML(product.license)}</span>`
+          : "";
+
+        return `
+          <a class="digital-delivery-link" href="${this.escapeHTML(product.downloadUrl)}" download>
+            <i class="fas fa-download"></i>
+            <span>
+              <strong>${title}</strong>
+              ${license}
+            </span>
+          </a>
+        `;
+      })
+      .join("");
+    deliveryContainer.style.display = "block";
+  }
+
+  getDigitalDeliveryProducts(orderData) {
+    const items = Array.isArray(orderData?.items) ? orderData.items : [];
+    return items
+      .filter(
+        (item) => this.isDigitalProductItem(item) && item.product?.downloadUrl,
+      )
+      .map((item) => ({
+        title: item.product.title || item.service?.name || "Digital Download",
+        downloadUrl: item.product.downloadUrl,
+        license: item.product.license || "",
+      }));
   }
 
   showError(message) {
@@ -1407,6 +1485,7 @@ class PaymentManager {
         phone: "555-0123",
         preferredContact: "email",
       },
+      status: "paid",
       items: [
         {
           service: { name: "Test Service" },
@@ -1429,8 +1508,7 @@ class PaymentManager {
 
     console.log("Testing email service with test order data...");
     try {
-      const result =
-        await this.emailService.sendOrderNotification(testOrderData);
+      const result = await this.emailService.sendOrderEmails(testOrderData);
       if (result.success) {
         console.log("Test email sent successfully!");
         this.showInfo("Test email sent successfully!");

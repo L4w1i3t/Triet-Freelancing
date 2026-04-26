@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="store-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store - Triet</title>
+    <meta
+      name="description"
+      content="Ready-made digital downloads from Triet, priced for quick checkout and instant delivery."
+    />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site store-page">
+    <div id="header-placeholder"></div>
+
+    <main class="store-main">
+      <section class="store-hero">
+        <div class="container">
+          <p class="store-kicker">Digital goods</p>
+          <h1>Ready-made downloads and small tools.</h1>
+          <p>
+            Pick up practical templates, utilities, and planning kits without
+            commissioning a custom build. The catalog is being built out now.
+          </p>
+          <div class="store-hero-actions">
+            <a href="#storeProducts" class="btn btn-primary">
+              <i class="fas fa-bag-shopping"></i>
+              Browse Items
+            </a>
+            <a href="/pages/services.html" class="btn btn-glass">
+              <i class="fas fa-screwdriver-wrench"></i>
+              Custom Services
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="store-catalog" aria-labelledby="storeCatalogTitle">
+        <div class="container">
+          <div class="store-section-header">
+            <div>
+              <p class="store-kicker">Catalog buildout</p>
+              <h2 id="storeCatalogTitle">Catalog</h2>
+            </div>
+            <p>
+              Storefront checkout and delivery are still being connected. Items
+              with temporary release links open the current download source.
+            </p>
+          </div>
+
+          <div class="store-progress-notice" role="status">
+            <i class="fas fa-screwdriver-wrench" aria-hidden="true"></i>
+            <div>
+              <strong>Storefront page currently under progress</strong>
+              <span>
+                I am working on populating my catalog. The first listed item is
+                available through a temporary release link while checkout is
+                finalized.
+              </span>
+            </div>
+          </div>
+
+          <div class="store-loading" id="storeLoading">
+            <div class="loading-spinner"></div>
+            <p>Loading store items...</p>
+          </div>
+
+          <div class="store-products-grid" id="storeProducts"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../components/addComponents.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/store.js"></script>
+  </body>
+</html>

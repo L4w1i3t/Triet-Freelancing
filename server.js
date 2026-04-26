@@ -4,6 +4,7 @@ const path = require("path");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const csrfProtection = require("./middleware/csrf");
+const { sendOrderEmails, validateOrderData } = require("./lib/order-email");
 require("dotenv").config();
 
 const app = express();
@@ -86,11 +87,7 @@ app.use(
           "https://cdnjs.cloudflare.com",
         ],
         imgSrc: ["'self'", "data:", "https:", "blob:"],
-        connectSrc: [
-          "'self'",
-          "https://api.emailjs.com",
-          "https://api.stripe.com",
-        ],
+        connectSrc: ["'self'", "https://api.stripe.com"],
         frameSrc: ["https://js.stripe.com"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
@@ -113,13 +110,28 @@ app.get("/", (req, res) => {
 // Environment configuration endpoint
 app.get("/api/config", (req, res) => {
   res.json({
-    EMAILJS_SERVICE_ID: process.env.EMAILJS_SERVICE_ID || "",
-    EMAILJS_TEMPLATE_ID_ADMIN: process.env.EMAILJS_TEMPLATE_ID_ADMIN || "",
-    EMAILJS_TEMPLATE_ID_CUSTOMER:
-      process.env.EMAILJS_TEMPLATE_ID_CUSTOMER || "",
-    EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY || "",
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || "",
   });
+});
+
+app.post("/api/send-order-email", async (req, res) => {
+  try {
+    const orderData = req.body?.orderData;
+    const validationError = validateOrderData(orderData);
+
+    if (validationError) {
+      return res.status(400).json({ success: false, error: validationError });
+    }
+
+    const result = await sendOrderEmails(orderData);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Order email error:", error);
+    res.status(error.statusCode || 500).json({
+      success: false,
+      error: "Unable to send order emails. Please try again later.",
+    });
+  }
 });
 
 // CSRF token endpoint
@@ -199,6 +211,19 @@ app.post(
         email: orderData.customerInfo.email,
       });
 
+      const orderItems = Array.isArray(orderData.items)
+        ? orderData.items
+        : Array.isArray(orderData.services)
+          ? orderData.services
+          : [];
+      const itemNames = orderItems
+        .map((item) => item.product?.title || item.service?.name || "Item")
+        .join(", ")
+        .slice(0, 500);
+      const hasDigitalProducts = orderItems.some(
+        (item) => item.itemType === "product" || Boolean(item.product),
+      );
+
       // Create the Payment Intent
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount * 100), // Convert to cents
@@ -207,8 +232,9 @@ app.post(
           customer_name: orderData.customerInfo.name || "",
           customer_email: orderData.customerInfo.email || "",
           order_id: `order_${Date.now()}`,
-          services: JSON.stringify(orderData.services || []),
-          total_items: (orderData.services || []).length.toString(),
+          item_names: itemNames,
+          total_items: orderItems.length.toString(),
+          has_digital_products: hasDigitalProducts.toString(),
         },
         receipt_email: orderData.customerInfo.email || null,
       });
@@ -257,10 +283,10 @@ app.post(
 
       // Return the payment details
       // Note: In newer Stripe API versions, use latest_charge instead of charges.data
-      const chargeData = paymentIntent.latest_charge 
+      const chargeData = paymentIntent.latest_charge
         ? await stripe.charges.retrieve(paymentIntent.latest_charge)
-        : (paymentIntent.charges?.data?.[0] || null);
-      
+        : paymentIntent.charges?.data?.[0] || null;
+
       res.status(200).json({
         success: true,
         paymentIntent: {

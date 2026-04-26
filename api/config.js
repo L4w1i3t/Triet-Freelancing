@@ -29,11 +29,6 @@ export default function handler(req, res) {
   try {
     // Return client-safe environment variables as JSON
     const config = {
-      EMAILJS_SERVICE_ID: process.env.EMAILJS_SERVICE_ID || "",
-      EMAILJS_TEMPLATE_ID_ADMIN: process.env.EMAILJS_TEMPLATE_ID_ADMIN || "",
-      EMAILJS_TEMPLATE_ID_CUSTOMER:
-        process.env.EMAILJS_TEMPLATE_ID_CUSTOMER || "",
-      EMAILJS_PUBLIC_KEY: process.env.EMAILJS_PUBLIC_KEY || "",
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || "",
     };
 

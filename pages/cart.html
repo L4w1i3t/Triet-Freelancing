@@ -30,7 +30,8 @@
           <div class="hero-content">
             <h1 class="cart-title">Shopping Cart</h1>
             <p class="cart-subtitle">
-              Review your selected services and checkout at your leisure.
+              Review your selected services and digital downloads before
+              checkout.
             </p>
           </div>
         </div>
@@ -43,7 +44,7 @@
             <!-- Cart Items -->
             <div class="cart-items-section">
               <div class="cart-items-header">
-                <h2>Your Services</h2>
+                <h2>Your Items</h2>
                 <button class="clear-cart-btn" id="clearCartBtn">
                   <i class="fas fa-trash"></i>
                   Clear Cart
@@ -56,11 +57,17 @@
                   <i class="fas fa-shopping-cart"></i>
                 </div>
                 <h3>Your cart is empty</h3>
-                <p>Browse our services and add items to your cart</p>
-                <a href="/pages/services.html" class="btn btn-primary">
-                  <i class="fas fa-plus"></i>
-                  Browse Services
-                </a>
+                <p>Browse services or pick up ready-made downloads.</p>
+                <div class="empty-cart-actions">
+                  <a href="/pages/store.html" class="btn btn-primary">
+                    <i class="fas fa-bag-shopping"></i>
+                    Browse Store
+                  </a>
+                  <a href="/pages/services.html" class="btn btn-glass">
+                    <i class="fas fa-plus"></i>
+                    Browse Services
+                  </a>
+                </div>
               </div>
 
               <!-- Cart Items Container -->
@@ -98,7 +105,7 @@
                     Proceed to Checkout
                   </button>
 
-                  <a href="/pages/services.html" class="btn btn-glass">
+                  <a href="/pages/store.html" class="btn btn-glass">
                     <i class="fas fa-arrow-left"></i>
                     Continue Shopping
                   </a>
@@ -123,14 +130,7 @@
     <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
-    <!-- EmailJS -->
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
-    ></script>
-    <script src="/js/env-loader.js"></script>
     <script src="/components/addComponents.js"></script>
-    <script src="/js/email-service.js"></script>
     <script src="/js/cart.js"></script>
   </body>
 </html>

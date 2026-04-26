@@ -203,6 +203,17 @@ body.payment {
               hyphens: auto; // Add hyphens where appropriate
               line-height: 1.4;
             }
+
+            .order-item-type {
+              display: inline-flex;
+              margin-top: 0.6rem;
+              padding: 0.25rem 0.5rem;
+              border-radius: 6px;
+              color: var(--accent-aurora-green);
+              background: rgba(81, 207, 102, 0.12);
+              font-size: 0.75rem;
+              font-weight: 700;
+            }
           }
 
           .item-price {
@@ -881,7 +892,7 @@ body.payment {
     border: 1px solid rgba(40, 167, 69, 0.4);
     border-radius: var(--radius-xl);
     padding: 3rem;
-    max-width: 500px;
+    max-width: 620px;
     width: 90%;
     text-align: center;
     box-shadow: var(--shadow-elevated);
@@ -915,6 +926,53 @@ body.payment {
       font-family: "JetBrains Mono", monospace;
       color: var(--text-primary);
       font-weight: 600;
+    }
+
+    .digital-delivery {
+      margin-bottom: 2rem;
+      text-align: left;
+
+      h4 {
+        color: var(--text-primary);
+        margin-bottom: 0.9rem;
+      }
+    }
+
+    .digital-delivery-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .digital-delivery-link {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: center;
+      padding: 0.85rem;
+      border-radius: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      background: rgba(81, 207, 102, 0.12);
+      border: 1px solid rgba(81, 207, 102, 0.28);
+
+      i {
+        color: var(--accent-aurora-green);
+      }
+
+      strong,
+      span span {
+        display: block;
+      }
+
+      span span {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        margin-top: 0.25rem;
+      }
+
+      &:hover {
+        background: rgba(81, 207, 102, 0.18);
+      }
     }
 
     .modal-actions {

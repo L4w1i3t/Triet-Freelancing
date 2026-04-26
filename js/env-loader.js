@@ -58,10 +58,6 @@ class EnvConfig {
     );
     // Return empty config as fallback since env-config.js is removed
     return {
-      EMAILJS_SERVICE_ID: "",
-      EMAILJS_TEMPLATE_ID_ADMIN: "",
-      EMAILJS_TEMPLATE_ID_CUSTOMER: "",
-      EMAILJS_PUBLIC_KEY: "",
       STRIPE_PUBLISHABLE_KEY: "",
     };
   }
