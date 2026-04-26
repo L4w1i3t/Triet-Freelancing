@@ -276,6 +276,65 @@
   }
 }
 
+.services-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2rem auto 0;
+  max-width: 1200px;
+
+  .pagination-status {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .pagination-btn {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.84);
+    cursor: pointer;
+    font-weight: 700;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover:not(:disabled),
+    &.active {
+      background: linear-gradient(135deg, #64ffda, #7c4dff);
+      border-color: rgba(100, 255, 218, 0.5);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 // Service Card
 .service-card {
   background: rgba(255, 255, 255, 0.08);

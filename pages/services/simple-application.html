@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Desktop Application - Triet</title>
+    <title>Single-Purpose Desktop Utility - Triet</title>
     <link rel="stylesheet" href="/css/main.css" />
     <link
       rel="stylesheet"
@@ -27,23 +27,21 @@
       <section class="service-hero">
         <div class="container">
           <div class="hero-content">
-            <h1 class="service-title">Simple Desktop Application</h1>
+            <h1 class="service-title">Single-Purpose Desktop Utility</h1>
             <div class="service-meta">
-              <span class="service-price">Starting at $125</span>
+              <span class="service-price">Starting at $200</span>
               <span class="service-duration">
                 <i class="fas fa-clock"></i>
-                3-10 days
+                4-8 days
               </span>
             </div>
             <p class="service-description">
-              A custom desktop application built to your specifications. From
-              simple single-purpose utilities to comprehensive multi-function
-              applications. Perfect for automating tasks, managing data, or
-              creating tools for your workflow.
+              A focused desktop utility built for one clear workflow,
+              automation, calculation, or file task.
             </p>
             <p class="service-description" style="font-style: italic">
-              Delivery time depends on complexity: Micro-utilities (3-5 days),
-              Basic apps (5-7 days), Multi-function apps (7-10+ days).
+              This budget package is intentionally scoped for small utilities;
+              larger business software belongs in the standard tier.
             </p>
           </div>
         </div>
@@ -58,33 +56,32 @@
               <h2>Examples of this Service</h2>
               <div class="examples-list">
                 <div class="example-item">
-                  <h4>Micro-Utilities ($125-$175)</h4>
+                  <h4>Single-Task Utilities ($200+)</h4>
                   <p>
                     Single-purpose tools like unit converters, text formatters,
-                    simple calculators, or clipboard managers. Quick to build,
-                    focused functionality.
+                    simple calculators, or clipboard helpers. Quick to build,
+                    focused, and easy to use.
                   </p>
                 </div>
                 <div class="example-item">
-                  <h4>Basic Applications ($225-$300)</h4>
+                  <h4>File Helpers ($275+)</h4>
                   <p>
-                    Todo lists, note-taking apps, simple inventory trackers, or
-                    basic file organizers with a few screens and local storage.
+                    Rename files, clean CSVs, organize folders, generate small
+                    exports, or handle a repeatable local file task.
                   </p>
                 </div>
                 <div class="example-item">
-                  <h4>Multi-Function Apps ($350+)</h4>
+                  <h4>Workflow Helpers ($350+)</h4>
                   <p>
-                    Comprehensive tools with multiple features: data management
-                    systems, task automation suites, or apps with database
-                    integration and reporting.
+                    Small internal helpers with a few related actions, basic
+                    local storage, and simple reporting or export behavior.
                   </p>
                 </div>
                 <div class="example-item">
-                  <h4>Simple Games or Simulations</h4>
+                  <h4>Local Productivity Tools</h4>
                   <p>
-                    Educational tools, training simulations, or basic games for
-                    learning or entertainment purposes.
+                    Lightweight tools that save time on a recurring personal or
+                    small-business task.
                   </p>
                 </div>
               </div>
@@ -96,26 +93,24 @@
 
               <!-- Project Description -->
               <div class="project-description-section">
-                <h3>Describe Your Application</h3>
+                <h3>Describe Your Utility</h3>
                 <p class="description-help">
-                  Please describe your application requirements in detail. The
-                  more information you provide, the better I can tailor the
-                  service to your needs. This includes but is not limited to:
+                  Please describe the one workflow this utility should handle.
+                  The more specific you are, the easier it is to keep the build
+                  focused and affordable. This includes but is not limited to:
                 </p>
                 <ul class="description-hints" style="font-style: italic">
-                  <li>- The purpose of your project (business, blog, etc.)</li>
-                  <li>- Your target audience and industry</li>
-                  <li>- Design preferences and style inspirations</li>
-                  <li>- Specific features or functionality you need (outside of the addon library)</li>
-                  <li>- Preferred operating system (Windows, Mac, Linux)</li>
-                  <li>- Any existing branding or content you have</li>
-                  <li>- Timeline and launch expectations</li>
+                  <li>- The exact task you want to automate or simplify</li>
+                  <li>- Input files, output files, or calculations involved</li>
+                  <li>- Preferred operating system</li>
+                  <li>- Any sample data or example results</li>
+                  <li>- Timeline and handoff expectations</li>
                 </ul>
                 <div class="description-field-container">
                   <textarea
                     id="projectDescription"
                     class="project-description-field"
-                    placeholder="Example: I need a simple inventory management tool for my small business. It should let me add, edit, and delete product records, track stock levels, and generate basic reports. I want it to work on Windows with a clean, easy-to-use interface. Data should be stored locally in a database file that I can backup..."
+                    placeholder="Example: I need a Windows utility that takes a folder of CSV files, checks for missing values, combines them into one clean export, and saves a short summary report. I can provide sample files and the expected output format..."
                     rows="6"
                     maxlength="65535"
                   ></textarea>
@@ -133,44 +128,119 @@
               <!-- Package Tier Selection -->
               <div class="base-service">
                 <h3>Choose Your Package Tier</h3>
-                <div class="package-tiers" style="margin-bottom: 1.5rem;">
+                <div class="package-tiers" style="margin-bottom: 1.5rem">
                   <div
                     class="tier-option"
                     data-tier="micro"
-                    data-price="125"
-                    style="padding: 1rem; border: 2px solid rgba(100, 255, 218, 0.3); border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; background: rgba(100, 255, 218, 0.05);"
+                    data-price="200"
+                    style="
+                      padding: 1rem;
+                      border: 2px solid rgba(100, 255, 218, 0.3);
+                      border-radius: 12px;
+                      margin-bottom: 0.75rem;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                      background: rgba(100, 255, 218, 0.05);
+                    "
                   >
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
                       <div>
-                        <h4 style="margin: 0 0 0.25rem 0; color: #64ffda; font-size: 1.1rem;">
-                          <i class="fas fa-circle-dot" style="margin-right: 0.5rem;"></i>
-                          Micro-Utility
+                        <h4
+                          style="
+                            margin: 0 0 0.25rem 0;
+                            color: #64ffda;
+                            font-size: 1.1rem;
+                          "
+                        >
+                          <i
+                            class="fas fa-circle-dot"
+                            style="margin-right: 0.5rem"
+                          ></i>
+                          Single-Purpose Utility
                         </h4>
-                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
-                          Single-purpose tool, simple interface, minimal features
+                        <p
+                          style="
+                            margin: 0;
+                            font-size: 0.85rem;
+                            color: rgba(255, 255, 255, 0.7);
+                          "
+                        >
+                          One clear task, simple interface, focused output
                         </p>
                       </div>
-                      <span style="font-size: 1.3rem; font-weight: 800; color: #64ffda;">$125</span>
+                      <span
+                        style="
+                          font-size: 1.3rem;
+                          font-weight: 800;
+                          color: #64ffda;
+                        "
+                        >$200</span
+                      >
                     </div>
                   </div>
 
                   <div
                     class="tier-option"
                     data-tier="basic"
-                    data-price="225"
-                    style="padding: 1rem; border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 12px; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.03);"
+                    data-price="275"
+                    style="
+                      padding: 1rem;
+                      border: 2px solid rgba(255, 255, 255, 0.15);
+                      border-radius: 12px;
+                      margin-bottom: 0.75rem;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                      background: rgba(255, 255, 255, 0.03);
+                    "
                   >
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
                       <div>
-                        <h4 style="margin: 0 0 0.25rem 0; color: #ffffff; font-size: 1.1rem;">
-                          <i class="fas fa-circle" style="margin-right: 0.5rem; color: rgba(255, 255, 255, 0.3);"></i>
-                          Basic Application
+                        <h4
+                          style="
+                            margin: 0 0 0.25rem 0;
+                            color: #ffffff;
+                            font-size: 1.1rem;
+                          "
+                        >
+                          <i
+                            class="fas fa-circle"
+                            style="
+                              margin-right: 0.5rem;
+                              color: rgba(255, 255, 255, 0.3);
+                            "
+                          ></i>
+                          Utility with Data Storage
                         </h4>
-                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
-                          Multiple features, data storage, 2-3 screens/views
+                        <p
+                          style="
+                            margin: 0;
+                            font-size: 0.85rem;
+                            color: rgba(255, 255, 255, 0.7);
+                          "
+                        >
+                          Focused task plus local save/load behavior
                         </p>
                       </div>
-                      <span style="font-size: 1.3rem; font-weight: 800; color: #ffffff;">$225</span>
+                      <span
+                        style="
+                          font-size: 1.3rem;
+                          font-weight: 800;
+                          color: #ffffff;
+                        "
+                        >$275</span
+                      >
                     </div>
                   </div>
 
@@ -178,27 +248,67 @@
                     class="tier-option"
                     data-tier="multi"
                     data-price="350"
-                    style="padding: 1rem; border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.03);"
+                    style="
+                      padding: 1rem;
+                      border: 2px solid rgba(255, 255, 255, 0.15);
+                      border-radius: 12px;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                      background: rgba(255, 255, 255, 0.03);
+                    "
                   >
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
                       <div>
-                        <h4 style="margin: 0 0 0.25rem 0; color: #ffffff; font-size: 1.1rem;">
-                          <i class="fas fa-circle" style="margin-right: 0.5rem; color: rgba(255, 255, 255, 0.3);"></i>
-                          Multi-Function
+                        <h4
+                          style="
+                            margin: 0 0 0.25rem 0;
+                            color: #ffffff;
+                            font-size: 1.1rem;
+                          "
+                        >
+                          <i
+                            class="fas fa-circle"
+                            style="
+                              margin-right: 0.5rem;
+                              color: rgba(255, 255, 255, 0.3);
+                            "
+                          ></i>
+                          Workflow Helper
                         </h4>
-                        <p style="margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
-                          Comprehensive app, multiple modules, advanced features
+                        <p
+                          style="
+                            margin: 0;
+                            font-size: 0.85rem;
+                            color: rgba(255, 255, 255, 0.7);
+                          "
+                        >
+                          A few related actions for one small workflow
                         </p>
                       </div>
-                      <span style="font-size: 1.3rem; font-weight: 800; color: #ffffff;">$350</span>
+                      <span
+                        style="
+                          font-size: 1.3rem;
+                          font-weight: 800;
+                          color: #ffffff;
+                        "
+                        >$350</span
+                      >
                     </div>
                   </div>
                 </div>
 
                 <div class="base-core">
                   <div class="base-item-header">
-                    <span class="item-name" id="selectedTierName">Micro-Utility Application</span>
-                    <span class="item-price" id="selectedTierPrice">$125</span>
+                    <span class="item-name" id="selectedTierName"
+                      >Single-Purpose Utility</span
+                    >
+                    <span class="item-price" id="selectedTierPrice">$200</span>
                   </div>
                   <p class="base-description">
                     Customize below to fit your needs.
@@ -276,7 +386,8 @@
                         <div class="feature-info">
                           <span class="feature-name">Local Data Storage</span>
                           <span class="feature-description"
-                            >Save and load data using local files or simple database</span
+                            >Save and load data using local files or simple
+                            database</span
                           >
                         </div>
                       </div>
@@ -320,9 +431,7 @@
                           class="fas fa-check-square feature-checkbox checked"
                         ></i>
                         <div class="feature-info">
-                          <span class="feature-name"
-                            >Basic Documentation</span
-                          >
+                          <span class="feature-name">Basic Documentation</span>
                           <span class="feature-description"
                             >Simple user guide and usage instructions</span
                           >
@@ -434,8 +543,8 @@
                       <span class="addon-price">$35</span>
                     </div>
                     <div class="addon-description">
-                      Custom themes, animations, and extra-polished
-                      interface design
+                      Custom themes, animations, and extra-polished interface
+                      design
                     </div>
                   </div>
                 </div>
@@ -446,7 +555,7 @@
                 <div class="pricing-breakdown">
                   <div class="breakdown-line">
                     <span class="breakdown-label">Base Package:</span>
-                    <span class="breakdown-price" id="basePrice">$225</span>
+                    <span class="breakdown-price" id="basePrice">$200</span>
                   </div>
                   <div
                     class="breakdown-line"
@@ -469,7 +578,7 @@
                   <div class="breakdown-divider"></div>
                   <div class="total-line">
                     <span class="total-label">Total Price:</span>
-                    <span class="total-price" id="totalPrice">$225</span>
+                    <span class="total-price" id="totalPrice">$200</span>
                   </div>
                 </div>
                 <div class="package-summary" id="packageSummary">

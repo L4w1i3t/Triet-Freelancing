@@ -3,9 +3,44 @@
     {
       "id": "budget",
       "name": "Budget",
-      "priceRange": "Starting from $65",
-      "description": "Perfect for startups and small projects.",
+      "priceRange": "Starting from $100",
+      "description": "Accessible starter packages for small projects and focused fixes.",
       "services": [
+        {
+          "id": "website-maintenance",
+          "title": "Website Maintenance / Modification / Editing",
+          "price": "Starting at $100",
+          "duration": "2-5 days",
+          "description": "Scoped website updates, bug fixes, content edits, and minor feature enhancements to keep your site running smoothly."
+        },
+        {
+          "id": "digital-business-card",
+          "title": "Digital Business Card",
+          "price": "Starting at $110",
+          "duration": "2-4 days",
+          "description": "A polished, mobile-first digital business card that makes your contact info easy to share and trust."
+        },
+        {
+          "id": "landing-page",
+          "title": "Landing Page",
+          "price": "Starting at $150",
+          "duration": "2-4 days",
+          "description": "A focused single-page site designed to turn visitors into leads, signups, bookings, or sales."
+        },
+        {
+          "id": "digital-portfolio",
+          "title": "Digital Portfolio",
+          "price": "Starting at $160",
+          "duration": "2-4 days",
+          "description": "A polished portfolio site that presents your work, skills, and contact details clearly."
+        },
+        {
+          "id": "simple-application",
+          "title": "Single-Purpose Desktop Utility",
+          "price": "Starting at $200",
+          "duration": "4-8 days",
+          "description": "A focused desktop utility for one clear workflow, automation, calculation, or file task."
+        },
         {
           "id": "static-site",
           "title": "Basic Website",
@@ -14,48 +49,63 @@
           "description": "A simple, 5-page website made from scratch with custom design, basic functionality, and instructions on hosting."
         },
         {
-          "id": "digital-portfolio",
-          "title": "Digital Portfolio",
-          "price": "Starting at $130",
-          "duration": "2-4 days",
-          "description": "A static portfolio platform made from scratch to showcase your work and skills. Complete with custom design and hosting instructions."
-        },
-        {
-          "id": "digital-business-card",
-          "title": "Digital Business Card",
-          "price": "Starting at $85",
-          "duration": "2-4 days",
-          "description": "A modern, mobile-first digital business card made from scratch to share your contact information professionally."
-        },
-        {
-          "id": "landing-page",
-          "title": "Landing Page",
-          "price": "Starting at $65",
-          "duration": "2-4 days",
-          "description": "A single-page website designed to convert visitors into leads or customers."
-        },
-        {
           "id": "discord-bot",
           "title": "Discord Bot",
-          "price": "Starting at $90",
+          "price": "Starting at $120",
           "duration": "3-7 days",
-          "description": "A custom Discord bot tailored to your server's needs. Includes instructions for setup, deployment, and functionality."
-        },
-        {
-          "id": "simple-application",
-          "title": "Simple Desktop Application",
-          "price": "Starting at $125",
-          "duration": "3-10 days",
-          "description": "Custom desktop applications from simple utilities to comprehensive multi-function apps. Built for Windows, Mac, or Linux with flexible pricing tiers."
+          "description": "A focused Discord bot for moderation, utility commands, community workflows, or lightweight automation."
         }
       ]
     },
     {
       "id": "standard",
       "name": "Standard",
-      "priceRange": "Starting from N/A",
-      "description": "Great for growing businesses and medium projects.",
-      "services": []
+      "priceRange": "Starting from $450",
+      "description": "Business-facing builds for tools, stores, dashboards, and web apps.",
+      "services": [
+        {
+          "id": "ai-chatbot",
+          "title": "AI Chatbot",
+          "price": "Starting at $450",
+          "duration": "5-10 days",
+          "description": "A custom chatbot that answers questions, captures leads, supports customers, or guides users through workflows."
+        },
+        {
+          "id": "edutainment-software",
+          "title": "Interactive Training Tools",
+          "price": "Starting at $500",
+          "duration": "7-14 days",
+          "description": "Interactive training tools, educational simulations, quizzes, and onboarding software that help people learn by doing."
+        },
+        {
+          "id": "ecommerce-website",
+          "title": "Starter E-commerce Site",
+          "price": "Starting at $600",
+          "duration": "7-14 days",
+          "description": "A starter online store with product listings, shopping cart, checkout flow, payment setup, and responsive storefront design."
+        },
+        {
+          "id": "desktop-software-development",
+          "title": "Desktop Software Development",
+          "price": "Starting at $650",
+          "duration": "7-14 days",
+          "description": "Polished desktop software for business workflows, automation, data handling, and internal tools."
+        },
+        {
+          "id": "progressive-web-app",
+          "title": "Web App",
+          "price": "Starting at $700",
+          "duration": "7-14 days",
+          "description": "An app-like website with responsive UX, fast loading, optional offline support, and workflows built for repeat use."
+        },
+        {
+          "id": "database-panel",
+          "title": "Database & Admin Panel",
+          "price": "Starting at $850",
+          "duration": "6-12 days",
+          "description": "A secure database-backed admin panel for managing records, users, content, reports, and operational data."
+        }
+      ]
     },
     {
       "id": "premium",

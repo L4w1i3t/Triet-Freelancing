@@ -170,15 +170,8 @@ class CartManager {
       </div>
     `;
 
-    // Add event listeners for edit and remove buttons
-    const editBtn = cartItem.querySelector(".edit-item-btn");
+    // Add event listener for the remove button
     const removeBtn = cartItem.querySelector(".remove-item-btn");
-
-    if (editBtn) {
-      editBtn.addEventListener("click", () => {
-        this.editCartItem(index);
-      });
-    }
 
     if (removeBtn) {
       removeBtn.addEventListener("click", () => {
@@ -278,13 +271,6 @@ class CartManager {
         this.showNotification("Item removed from cart", "success");
       },
     );
-  }
-
-  editCartItem(index) {
-    const item = this.cart[index];
-    // Navigate back to the service page with the item data
-    // This would require the service page to accept URL parameters or use localStorage
-    this.showNotification("Edit functionality coming soon", "info");
   }
 
   clearCart() {

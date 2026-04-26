@@ -3,6 +3,8 @@ class ServicesManager {
   constructor() {
     this.services = [];
     this.currentTier = "budget"; // Start with budget tier
+    this.servicesPerPage = 6;
+    this.currentPages = new Map();
 
     this.init();
   }
@@ -48,6 +50,9 @@ class ServicesManager {
 
         // Update current tier and render
         this.currentTier = tab.dataset.tier;
+        if (!this.currentPages.has(this.currentTier)) {
+          this.currentPages.set(this.currentTier, 1);
+        }
         this.renderCurrentTier();
       });
     });
@@ -83,9 +88,13 @@ class ServicesManager {
          </div>
        </div>`;
     } else if (tier.services && tier.services.length > 0) {
+      const currentPage = this.getCurrentPage(tier.id, tier.services.length);
+      const paginatedServices = this.getPaginatedServices(tier, currentPage);
+
       servicesContent = `<div class="services-grid">
-         ${tier.services.map((service) => this.createServiceHTML(service, tier.id)).join("")}
-       </div>`;
+         ${paginatedServices.map((service) => this.createServiceHTML(service, tier.id)).join("")}
+       </div>
+       ${this.createPaginationHTML(tier, currentPage)}`;
     } else {
       servicesContent = `<div class="no-services-message">
          <i class="fas fa-tools"></i>
@@ -107,6 +116,82 @@ class ServicesManager {
           ${servicesContent}
         </div>
       </div>
+    `;
+  }
+
+  getCurrentPage(tierId, serviceCount) {
+    const totalPages = this.getTotalPages(serviceCount);
+    const requestedPage = this.currentPages.get(tierId) || 1;
+    const currentPage = Math.min(Math.max(requestedPage, 1), totalPages);
+
+    this.currentPages.set(tierId, currentPage);
+
+    return currentPage;
+  }
+
+  getTotalPages(serviceCount) {
+    return Math.max(1, Math.ceil(serviceCount / this.servicesPerPage));
+  }
+
+  getPaginatedServices(tier, currentPage) {
+    const startIndex = (currentPage - 1) * this.servicesPerPage;
+    const endIndex = startIndex + this.servicesPerPage;
+
+    return tier.services.slice(startIndex, endIndex);
+  }
+
+  createPaginationHTML(tier, currentPage) {
+    const totalServices = tier.services.length;
+    const totalPages = this.getTotalPages(totalServices);
+
+    if (totalPages <= 1) {
+      return "";
+    }
+
+    const startItem = (currentPage - 1) * this.servicesPerPage + 1;
+    const endItem = Math.min(currentPage * this.servicesPerPage, totalServices);
+    const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+      const page = index + 1;
+      const isActive = page === currentPage;
+
+      return `
+        <button
+          class="pagination-btn pagination-page${isActive ? " active" : ""}"
+          type="button"
+          data-page="${page}"
+          aria-label="Go to page ${page}"
+          aria-current="${isActive ? "page" : "false"}"
+        >
+          ${page}
+        </button>
+      `;
+    }).join("");
+
+    return `
+      <nav class="services-pagination" aria-label="${tier.name} services pagination">
+        <p class="pagination-status">Showing ${startItem}-${endItem} of ${totalServices}</p>
+        <div class="pagination-controls">
+          <button
+            class="pagination-btn pagination-prev"
+            type="button"
+            data-page="${currentPage - 1}"
+            ${currentPage === 1 ? "disabled" : ""}
+            aria-label="Previous services page"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          ${pageButtons}
+          <button
+            class="pagination-btn pagination-next"
+            type="button"
+            data-page="${currentPage + 1}"
+            ${currentPage === totalPages ? "disabled" : ""}
+            aria-label="Next services page"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </nav>
     `;
   }
 
@@ -136,6 +221,15 @@ class ServicesManager {
       button.addEventListener("click", (e) => {
         e.stopPropagation();
         this.handleCTAClick(button);
+      });
+    });
+
+    document.querySelectorAll(".pagination-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.disabled) return;
+
+        this.currentPages.set(this.currentTier, Number(button.dataset.page));
+        this.renderCurrentTier();
       });
     });
   }
@@ -177,15 +271,4 @@ class ServicesManager {
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   new ServicesManager();
-});
-
-// Add smooth scrolling for anchor links
-document.addEventListener("click", (e) => {
-  if (e.target.matches('a[href^="#"]')) {
-    e.preventDefault();
-    const target = document.querySelector(e.target.getAttribute("href"));
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
-  }
 });

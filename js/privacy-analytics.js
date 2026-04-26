@@ -12,7 +12,7 @@ class PrivacyAnalytics {
       window.location.protocol === "file:";
 
     this.config = {
-      trackingEnabled: false, // Requires user consent
+      trackingEnabled: true, // Consent not required
       cookieless: true, // No cookies by default
       sessionOnly: true, // Only session storage
       anonymizeIPs: true,
@@ -26,7 +26,8 @@ class PrivacyAnalytics {
 
     this.sessionId = this.generateSessionId();
     this.eventQueue = [];
-    this.userConsent = this.checkUserConsent();
+    // Consent is no longer required; assume consent granted
+    this.userConsent = true;
     this.doNotTrack = this.checkDoNotTrack();
 
     this.init();
@@ -39,11 +40,7 @@ class PrivacyAnalytics {
       return;
     }
 
-    // Check for user consent
-    if (!this.userConsent) {
-      this.showConsentBanner();
-      return;
-    }
+    // Consent banner removed; start tracking directly
 
     this.startTracking();
     this.setupEventListeners();
@@ -84,10 +81,7 @@ class PrivacyAnalytics {
   }
 
   grantConsent() {
-    localStorage.setItem("analytics_consent", "granted");
-    localStorage.setItem("analytics_consent_date", Date.now().toString());
-    this.userConsent = true;
-    this.hideConsentBanner();
+    // Consent is assumed granted; start tracking directly
     this.startTracking();
     console.log(" Analytics consent granted");
   }
@@ -115,146 +109,7 @@ class PrivacyAnalytics {
   // CONSENT BANNER
   // ===============================================
 
-  showConsentBanner() {
-    // Don't show banner if already dismissed
-    if (localStorage.getItem("analytics_banner_dismissed") === "true") {
-      return;
-    }
-
-    const banner = document.createElement("div");
-    banner.id = "analytics-consent-banner";
-    banner.innerHTML = `
-      <div class="consent-banner">
-        <div class="consent-content">
-          <div class="consent-text">
-            <h4> Privacy-First Analytics</h4>
-            <p>I use cookieless, privacy-compliant analytics to improve our services. No personal data is collected or stored.</p>
-          </div>
-          <div class="consent-actions">
-            <button id="consent-accept" class="consent-btn accept">Accept</button>
-            <button id="consent-decline" class="consent-btn decline">Decline</button>
-            <button id="consent-learn-more" class="consent-btn learn-more">Learn More</button>
-          </div>
-        </div>
-      </div>
-    `;
-
-    // Add styles
-    banner.style.cssText = `
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 10000;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      font-family: 'Inter', sans-serif;
-    `;
-
-    // Add internal styles
-    const style = document.createElement("style");
-    style.textContent = `
-      .consent-banner {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1rem 2rem;
-      }
-      .consent-content {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 2rem;
-      }
-      .consent-text h4 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-        color: #64ffda;
-      }
-      .consent-text p {
-        margin: 0;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.4;
-      }
-      .consent-actions {
-        display: flex;
-        gap: 0.75rem;
-        flex-shrink: 0;
-      }
-      .consent-btn {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-weight: 500;
-      }
-      .consent-btn.accept {
-        background: #64ffda;
-        color: #000;
-      }
-      .consent-btn.accept:hover {
-        background: #4fd1c7;
-      }
-      .consent-btn.decline {
-        background: transparent;
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-      }
-      .consent-btn.decline:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-      .consent-btn.learn-more {
-        background: transparent;
-        color: #64ffda;
-        text-decoration: underline;
-      }
-      @media (max-width: 768px) {
-        .consent-content {
-          flex-direction: column;
-          text-align: center;
-          gap: 1rem;
-        }
-        .consent-actions {
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    document.body.appendChild(banner);
-
-    // Add event listeners
-    document.getElementById("consent-accept").addEventListener("click", () => {
-      this.grantConsent();
-    });
-
-    document.getElementById("consent-decline").addEventListener("click", () => {
-      this.dismissBanner();
-    });
-
-    document
-      .getElementById("consent-learn-more")
-      .addEventListener("click", () => {
-        this.showPrivacyModal();
-      });
-  }
-
-  hideConsentBanner() {
-    const banner = document.getElementById("analytics-consent-banner");
-    if (banner) {
-      banner.remove();
-    }
-  }
-
-  dismissBanner() {
-    localStorage.setItem("analytics_banner_dismissed", "true");
-    this.hideConsentBanner();
-  }
+  // showConsentBanner method removed as consent UI is no longer used.
 
   showPrivacyModal() {
     const modal = document.createElement("div");
@@ -304,64 +159,7 @@ class PrivacyAnalytics {
     // Add modal styles
     const modalStyle = document.createElement("style");
     modalStyle.textContent = `
-      .privacy-modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(5px);
-        z-index: 10001;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-      }
-      .privacy-modal {
-        background: #1a1a2e;
-        border-radius: 12px;
-        max-width: 600px;
-        width: 100%;
-        max-height: 80vh;
-        overflow-y: auto;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .privacy-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .privacy-modal-header h3 {
-        margin: 0;
-        color: #64ffda;
-        font-size: 1.25rem;
-      }
-      .privacy-modal-close {
-        background: none;
-        border: none;
-        color: #fff;
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .privacy-modal-content {
-        padding: 1.5rem;
-        color: #fff;
-        line-height: 1.6;
-      }
-      .privacy-modal-content h4 {
-        color: #64ffda;
-        margin: 1.5rem 0 0.5rem 0;
-      }
-      .privacy-modal-content h4:first-child {
+      // Consent banner and related UI have been removed as analytics are always enabled.
         margin-top: 0;
       }
       .privacy-modal-content ul {

@@ -26,7 +26,9 @@ class EnhancedServiceCalculator {
     if (tierOptions.length === 0) return;
 
     // Find initially selected tier (first one with selected styling)
-    const initialSelected = document.querySelector('.tier-option[style*="background: rgba(100, 255, 218, 0.05)"]');
+    const initialSelected = document.querySelector(
+      '.tier-option[style*="background: rgba(100, 255, 218, 0.05)"]',
+    );
     if (initialSelected) {
       this.selectedTier = initialSelected.dataset.tier;
     }
@@ -40,7 +42,9 @@ class EnhancedServiceCalculator {
             // Selected state
             t.style.background = "rgba(100, 255, 218, 0.05)";
             t.style.borderColor = "rgba(100, 255, 218, 0.3)";
-            const priceSpan = t.querySelector("span[style*='font-size: 1.3rem']");
+            const priceSpan = t.querySelector(
+              "span[style*='font-size: 1.3rem']",
+            );
             if (priceSpan) priceSpan.style.color = "#64ffda";
             if (icon) {
               icon.className = "fas fa-circle-dot";
@@ -50,7 +54,9 @@ class EnhancedServiceCalculator {
             // Unselected state
             t.style.background = "rgba(255, 255, 255, 0.03)";
             t.style.borderColor = "rgba(255, 255, 255, 0.15)";
-            const priceSpan = t.querySelector("span[style*='font-size: 1.3rem']");
+            const priceSpan = t.querySelector(
+              "span[style*='font-size: 1.3rem']",
+            );
             if (priceSpan) priceSpan.style.color = "#ffffff";
             if (icon) {
               icon.className = "fas fa-circle";
@@ -65,13 +71,14 @@ class EnhancedServiceCalculator {
 
         // Update tier name display
         const tierNames = {
-          micro: "Micro-Utility Application",
-          basic: "Basic Application",
-          multi: "Multi-Function Application",
+          micro: "Single-Purpose Utility",
+          basic: "Utility with Data Storage",
+          multi: "Workflow Helper",
         };
         const tierNameElement = document.getElementById("selectedTierName");
         if (tierNameElement) {
-          tierNameElement.textContent = tierNames[this.selectedTier] || "Application";
+          tierNameElement.textContent =
+            tierNames[this.selectedTier] || "Application";
         }
 
         // Update tier price display
@@ -80,51 +87,9 @@ class EnhancedServiceCalculator {
           tierPriceElement.textContent = `$${this.basePrice}`;
         }
 
-        // Handle tier-dependent features
-        this.updateTierDependentFeatures();
-
         // Recalculate everything
         this.calculateTotal();
       });
-    });
-  }
-
-  updateTierDependentFeatures() {
-    // Features that change based on tier
-    const tierDependentFeatures = document.querySelectorAll(".tier-dependent");
-    
-    tierDependentFeatures.forEach((feature) => {
-      const featureId = feature.dataset.featureId;
-      const includedInTiers = (feature.dataset.tiers || "").split(",");
-      const checkbox = feature.querySelector(".feature-checkbox");
-      
-      // For micro tier, data storage is optional (+$25)
-      // For basic/multi tiers, it's included (free)
-      if (featureId === "local-storage") {
-        if (this.selectedTier === "micro") {
-          // Optional, costs $25
-          feature.dataset.price = "25";
-          feature.querySelector(".feature-price").textContent = "+$25";
-          // Uncheck it by default for micro
-          if (checkbox) {
-            checkbox.classList.remove("fa-check-square", "checked");
-            checkbox.classList.add("fa-square");
-          }
-          feature.classList.remove("removed");
-          this.featureAdjustments.delete(featureId);
-        } else {
-          // Included for basic/multi
-          feature.dataset.price = "0";
-          feature.querySelector(".feature-price").textContent = "Free";
-          // Check it by default
-          if (checkbox) {
-            checkbox.classList.add("fa-check-square", "checked");
-            checkbox.classList.remove("fa-square");
-          }
-          feature.classList.remove("removed");
-          this.featureAdjustments.delete(featureId);
-        }
-      }
     });
   }
 
@@ -506,7 +471,7 @@ class EnhancedServiceCalculator {
           addonElement.querySelector(".addon-name")?.textContent ||
           "Unknown Addon";
         const li = document.createElement("li");
-        li.textContent = `${addonName}${quantity > 1 ? ` (×${quantity})` : ""}`;
+        li.textContent = `${addonName}${quantity > 1 ? ` (x${quantity})` : ""}`;
         packageItems.appendChild(li);
       }
     });
@@ -553,21 +518,21 @@ class EnhancedServiceCalculator {
       // Update encouragement based on description length
       if (encouragement) {
         if (count === 0) {
-          encouragement.textContent = "• Please describe your project";
+          encouragement.textContent = "- Please describe your project";
           encouragement.style.color = "#ef4444";
         } else if (count < 100) {
           encouragement.textContent =
-            "• More details help me serve you better!";
+            "- More details help me serve you better!";
           encouragement.style.color = "#f59e0b";
         } else if (count < 300) {
-          encouragement.textContent = "• Great! Feel free to add more details";
+          encouragement.textContent = "- Great! Feel free to add more details";
           encouragement.style.color = "#3b82f6";
         } else if (count > 60000) {
-          encouragement.textContent = "• Approaching character limit";
+          encouragement.textContent = "- Approaching character limit";
           encouragement.style.color = "#f59e0b";
         } else {
           encouragement.textContent =
-            "• Perfect! This will help us create exactly what you need";
+            "- Perfect! This will help me create exactly what you need";
           encouragement.style.color = "#10b981";
         }
       }
