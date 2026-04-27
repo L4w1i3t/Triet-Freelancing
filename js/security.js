@@ -4,8 +4,10 @@
 
 class SecurityManager {
   constructor() {
-    // Detect development environment
-    this.isDevelopment = 
+    // Detect development environment (treat file:// and empty hostnames as dev)
+    this.isDevelopment =
+      window.location.protocol === 'file:' ||
+      window.location.hostname === '' ||
       window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1' ||
       window.location.hostname.startsWith('192.168.') ||
