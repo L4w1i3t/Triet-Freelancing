@@ -72,23 +72,39 @@ class SecurityManager {
 
     try {
       // Fetch CSRF token from server
-      const response = await fetch('/api/csrf-token', {
-        method: 'GET',
+      const response = await fetch("/api/csrf-token", {
+        method: "GET",
         headers: {
-          'Accept': 'application/json',
+          Accept: "application/json",
         },
       });
-      
+
       if (!response.ok) {
-        throw new Error(`Failed to fetch CSRF token: ${response.status} ${response.statusText}`);
+        console.warn(
+          `CSRF endpoint returned ${response.status} ${response.statusText}`,
+        );
+        throw new Error("CSRF endpoint not available");
       }
-      
-      const data = await response.json();
-      
-      if (!data.csrfToken) {
-        throw new Error('CSRF token not found in server response');
+
+      // Read body as text and parse safely to avoid unhandled JSON parse errors
+      const text = await response.text();
+      if (!text) {
+        console.warn("CSRF endpoint returned empty body");
+        throw new Error("Empty CSRF response body");
       }
-      
+
+      let data = null;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        console.warn("Invalid JSON from CSRF endpoint:", text.slice(0, 200));
+        throw new Error("Invalid JSON from CSRF endpoint");
+      }
+
+      if (!data || !data.csrfToken) {
+        throw new Error("CSRF token not found in server response");
+      }
+
       this.csrfToken = data.csrfToken;
 
       // Store in session storage (more secure than localStorage)
@@ -103,7 +119,7 @@ class SecurityManager {
       }
       csrfMeta.content = this.csrfToken;
 
-      console.log(" CSRF token fetched from server successfully");
+      console.log("CSRF token fetched from server successfully");
     } catch (error) {
       console.error(" Failed to fetch CSRF token from server:", error.message);
       console.warn(" Using client-side generated token");
