@@ -29,13 +29,14 @@
       <section class="store-hero">
         <div class="container">
           <p class="store-kicker">Digital goods</p>
-          <h1>Ready-made downloads and small tools.</h1>
+          <h1>Ready-made downloads, digital gifts, and small tools.</h1>
           <p>
             Pick up practical templates, utilities, and planning kits without
-            commissioning a custom build. The catalog is being built out now.
+            commissioning a custom build. Seasonal digital items rotate in for
+            limited windows.
           </p>
           <div class="store-hero-actions">
-            <a href="#storeProducts" class="btn btn-primary">
+            <a href="#storefrontItems" class="btn btn-primary">
               <i class="fas fa-bag-shopping"></i>
               Browse Items
             </a>
@@ -47,27 +48,52 @@
         </div>
       </section>
 
-      <section class="store-catalog" aria-labelledby="storeCatalogTitle">
+      <section
+        class="store-catalog"
+        id="storefrontItems"
+        aria-labelledby="storeCatalogTitle"
+      >
         <div class="container">
+          <section
+            class="store-seasonal-section"
+            id="seasonalSection"
+            aria-labelledby="seasonalCatalogTitle"
+          >
+            <div class="store-section-header">
+              <div>
+                <p class="store-kicker">Seasonal rotation</p>
+                <h2 id="seasonalCatalogTitle">Mother's Day</h2>
+              </div>
+              <p>
+                Limited-time personalized cards with PNG delivery after payment.
+                The download page is also included in the order email.
+              </p>
+            </div>
+
+            <div
+              class="store-products-grid store-seasonal-grid"
+              id="seasonalProducts"
+            ></div>
+          </section>
+
           <div class="store-section-header">
             <div>
               <p class="store-kicker">Catalog buildout</p>
               <h2 id="storeCatalogTitle">Catalog</h2>
             </div>
             <p>
-              Storefront checkout and delivery are still being connected. Items
-              with temporary release links open the current download source.
+              Permanent downloads and small utilities live here. Items with
+              temporary release links open the current download source.
             </p>
           </div>
 
           <div class="store-progress-notice" role="status">
-            <i class="fas fa-screwdriver-wrench" aria-hidden="true"></i>
+            <i class="fas fa-envelope-open-text" aria-hidden="true"></i>
             <div>
-              <strong>Storefront page currently under progress</strong>
+              <strong>Digital delivery note</strong>
               <span>
-                I am working on populating my catalog. The first listed item is
-                available through a temporary release link while checkout is
-                finalized.
+                Paid digital items show their download link after payment and
+                include the same link in the customer confirmation email.
               </span>
             </div>
           </div>
@@ -86,6 +112,7 @@
 
     <script src="../components/addComponents.js"></script>
     <script src="../js/cart.js"></script>
+    <script src="../js/mothers-day-card.js"></script>
     <script src="../js/store.js"></script>
   </body>
 </html>

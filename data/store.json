@@ -1,6 +1,34 @@
 {
   "products": [
     {
+      "id": "mothers-day-digital-card",
+      "title": "Custom Mother's Day Digital Card",
+      "price": 5,
+      "summary": "A personalized Mother's Day card generated as a PNG after checkout, with recipient, message, signature, 18 visual styles, card formats, and text layouts.",
+      "description": "Customize a seasonal Mother's Day card and receive a PNG download page after payment. Every style is $5, and the same download link is included in the order email.",
+      "icon": "fa-heart",
+      "badge": "Mother's Day",
+      "delivery": "PNG download page after payment, also emailed",
+      "files": [
+        "Personalized PNG card",
+        "18 visual styles",
+        "Portrait, landscape, square, story, wide, or keepsake format",
+        "8 text layout options",
+        "All card designs at $5"
+      ],
+      "license": "Personal use",
+      "purchaseMode": "customized",
+      "ctaLabel": "Customize",
+      "seasonal": {
+        "active": true,
+        "section": "Mother's Day",
+        "label": "Limited seasonal rotation"
+      },
+      "customizer": {
+        "type": "mothers-day-card"
+      }
+    },
+    {
       "id": "the-network",
       "title": "The Network",
       "price": 0,

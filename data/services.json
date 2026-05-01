@@ -61,7 +61,7 @@
       "id": "standard",
       "name": "Standard",
       "priceRange": "Starting from $450",
-      "description": "Business-facing builds for tools, stores, dashboards, and web apps.",
+      "description": "More complex builds for tools, stores, dashboards, and web apps.",
       "services": [
         {
           "id": "ai-chatbot",
@@ -111,7 +111,7 @@
       "id": "premium",
       "name": "Premium",
       "priceRange": "Starting from N/A",
-      "description": "Enterprise solutions for large-scale projects.",
+      "description": "Solutions for large-scale projects.",
       "services": []
     },
     {

@@ -221,10 +221,13 @@ class CartManager {
       const files = Array.isArray(item?.product?.files)
         ? item.product.files
         : [];
-      if (files.length === 0) {
-        return "<li>Digital download file</li>";
-      }
-      return files.map((file) => `<li>${this.escapeHTML(file)}</li>`).join("");
+      const packageItems =
+        files.length > 0 ? [...files] : ["Digital download file"];
+      const customizationItems = this.getProductCustomizationItems(item);
+
+      return [...packageItems, ...customizationItems]
+        .map((file) => `<li>${this.escapeHTML(file)}</li>`)
+        .join("");
     }
 
     let packageItems = [];
@@ -257,6 +260,33 @@ class CartManager {
     });
 
     return packageItems.map((item) => `<li>${item}</li>`).join("");
+  }
+
+  getProductCustomizationItems(item) {
+    const customization = item?.product?.customization;
+    if (!customization) return [];
+
+    const details = [];
+    if (customization.styleLabel) {
+      details.push(`Style: ${customization.styleLabel}`);
+    }
+    if (customization.layoutLabel) {
+      details.push(`Format: ${customization.layoutLabel}`);
+    }
+    if (customization.textLayoutLabel) {
+      details.push(`Text layout: ${customization.textLayoutLabel}`);
+    }
+    if (customization.recipient) {
+      details.push(`Recipient: ${customization.recipient}`);
+    }
+    if (customization.message) {
+      details.push(`Message: ${customization.message}`);
+    }
+    if (customization.signature) {
+      details.push(`Signature: ${customization.signature}`);
+    }
+
+    return details;
   }
 
   removeCartItem(index) {
@@ -411,8 +441,11 @@ class CartManager {
         id: item.product?.id,
         title: item.product?.title || item.service?.name,
         downloadUrl: item.product?.downloadUrl,
+        downloadLabel: item.product?.downloadLabel,
+        deliveryMode: item.product?.deliveryMode,
         files: item.product?.files || [],
         license: item.product?.license,
+        customization: item.product?.customization || null,
       }));
 
     const orderData = {

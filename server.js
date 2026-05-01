@@ -108,6 +108,18 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+app.get(
+  [
+    "/pages/downloads/mothers-day-card",
+    "/pages/downloads/mothers-day-card.html",
+  ],
+  (req, res) => {
+    res.sendFile(
+      path.join(__dirname, "pages", "downloads", "mothers-day-card.html"),
+    );
+  },
+);
+
 // Environment configuration endpoint
 app.get("/api/config", (req, res) => {
   res.json({

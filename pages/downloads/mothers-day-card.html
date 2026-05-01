@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" class="card-download-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mother's Day Card Download - Triet</title>
+    <meta
+      name="description"
+      content="Download your personalized Mother's Day card as a PNG."
+    />
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="icon" href="../../images/favicon.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="site card-download">
+    <div id="header-placeholder"></div>
+
+    <main class="card-download-main">
+      <section class="card-download-section">
+        <div class="container">
+          <div class="card-download-layout">
+            <div class="card-download-copy">
+              <p class="store-kicker">Digital delivery</p>
+              <h1>Your Mother's Day card is ready.</h1>
+              <p>
+                The PNG is generated from the customization attached to your
+                paid order.
+              </p>
+              <div class="card-download-actions">
+                <a
+                  class="btn btn-primary"
+                  id="downloadCardButton"
+                  href="#"
+                  download="mothers-day-card.png"
+                  aria-disabled="true"
+                >
+                  <i class="fas fa-download"></i>
+                  Download PNG
+                </a>
+                <a class="btn btn-glass" href="/pages/store.html">
+                  <i class="fas fa-bag-shopping"></i>
+                  Back to Store
+                </a>
+              </div>
+              <p class="card-download-status" id="cardDownloadStatus">
+                Preparing download...
+              </p>
+            </div>
+
+            <div class="card-download-preview">
+              <canvas id="downloadCardCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../../components/addComponents.js"></script>
+    <script src="../../js/mothers-day-card.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const renderer = window.MothersDayCardRenderer;
+        const canvas = document.getElementById("downloadCardCanvas");
+        const downloadButton = document.getElementById("downloadCardButton");
+        const status = document.getElementById("cardDownloadStatus");
+
+        downloadButton.addEventListener("click", (event) => {
+          if (downloadButton.getAttribute("aria-disabled") === "true") {
+            event.preventDefault();
+          }
+        });
+
+        const showError = () => {
+          status.textContent =
+            "This card link is invalid. Please use the link from your order email.";
+          downloadButton.setAttribute("aria-disabled", "true");
+          downloadButton.removeAttribute("href");
+        };
+
+        try {
+          const hashParams = new URLSearchParams(
+            window.location.hash.replace(/^#/, ""),
+          );
+          const searchParams = new URLSearchParams(window.location.search);
+          const token = hashParams.get("card") || searchParams.get("card");
+          const config = renderer.decodeConfig(token);
+
+          if (document.fonts?.ready) {
+            await document.fonts.ready;
+          }
+
+          renderer.renderToCanvas(canvas, config);
+          downloadButton.download = renderer.getFilename(config);
+
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                downloadButton.href = canvas.toDataURL("image/png");
+              } else {
+                downloadButton.href = URL.createObjectURL(blob);
+              }
+
+              downloadButton.removeAttribute("aria-disabled");
+              status.textContent = "PNG download is ready.";
+            },
+            "image/png",
+            0.98,
+          );
+        } catch (error) {
+          console.error("Unable to render Mother's Day card:", error);
+          showError();
+        }
+      });
+    </script>
+  </body>
+</html>

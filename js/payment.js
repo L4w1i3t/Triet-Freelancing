@@ -1390,13 +1390,22 @@ class PaymentManager {
         const license = product.license
           ? `<span>${this.escapeHTML(product.license)}</span>`
           : "";
+        const label = product.downloadLabel
+          ? `<span>${this.escapeHTML(product.downloadLabel)}</span>`
+          : license;
+        const linkAttributes = product.opensInBrowser
+          ? 'target="_blank" rel="noopener noreferrer"'
+          : "download";
+        const icon = product.opensInBrowser
+          ? "fa-arrow-up-right-from-square"
+          : "fa-download";
 
         return `
-          <a class="digital-delivery-link" href="${this.escapeHTML(product.downloadUrl)}" download>
-            <i class="fas fa-download"></i>
+          <a class="digital-delivery-link" href="${this.escapeHTML(product.downloadUrl)}" ${linkAttributes}>
+            <i class="fas ${icon}"></i>
             <span>
               <strong>${title}</strong>
-              ${license}
+              ${label}
             </span>
           </a>
         `;
@@ -1414,6 +1423,8 @@ class PaymentManager {
       .map((item) => ({
         title: item.product.title || item.service?.name || "Digital Download",
         downloadUrl: item.product.downloadUrl,
+        downloadLabel: item.product.downloadLabel || "",
+        opensInBrowser: item.product.deliveryMode === "generated",
         license: item.product.license || "",
       }));
   }

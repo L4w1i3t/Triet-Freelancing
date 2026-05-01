@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/pages/downloads/mothers-day-card",
+      "destination": "/pages/downloads/mothers-day-card.html"
+    }
+  ],
   "functions": {
     "api/create-payment-intent.js": {
       "maxDuration": 10
