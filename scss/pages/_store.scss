@@ -553,6 +553,68 @@
       border-color: rgba(34, 211, 238, 0.6);
     }
   }
+
+  small {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+}
+
+.customizer-photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.customizer-file-button,
+.customizer-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-smooth),
+    background var(--transition-smooth);
+
+  &:hover,
+  &:focus-within,
+  &:focus-visible {
+    border-color: rgba(34, 211, 238, 0.58);
+    background: rgba(34, 211, 238, 0.12);
+  }
+}
+
+.customizer-file-button {
+  input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.customizer-secondary-button {
+  color: #fecdd3;
+  background: rgba(244, 63, 94, 0.12);
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 .customizer-actions {

@@ -276,14 +276,23 @@ class CartManager {
     if (customization.textLayoutLabel) {
       details.push(`Text layout: ${customization.textLayoutLabel}`);
     }
+    if (customization.salutation) {
+      details.push(`Salutation: ${customization.salutation}`);
+    }
     if (customization.recipient) {
       details.push(`Recipient: ${customization.recipient}`);
     }
     if (customization.message) {
       details.push(`Message: ${customization.message}`);
     }
+    if (customization.signoff) {
+      details.push(`Signoff: ${customization.signoff}`);
+    }
     if (customization.signature) {
-      details.push(`Signature: ${customization.signature}`);
+      details.push(`Name: ${customization.signature}`);
+    }
+    if (customization.hasPhoto) {
+      details.push("Photo: included");
     }
 
     return details;

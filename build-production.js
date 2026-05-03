@@ -103,7 +103,11 @@ const EXCLUDE_PATTERNS = [
 
 // HTML files where inline JavaScript should NOT be obfuscated (only minified)
 // Add filenames here to preserve readability of inline scripts while still minifying HTML
-const HTML_INLINE_JS_IGNORE_LIST = ["payment.html"];
+const HTML_INLINE_JS_IGNORE_LIST = [
+  "payment.html",
+  "pages/downloads/mothers-day-card.html",
+  "pages/subsites/alter-ego.html",
+];
 
 // Check if a file should be excluded
 function shouldExclude(filePath) {

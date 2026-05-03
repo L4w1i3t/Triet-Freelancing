@@ -175,7 +175,7 @@ class StoreManager {
       <dl class="product-option-list">
         <div>
           <dt>Styles</dt>
-          <dd>18 visual styles</dd>
+          <dd>21 visual styles</dd>
         </div>
         <div>
           <dt>Formats</dt>
@@ -184,6 +184,10 @@ class StoreManager {
         <div>
           <dt>Text layouts</dt>
           <dd>8 message arrangements</dd>
+        </div>
+        <div>
+          <dt>Photo</dt>
+          <dd>Optional image upload</dd>
         </div>
         <div>
           <dt>Delivery</dt>
@@ -287,14 +291,40 @@ class StoreManager {
 
             <div class="customizer-fields-grid">
               <label class="customizer-field">
+                <span>Salutation</span>
+                <input type="text" name="salutation" maxlength="32" value="Dear" required />
+              </label>
+
+              <label class="customizer-field">
                 <span>Recipient</span>
                 <input type="text" name="recipient" maxlength="40" value="Mom" required />
               </label>
 
               <label class="customizer-field">
-                <span>Signature</span>
-                <input type="text" name="signature" maxlength="50" placeholder="Your name" required />
+                <span>Signoff</span>
+                <input type="text" name="signoff" maxlength="40" value="With love" required />
               </label>
+
+              <label class="customizer-field">
+                <span>Name</span>
+                <input type="text" name="signature" maxlength="50" placeholder="Your name" />
+              </label>
+            </div>
+
+            <div class="customizer-field customizer-photo-field">
+              <span id="cardPhotoLabel">Photo</span>
+              <div class="customizer-photo-actions">
+                <label class="customizer-file-button" aria-labelledby="cardPhotoLabel">
+                  <input type="file" name="photo" accept="image/*" />
+                  <i class="fas fa-image" aria-hidden="true"></i>
+                  <span>Choose image</span>
+                </label>
+                <button class="customizer-secondary-button" type="button" data-clear-card-photo hidden>
+                  <i class="fas fa-xmark" aria-hidden="true"></i>
+                  <span>Remove</span>
+                </button>
+              </div>
+              <small id="cardPhotoStatus">No photo selected</small>
             </div>
 
             <label class="customizer-field">
@@ -327,6 +357,12 @@ class StoreManager {
     const canvas = modal.querySelector("#cardPreviewCanvas");
     const priceElement = modal.querySelector("#customizerPrice");
     const submitButton = modal.querySelector("#addCardToCartBtn");
+    const photoInput = modal.querySelector('input[name="photo"]');
+    const photoStatus = modal.querySelector("#cardPhotoStatus");
+    const clearPhotoButton = modal.querySelector("[data-clear-card-photo]");
+    let currentPhotoDataUrl = "";
+    let photoProcessing = false;
+    let previewRequest = 0;
 
     canvas.addEventListener("contextmenu", (event) => {
       event.preventDefault();
@@ -337,10 +373,20 @@ class StoreManager {
     });
     canvas.addEventListener("dragstart", (event) => event.preventDefault());
 
-    const updatePreview = () => {
-      const config = this.readCustomizerConfig(form);
+    const setPhotoProcessing = (isProcessing) => {
+      photoProcessing = isProcessing;
+      if (submitButton) {
+        submitButton.disabled = isProcessing;
+      }
+      if (photoStatus && isProcessing) {
+        photoStatus.textContent = "Preparing photo...";
+      }
+    };
+
+    const updatePreview = async () => {
+      const requestId = (previewRequest += 1);
+      const config = this.readCustomizerConfig(form, currentPhotoDataUrl);
       const price = renderer.getPrice(config);
-      renderer.renderToCanvas(canvas, config, { preview: true });
 
       if (priceElement) {
         priceElement.textContent = `$${price.toFixed(2)}`;
@@ -351,6 +397,49 @@ class StoreManager {
           <i class="fas fa-cart-plus"></i>
           Add to cart - $${price.toFixed(2)}
         `;
+      }
+
+      await renderer.renderToCanvasAsync(canvas, config, { preview: true });
+
+      if (requestId !== previewRequest) {
+        await renderer.renderToCanvasAsync(
+          canvas,
+          this.readCustomizerConfig(form, currentPhotoDataUrl),
+          { preview: true },
+        );
+        return;
+      }
+    };
+
+    const handlePhotoChange = async () => {
+      const file = photoInput?.files?.[0];
+
+      if (!file) {
+        currentPhotoDataUrl = "";
+        if (photoStatus) photoStatus.textContent = "No photo selected";
+        if (clearPhotoButton) clearPhotoButton.hidden = true;
+        await updatePreview();
+        return;
+      }
+
+      setPhotoProcessing(true);
+
+      try {
+        currentPhotoDataUrl = await this.createCardPhotoDataUrl(file);
+        if (photoStatus) photoStatus.textContent = file.name;
+        if (clearPhotoButton) clearPhotoButton.hidden = false;
+      } catch (error) {
+        currentPhotoDataUrl = "";
+        if (photoInput) photoInput.value = "";
+        if (photoStatus) photoStatus.textContent = "No photo selected";
+        if (clearPhotoButton) clearPhotoButton.hidden = true;
+        this.showNotification(
+          error.message || "That photo could not be added",
+          "warning",
+        );
+      } finally {
+        setPhotoProcessing(false);
+        await updatePreview();
       }
     };
 
@@ -379,10 +468,32 @@ class StoreManager {
     });
 
     document.addEventListener("keydown", handleEscape);
-    form.addEventListener("input", updatePreview);
-    form.addEventListener("change", updatePreview);
+    form.addEventListener("input", (event) => {
+      if (event.target?.type !== "file") {
+        void updatePreview();
+      }
+    });
+    form.addEventListener("change", (event) => {
+      if (event.target === photoInput) {
+        void handlePhotoChange();
+        return;
+      }
+      void updatePreview();
+    });
+    clearPhotoButton?.addEventListener("click", () => {
+      currentPhotoDataUrl = "";
+      if (photoInput) photoInput.value = "";
+      if (photoStatus) photoStatus.textContent = "No photo selected";
+      clearPhotoButton.hidden = true;
+      void updatePreview();
+    });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
+
+      if (photoProcessing) {
+        this.showNotification("The photo is still being prepared", "info");
+        return;
+      }
 
       if (!form.checkValidity()) {
         form.reportValidity();
@@ -391,17 +502,19 @@ class StoreManager {
 
       const customizedProduct = this.createCustomizedCardProduct(
         product,
-        this.readCustomizerConfig(form),
+        this.readCustomizerConfig(form, currentPhotoDataUrl),
       );
 
       this.addProductToCart(customizedProduct, submitButton);
       closeCustomizer();
     });
 
-    updatePreview();
+    void updatePreview();
 
     if (document.fonts?.ready) {
-      document.fonts.ready.then(updatePreview).catch(updatePreview);
+      document.fonts.ready
+        .then(() => updatePreview())
+        .catch(() => updatePreview());
     }
   }
 
@@ -439,15 +552,78 @@ class StoreManager {
     `;
   }
 
-  readCustomizerConfig(form) {
+  readCustomizerConfig(form, photoDataUrl = "") {
     const formData = new FormData(form);
     return window.MothersDayCardRenderer.normalizeConfig({
       style: formData.get("style"),
       layout: formData.get("layout"),
       textLayout: formData.get("textLayout"),
+      salutation: formData.get("salutation"),
       recipient: formData.get("recipient"),
       message: formData.get("message"),
+      signoff: formData.get("signoff"),
       signature: formData.get("signature"),
+      photoDataUrl,
+    });
+  }
+
+  async createCardPhotoDataUrl(file) {
+    if (!file || !file.type?.startsWith("image/")) {
+      throw new Error("Choose a valid image file");
+    }
+
+    const sourceUrl = URL.createObjectURL(file);
+
+    try {
+      const image = await this.loadImage(sourceUrl);
+      const maxSide = 640;
+      const scale = Math.min(
+        1,
+        maxSide / Math.max(image.naturalWidth || 1, image.naturalHeight || 1),
+      );
+      const width = Math.max(1, Math.round(image.naturalWidth * scale));
+      const height = Math.max(1, Math.round(image.naturalHeight * scale));
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(image, 0, 0, width, height);
+
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, "image/jpeg", 0.74);
+      });
+
+      if (!blob) {
+        throw new Error("That photo could not be processed");
+      }
+
+      const dataUrl = await this.blobToDataUrl(blob);
+      if (dataUrl.length > 160000) {
+        throw new Error("Choose a smaller photo");
+      }
+
+      return dataUrl;
+    } finally {
+      URL.revokeObjectURL(sourceUrl);
+    }
+  }
+
+  loadImage(sourceUrl) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("That photo could not be loaded"));
+      image.src = sourceUrl;
+    });
+  }
+
+  blobToDataUrl(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("That photo could not be read"));
+      reader.readAsDataURL(blob);
     });
   }
 
@@ -467,7 +643,7 @@ class StoreManager {
       price: renderer.getPrice(normalized),
       summary: `${style.label} ${layout.label.toLowerCase()} card with ${textLayout.label.toLowerCase()} text for ${normalized.recipient}.`,
       delivery: "Personalized PNG download page after payment, also emailed",
-      downloadUrl: `/pages/downloads/mothers-day-card.html?card=${token}`,
+      downloadUrl: `/pages/downloads/mothers-day-card.html#card=${token}`,
       downloadLabel: "Open PNG download page",
       deliveryMode: "generated",
       files: [
@@ -475,9 +651,11 @@ class StoreManager {
         `Style: ${style.label}`,
         `Format: ${layout.label}`,
         `Text layout: ${textLayout.label}`,
+        ...(normalized.photoDataUrl ? ["Photo: included"] : []),
       ],
       customization: {
         ...normalized,
+        hasPhoto: Boolean(normalized.photoDataUrl),
         styleLabel: style.label,
         layoutLabel: layout.label,
         textLayoutLabel: textLayout.label,

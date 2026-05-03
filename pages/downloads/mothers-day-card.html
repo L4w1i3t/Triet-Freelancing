@@ -101,7 +101,7 @@
             await document.fonts.ready;
           }
 
-          renderer.renderToCanvas(canvas, config);
+          await renderer.renderToCanvasAsync(canvas, config);
           downloadButton.download = renderer.getFilename(config);
 
           canvas.toBlob(

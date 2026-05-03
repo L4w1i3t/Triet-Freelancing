@@ -4,6 +4,9 @@
   const DEFAULT_MESSAGE =
     "Thank you for everything you do. You are loved more than words can say.";
   const PRODUCT_PRICE = 5;
+  const MAX_PHOTO_DATA_URL_LENGTH = 160000;
+  const PHOTO_DATA_URL_PATTERN = /^data:image\/(?:jpeg|jpg|png|webp);base64,/i;
+  const photoImageCache = new Map();
 
   const STYLE_OPTIONS = [
     {
@@ -297,6 +300,57 @@
       ),
     },
     {
+      id: "peony-bouquet",
+      label: "Peony Bouquet",
+      description: "Full peony clusters with layered leaves",
+      price: PRODUCT_PRICE,
+      motif: "peony",
+      palette: createPalette(
+        "#fff7fb",
+        "#fce7f3",
+        "#9d174d",
+        "#3f1d32",
+        "#8b5b70",
+        "#ec4899",
+        "#fb7185",
+        "#15803d",
+      ),
+    },
+    {
+      id: "wildflower-meadow",
+      label: "Wildflower Meadow",
+      description: "Loose meadow stems and tiny blossoms",
+      price: PRODUCT_PRICE,
+      motif: "wildflower",
+      palette: createPalette(
+        "#f0fdfa",
+        "#fff7ed",
+        "#0f766e",
+        "#263a2f",
+        "#5d7165",
+        "#f97316",
+        "#a855f7",
+        "#16a34a",
+      ),
+    },
+    {
+      id: "tulip-border",
+      label: "Tulip Border",
+      description: "Tall tulips framing the message",
+      price: PRODUCT_PRICE,
+      motif: "tulip",
+      palette: createPalette(
+        "#fff1f2",
+        "#e0f2fe",
+        "#be123c",
+        "#3c2430",
+        "#7d5964",
+        "#f43f5e",
+        "#facc15",
+        "#15803d",
+      ),
+    },
+    {
       id: "joyful-confetti",
       label: "Joyful Confetti",
       description: "Static celebratory confetti and sparkle",
@@ -411,15 +465,25 @@
     const textLayout = TEXT_LAYOUT_MAP.has(config.textLayout)
       ? config.textLayout
       : TEXT_LAYOUT_OPTIONS[0].id;
+    const rawSignature = cleanField(config.signature || "", 50);
+    const signature =
+      Number(config.version || 0) < 3 &&
+      !config.signoff &&
+      rawSignature.toLowerCase() === "with love"
+        ? ""
+        : rawSignature;
 
     return {
-      version: 2,
+      version: 3,
       style,
       layout,
       textLayout,
+      salutation: cleanField(config.salutation || "Dear", 32),
       recipient: cleanField(config.recipient || "Mom", 40),
       message: cleanField(config.message || "", 180),
-      signature: cleanField(config.signature || "With love", 50),
+      signoff: cleanField(config.signoff || "With love", 40),
+      signature,
+      photoDataUrl: cleanPhotoDataUrl(config.photoDataUrl),
     };
   }
 
@@ -428,6 +492,13 @@
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, maxLength);
+  }
+
+  function cleanPhotoDataUrl(value) {
+    const photoDataUrl = String(value || "").trim();
+    if (!photoDataUrl) return "";
+    if (!PHOTO_DATA_URL_PATTERN.test(photoDataUrl)) return "";
+    return photoDataUrl.length <= MAX_PHOTO_DATA_URL_LENGTH ? photoDataUrl : "";
   }
 
   function getStyle(styleId) {
@@ -491,6 +562,15 @@
     drawBackground(ctx, width, height, palette, style.motif);
     drawPanel(ctx, padding, width, height, palette);
     drawStyleAccents(ctx, style.motif, width, height, padding, palette);
+    drawCardPhoto(
+      ctx,
+      options.photoImage,
+      normalized,
+      width,
+      height,
+      padding,
+      palette,
+    );
     drawCardText(ctx, normalized, width, height, padding, palette);
 
     if (isPreview) {
@@ -502,6 +582,36 @@
     }
 
     return normalized;
+  }
+
+  async function renderToCanvasAsync(canvas, config, options = {}) {
+    const normalized = normalizeConfig(config);
+    const photoImage = normalized.photoDataUrl
+      ? await loadPhotoImage(normalized.photoDataUrl)
+      : null;
+
+    return renderToCanvas(canvas, normalized, {
+      ...options,
+      photoImage,
+    });
+  }
+
+  function loadPhotoImage(photoDataUrl) {
+    if (!photoDataUrl) return Promise.resolve(null);
+    if (photoImageCache.has(photoDataUrl)) {
+      return photoImageCache.get(photoDataUrl);
+    }
+
+    const imagePromise = new Promise((resolve) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => resolve(image);
+      image.onerror = () => resolve(null);
+      image.src = photoDataUrl;
+    });
+
+    photoImageCache.set(photoDataUrl, imagePromise);
+    return imagePromise;
   }
 
   function drawBackground(ctx, width, height, palette, motif) {
@@ -615,6 +725,15 @@
       case "orchid":
         drawFloralAccents(ctx, width, height, padding, palette, "orchid");
         break;
+      case "peony":
+        drawPeonyAccents(ctx, width, height, padding, palette);
+        break;
+      case "wildflower":
+        drawWildflowerAccents(ctx, width, height, padding, palette);
+        break;
+      case "tulip":
+        drawTulipAccents(ctx, width, height, padding, palette);
+        break;
       case "confetti":
         drawConfettiAccents(ctx, width, height, padding, palette);
         break;
@@ -635,6 +754,90 @@
     positions.forEach(([x, y, rotation], index) => {
       const scale = variant === "small" ? 0.68 : index % 2 === 0 ? 1 : 0.82;
       drawFlower(ctx, x, y, flowerSize * scale, rotation, palette, variant);
+    });
+  }
+
+  function drawPeonyAccents(ctx, width, height, padding, palette) {
+    const minSide = Math.min(width, height);
+    const clusters = [
+      [padding * 1.45, padding * 1.3, 1, -0.3],
+      [width - padding * 1.48, padding * 1.38, 0.86, 0.38],
+      [padding * 1.55, height - padding * 1.32, 0.92, 0.2],
+      [width - padding * 1.5, height - padding * 1.38, 1.05, -0.25],
+    ];
+
+    clusters.forEach(([x, y, scale, rotation], index) => {
+      drawPeonyCluster(
+        ctx,
+        x,
+        y,
+        minSide * 0.07 * scale,
+        rotation,
+        palette,
+        index,
+      );
+    });
+  }
+
+  function drawWildflowerAccents(ctx, width, height, padding, palette) {
+    const minSide = Math.min(width, height);
+    const meadowTop = height - padding * 1.08;
+    const stems = [
+      [padding * 1.45, 0.32, -0.25, palette.accent],
+      [padding * 2.05, 0.48, 0.16, palette.accentTwo],
+      [padding * 2.72, 0.38, -0.08, palette.title],
+      [width - padding * 2.65, 0.42, 0.12, palette.accent],
+      [width - padding * 1.95, 0.52, -0.18, palette.accentTwo],
+      [width - padding * 1.35, 0.34, 0.24, palette.title],
+    ];
+
+    ctx.save();
+    stems.forEach(([x, heightRatio, lean, color], index) => {
+      drawWildflowerStem(
+        ctx,
+        x,
+        meadowTop,
+        minSide * heightRatio,
+        lean,
+        color,
+        palette,
+        index,
+      );
+    });
+    ctx.restore();
+
+    drawSprig(
+      ctx,
+      padding * 1.25,
+      padding * 1.2,
+      minSide * 0.16,
+      0.72,
+      palette,
+    );
+    drawSprig(
+      ctx,
+      width - padding * 1.25,
+      padding * 1.2,
+      minSide * 0.16,
+      2.35,
+      palette,
+    );
+  }
+
+  function drawTulipAccents(ctx, width, height, padding, palette) {
+    const minSide = Math.min(width, height);
+    const baseY = height - padding * 1.12;
+    const tulips = [
+      [padding * 1.28, baseY, minSide * 0.19, -0.16, palette.accent],
+      [padding * 1.88, baseY, minSide * 0.25, 0.1, palette.accentTwo],
+      [padding * 2.48, baseY, minSide * 0.18, -0.08, palette.title],
+      [width - padding * 2.5, baseY, minSide * 0.18, 0.08, palette.title],
+      [width - padding * 1.9, baseY, minSide * 0.25, -0.12, palette.accent],
+      [width - padding * 1.3, baseY, minSide * 0.2, 0.14, palette.accentTwo],
+    ];
+
+    tulips.forEach(([x, y, size, lean, color], index) => {
+      drawTulip(ctx, x, y, size, lean, color, palette, index);
     });
   }
 
@@ -941,6 +1144,199 @@
     ctx.restore();
   }
 
+  function drawCardPhoto(
+    ctx,
+    photoImage,
+    config,
+    width,
+    height,
+    padding,
+    palette,
+  ) {
+    if (!photoImage) return;
+
+    const rect = getPhotoFrameRect(config.textLayout, width, height, padding);
+    const radius = Math.min(rect.width, rect.height) * 0.12;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(15, 23, 42, 0.22)";
+    ctx.shadowBlur = Math.max(18, Math.min(width, height) * 0.018);
+    ctx.shadowOffsetY = Math.max(10, Math.min(width, height) * 0.01);
+    roundedRect(ctx, rect.x, rect.y, rect.width, rect.height, radius);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.88)";
+    ctx.fill();
+    ctx.shadowColor = "transparent";
+
+    const inset = Math.max(8, Math.min(width, height) * 0.009);
+    roundedRect(
+      ctx,
+      rect.x + inset,
+      rect.y + inset,
+      rect.width - inset * 2,
+      rect.height - inset * 2,
+      Math.max(8, radius - inset),
+    );
+    ctx.clip();
+    drawImageCover(
+      ctx,
+      photoImage,
+      rect.x + inset,
+      rect.y + inset,
+      rect.width - inset * 2,
+      rect.height - inset * 2,
+    );
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = palette.accent;
+    ctx.lineWidth = Math.max(4, Math.min(width, height) * 0.005);
+    roundedRect(ctx, rect.x, rect.y, rect.width, rect.height, radius);
+    ctx.stroke();
+    drawFlower(
+      ctx,
+      rect.x + rect.width * 0.08,
+      rect.y + rect.height * 0.08,
+      Math.min(rect.width, rect.height) * 0.13,
+      -0.36,
+      palette,
+      "small",
+    );
+    ctx.restore();
+  }
+
+  function getPhotoFrameRect(textLayout, width, height, padding) {
+    const minSide = Math.min(width, height);
+    const isWide = width > height * 1.15;
+    const size = isWide ? minSide * 0.16 : minSide * 0.18;
+    const wideWidth = size * 1.18;
+    const xCenter = (width - wideWidth) / 2;
+    const xRight = width - padding * 1.35 - wideWidth;
+    const yBottom = height - padding * 1.35 - size;
+
+    switch (textLayout) {
+      case "classic-center":
+        return {
+          x: xCenter,
+          y: height * 0.58,
+          width: wideWidth,
+          height: size,
+        };
+      case "editorial-left":
+        return {
+          x: xRight,
+          y: height * 0.38,
+          width: wideWidth,
+          height: size,
+        };
+      case "split-panel":
+        return {
+          x: padding * 1.5,
+          y: height - padding * 1.55 - size,
+          width: wideWidth,
+          height: size,
+        };
+      case "bottom-letter":
+      case "title-frame":
+        return {
+          x: xRight,
+          y: padding * 1.45,
+          width: wideWidth,
+          height: size,
+        };
+      case "postcard":
+        return {
+          x: width - padding * 2.75,
+          y: padding * 1.38,
+          width: padding * 1.55,
+          height: padding * 1.15,
+        };
+      case "bold-stack":
+        return {
+          x: xCenter,
+          y: height * 0.67,
+          width: wideWidth,
+          height: size,
+        };
+      case "compact-note":
+        return {
+          x: xCenter,
+          y: height * 0.67,
+          width: wideWidth,
+          height: size,
+        };
+      default:
+        return {
+          x: xCenter,
+          y: yBottom,
+          width: wideWidth,
+          height: size,
+        };
+    }
+  }
+
+  function drawImageCover(ctx, image, x, y, width, height) {
+    const imageWidth = image.naturalWidth || image.width;
+    const imageHeight = image.naturalHeight || image.height;
+    if (!imageWidth || !imageHeight) return;
+
+    const scale = Math.max(width / imageWidth, height / imageHeight);
+    const drawWidth = imageWidth * scale;
+    const drawHeight = imageHeight * scale;
+    const drawX = x + (width - drawWidth) / 2;
+    const drawY = y + (height - drawHeight) / 2;
+
+    ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+  }
+
+  function getSalutationLine(config, punctuation = true) {
+    const salutation = cleanField(config.salutation || "", 32);
+    const recipient = cleanField(config.recipient || "Mom", 40);
+    const line = [salutation, recipient].filter(Boolean).join(" ");
+    if (!line) return punctuation ? "Dear Mom," : "Dear Mom";
+    return punctuation ? `${line},` : line;
+  }
+
+  function getSignatureLine(config, options = {}) {
+    const signoff = cleanField(config.signoff || "", 40);
+    const signature = cleanField(config.signature || "", 50);
+    const prefix = options.prefix || "";
+    const separator = options.separator || ", ";
+    const line =
+      signoff && signature
+        ? `${signoff}${separator}${signature}`
+        : signoff || signature || "With love";
+
+    return `${prefix}${line}`;
+  }
+
+  function hasCardPhoto(config) {
+    return Boolean(config.photoDataUrl);
+  }
+
+  function getPhotoTextRegion(config, width, height, padding) {
+    if (!hasCardPhoto(config)) {
+      return null;
+    }
+
+    const photoRect = getPhotoFrameRect(
+      config.textLayout,
+      width,
+      height,
+      padding,
+    );
+    const minSide = Math.min(width, height);
+    const gap = Math.max(24, minSide * 0.03);
+    const x = padding * 1.55;
+    const maxWidth = Math.max(minSide * 0.34, photoRect.x - x - gap);
+
+    return {
+      x,
+      centerX: x + maxWidth / 2,
+      maxWidth,
+      photoRect,
+    };
+  }
+
   function drawCardText(ctx, config, width, height, padding, palette) {
     switch (config.textLayout) {
       case "editorial-left":
@@ -971,6 +1367,7 @@
 
   function drawClassicCenterText(ctx, config, width, height, padding, palette) {
     const metrics = getSharedTextMetrics(width, height, padding);
+    const includesPhoto = hasCardPhoto(config);
     drawFittedSingleLine(ctx, {
       text: "Happy Mother's Day",
       x: width / 2,
@@ -983,7 +1380,7 @@
       color: palette.title,
     });
     drawFittedSingleLine(ctx, {
-      text: `Dear ${config.recipient || "Mom"},`,
+      text: getSalutationLine(config),
       x: width / 2,
       y: height * 0.34,
       maxWidth: metrics.maxTextWidth,
@@ -998,7 +1395,7 @@
       x: width / 2,
       y: height * 0.43,
       maxWidth: metrics.maxTextWidth,
-      maxHeight: height * 0.25,
+      maxHeight: height * (includesPhoto ? 0.2 : 0.25),
       fontSize: metrics.messageSize,
       minFontSize: 22,
       weight: 500,
@@ -1006,7 +1403,7 @@
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? `With love, ${config.signature}` : "With love",
+      text: getSignatureLine(config),
       x: width / 2,
       y: height - padding * 1.65,
       maxWidth: metrics.maxTextWidth,
@@ -1022,11 +1419,15 @@
     const metrics = getSharedTextMetrics(width, height, padding);
     const leftX = padding * 1.65;
     const maxWidth = width - padding * 3.2;
+    const photoRegion = getPhotoTextRegion(config, width, height, padding);
+    const safeMaxWidth = photoRegion
+      ? Math.min(maxWidth, photoRegion.maxWidth)
+      : maxWidth;
     drawFittedSingleLine(ctx, {
       text: "Happy Mother's Day",
       x: leftX,
       y: height * 0.22,
-      maxWidth,
+      maxWidth: safeMaxWidth,
       fontSize: metrics.titleSize * 0.9,
       minFontSize: 36,
       weight: 800,
@@ -1035,10 +1436,10 @@
       align: "left",
     });
     drawFittedSingleLine(ctx, {
-      text: `For ${config.recipient || "Mom"}`,
+      text: getSalutationLine(config, false),
       x: leftX,
       y: height * 0.33,
-      maxWidth,
+      maxWidth: safeMaxWidth,
       fontSize: metrics.recipientSize,
       minFontSize: 24,
       weight: 700,
@@ -1050,7 +1451,7 @@
       text: config.message || DEFAULT_MESSAGE,
       x: leftX,
       y: height * 0.5,
-      maxWidth: maxWidth * 0.78,
+      maxWidth: Math.min(maxWidth * 0.78, safeMaxWidth),
       maxHeight: height * 0.28,
       fontSize: metrics.messageSize,
       minFontSize: 22,
@@ -1060,10 +1461,10 @@
       align: "left",
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? `- ${config.signature}` : "- With love",
+      text: getSignatureLine(config, { prefix: "- " }),
       x: leftX,
       y: height - padding * 1.65,
-      maxWidth,
+      maxWidth: safeMaxWidth,
       fontSize: metrics.signatureSize,
       minFontSize: 22,
       weight: 700,
@@ -1106,7 +1507,7 @@
       lineHeightRatio: 1.0,
     });
     drawFittedSingleLine(ctx, {
-      text: config.recipient || "Mom",
+      text: getSalutationLine(config, false),
       x: leftX,
       y: height * 0.62,
       maxWidth: leftWidth,
@@ -1132,7 +1533,7 @@
       lineHeightRatio: 1.28,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? config.signature : "With love",
+      text: getSignatureLine(config),
       x: rightX,
       y: height * 0.68,
       maxWidth: rightWidth,
@@ -1147,11 +1548,16 @@
 
   function drawBottomLetterText(ctx, config, width, height, padding, palette) {
     const metrics = getSharedTextMetrics(width, height, padding);
+    const photoRegion = getPhotoTextRegion(config, width, height, padding);
+    const titleX = photoRegion ? photoRegion.centerX : width / 2;
+    const titleWidth = photoRegion
+      ? photoRegion.maxWidth
+      : metrics.maxTextWidth;
     drawFittedSingleLine(ctx, {
       text: "Happy Mother's Day",
-      x: width / 2,
+      x: titleX,
       y: height * 0.25,
-      maxWidth: metrics.maxTextWidth,
+      maxWidth: titleWidth,
       fontSize: metrics.titleSize,
       minFontSize: 42,
       weight: 800,
@@ -1159,7 +1565,7 @@
       color: palette.title,
     });
     drawFittedParagraph(ctx, {
-      text: `Dear ${config.recipient || "Mom"}, ${config.message || DEFAULT_MESSAGE}`,
+      text: `${getSalutationLine(config)} ${config.message || DEFAULT_MESSAGE}`,
       x: width / 2,
       y: height * 0.63,
       maxWidth: metrics.maxTextWidth * 0.88,
@@ -1171,7 +1577,7 @@
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? `With love, ${config.signature}` : "With love",
+      text: getSignatureLine(config),
       x: width / 2,
       y: height * 0.78,
       maxWidth: metrics.maxTextWidth,
@@ -1185,15 +1591,20 @@
 
   function drawTitleFrameText(ctx, config, width, height, padding, palette) {
     const metrics = getSharedTextMetrics(width, height, padding);
+    const photoRegion = getPhotoTextRegion(config, width, height, padding);
+    const titleX = photoRegion ? photoRegion.centerX : width / 2;
+    const titleWidth = photoRegion
+      ? photoRegion.maxWidth
+      : metrics.maxTextWidth;
     const boxX = padding * 1.55;
     const boxY = height * 0.38;
     const boxWidth = width - padding * 3.1;
     const boxHeight = height * 0.32;
     drawFittedSingleLine(ctx, {
       text: "Happy Mother's Day",
-      x: width / 2,
+      x: titleX,
       y: height * 0.24,
-      maxWidth: metrics.maxTextWidth,
+      maxWidth: titleWidth,
       fontSize: metrics.titleSize * 0.94,
       minFontSize: 38,
       weight: 800,
@@ -1208,7 +1619,7 @@
     ctx.stroke();
     ctx.restore();
     drawFittedSingleLine(ctx, {
-      text: `Dear ${config.recipient || "Mom"},`,
+      text: getSalutationLine(config),
       x: width / 2,
       y: boxY + boxHeight * 0.22,
       maxWidth: boxWidth * 0.82,
@@ -1231,7 +1642,7 @@
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? config.signature : "With love",
+      text: getSignatureLine(config),
       x: width / 2,
       y: height - padding * 1.55,
       maxWidth: metrics.maxTextWidth,
@@ -1279,7 +1690,7 @@
       lineHeightRatio: 1.0,
     });
     drawFittedParagraph(ctx, {
-      text: `Dear ${config.recipient || "Mom"}, ${config.message || DEFAULT_MESSAGE}`,
+      text: `${getSalutationLine(config)} ${config.message || DEFAULT_MESSAGE}`,
       x: rightX,
       y: height * 0.48,
       maxWidth: rightWidth,
@@ -1293,7 +1704,7 @@
       lineHeightRatio: 1.28,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? config.signature : "With love",
+      text: getSignatureLine(config),
       x: rightX,
       y: height * 0.7,
       maxWidth: rightWidth,
@@ -1308,6 +1719,7 @@
 
   function drawBoldStackText(ctx, config, width, height, padding, palette) {
     const metrics = getSharedTextMetrics(width, height, padding);
+    const includesPhoto = hasCardPhoto(config);
     const stackSize = Math.min(112, Math.max(54, metrics.minSide * 0.092));
     ["Happy", "Mother's", "Day"].forEach((line, index) => {
       drawFittedSingleLine(ctx, {
@@ -1323,7 +1735,7 @@
       });
     });
     drawFittedSingleLine(ctx, {
-      text: `For ${config.recipient || "Mom"}`,
+      text: getSalutationLine(config, false),
       x: width / 2,
       y: height * 0.52,
       maxWidth: metrics.maxTextWidth,
@@ -1336,9 +1748,9 @@
     drawFittedParagraph(ctx, {
       text: config.message || DEFAULT_MESSAGE,
       x: width / 2,
-      y: height * 0.64,
+      y: height * (includesPhoto ? 0.58 : 0.64),
       maxWidth: metrics.maxTextWidth * 0.82,
-      maxHeight: height * 0.18,
+      maxHeight: height * (includesPhoto ? 0.12 : 0.18),
       fontSize: metrics.messageSize * 0.82,
       minFontSize: 19,
       weight: 500,
@@ -1346,9 +1758,9 @@
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? config.signature : "With love",
+      text: getSignatureLine(config),
       x: width / 2,
-      y: height * 0.78,
+      y: includesPhoto ? height - padding * 1.35 : height * 0.78,
       maxWidth: metrics.maxTextWidth,
       fontSize: metrics.signatureSize * 0.9,
       minFontSize: 20,
@@ -1360,6 +1772,7 @@
 
   function drawCompactNoteText(ctx, config, width, height, padding, palette) {
     const metrics = getSharedTextMetrics(width, height, padding);
+    const includesPhoto = hasCardPhoto(config);
     drawFittedSingleLine(ctx, {
       text: "Mother's Day",
       x: width / 2,
@@ -1372,11 +1785,11 @@
       color: palette.title,
     });
     drawFittedParagraph(ctx, {
-      text: `${config.recipient || "Mom"} - ${config.message || DEFAULT_MESSAGE}`,
+      text: `${getSalutationLine(config, false)} - ${config.message || DEFAULT_MESSAGE}`,
       x: width / 2,
-      y: height * 0.49,
+      y: height * (includesPhoto ? 0.45 : 0.49),
       maxWidth: metrics.maxTextWidth * 0.78,
-      maxHeight: height * 0.25,
+      maxHeight: height * (includesPhoto ? 0.2 : 0.25),
       fontSize: metrics.messageSize * 0.76,
       minFontSize: 18,
       weight: 500,
@@ -1385,9 +1798,9 @@
       lineHeightRatio: 1.28,
     });
     drawFittedSingleLine(ctx, {
-      text: config.signature ? config.signature : "With love",
+      text: getSignatureLine(config),
       x: width / 2,
-      y: height * 0.67,
+      y: includesPhoto ? height - padding * 1.35 : height * 0.67,
       maxWidth: metrics.maxTextWidth * 0.72,
       fontSize: metrics.signatureSize * 0.76,
       minFontSize: 18,
@@ -1565,6 +1978,237 @@
 
     if (currentChunk) chunks.push(currentChunk);
     return chunks;
+  }
+
+  function drawPeonyCluster(ctx, x, y, radius, rotation, palette, index) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+
+    ctx.fillStyle = palette.leaf;
+    ctx.globalAlpha = 0.72;
+    [
+      [-radius * 0.92, radius * 0.1, -0.5],
+      [radius * 0.86, radius * 0.14, 0.48],
+      [-radius * 0.52, radius * 0.78, -0.9],
+      [radius * 0.58, radius * 0.78, 0.82],
+    ].forEach(([leafX, leafY, leafRotation]) => {
+      ctx.save();
+      ctx.translate(leafX, leafY);
+      ctx.rotate(leafRotation);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, radius * 0.62, radius * 0.22, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.globalAlpha = 1;
+    [
+      [0, 0, 1],
+      [-radius * 0.5, radius * 0.2, 0.72],
+      [radius * 0.46, radius * 0.26, 0.66],
+    ].forEach(([flowerX, flowerY, scale], flowerIndex) => {
+      drawLayeredBloom(
+        ctx,
+        flowerX,
+        flowerY,
+        radius * scale,
+        palette,
+        index + flowerIndex,
+      );
+    });
+
+    ctx.restore();
+  }
+
+  function drawLayeredBloom(ctx, x, y, radius, palette, seed) {
+    const colors = [palette.accent, palette.accentTwo, "#fff7ad"];
+
+    ctx.save();
+    ctx.translate(x, y);
+    for (let layer = 0; layer < 3; layer += 1) {
+      const petalCount = 7 + layer * 2;
+      const layerRadius = radius * (1 - layer * 0.22);
+      ctx.fillStyle = colors[layer % colors.length];
+      ctx.globalAlpha = layer === 0 ? 0.72 : 0.82;
+
+      for (let i = 0; i < petalCount; i += 1) {
+        ctx.save();
+        ctx.rotate(((Math.PI * 2) / petalCount) * i + seed * 0.14);
+        ctx.beginPath();
+        ctx.ellipse(
+          layerRadius * 0.42,
+          0,
+          layerRadius * 0.34,
+          layerRadius * 0.16,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = palette.title;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 0.13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawWildflowerStem(
+    ctx,
+    x,
+    baseY,
+    height,
+    lean,
+    flowerColor,
+    palette,
+    index,
+  ) {
+    const topX = x + height * lean;
+    const topY = baseY - height;
+
+    ctx.save();
+    ctx.strokeStyle = palette.leaf;
+    ctx.fillStyle = palette.leaf;
+    ctx.lineWidth = Math.max(3, height * 0.018);
+    ctx.beginPath();
+    ctx.moveTo(x, baseY);
+    ctx.quadraticCurveTo(
+      x + height * lean * 0.5,
+      baseY - height * 0.52,
+      topX,
+      topY,
+    );
+    ctx.stroke();
+
+    for (let leafIndex = 0; leafIndex < 2; leafIndex += 1) {
+      const t = 0.35 + leafIndex * 0.26;
+      const leafX = x + (topX - x) * t;
+      const leafY = baseY + (topY - baseY) * t;
+      const side = (leafIndex + index) % 2 === 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.ellipse(
+        leafX + side * height * 0.045,
+        leafY,
+        height * 0.075,
+        height * 0.026,
+        side * 0.56,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    }
+
+    drawTinyBloom(ctx, topX, topY, height * 0.11, flowerColor, palette);
+    ctx.restore();
+  }
+
+  function drawTinyBloom(ctx, x, y, radius, flowerColor, palette) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = flowerColor;
+    for (let i = 0; i < 5; i += 1) {
+      ctx.save();
+      ctx.rotate((Math.PI * 2 * i) / 5);
+      ctx.beginPath();
+      ctx.ellipse(
+        radius * 0.52,
+        0,
+        radius * 0.35,
+        radius * 0.18,
+        0,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = palette.accentTwo;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 0.16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawTulip(ctx, x, baseY, height, lean, flowerColor, palette, index) {
+    const bloomY = baseY - height;
+    const bloomX = x + height * lean;
+    const bloomWidth = height * 0.34;
+    const bloomHeight = height * 0.28;
+
+    ctx.save();
+    ctx.strokeStyle = palette.leaf;
+    ctx.fillStyle = palette.leaf;
+    ctx.lineWidth = Math.max(4, height * 0.025);
+    ctx.beginPath();
+    ctx.moveTo(x, baseY);
+    ctx.quadraticCurveTo(
+      x + height * lean * 0.45,
+      baseY - height * 0.48,
+      bloomX,
+      bloomY,
+    );
+    ctx.stroke();
+
+    [-1, 1].forEach((side) => {
+      ctx.beginPath();
+      ctx.ellipse(
+        x + side * height * 0.08,
+        baseY - height * 0.34,
+        height * 0.14,
+        height * 0.04,
+        side * 0.52,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    });
+
+    ctx.translate(bloomX, bloomY);
+    ctx.rotate(lean * 0.3);
+    ctx.fillStyle = flowerColor;
+    ctx.globalAlpha = 0.86;
+    ctx.beginPath();
+    ctx.moveTo(0, bloomHeight * 0.52);
+    ctx.bezierCurveTo(
+      -bloomWidth * 0.58,
+      bloomHeight * 0.18,
+      -bloomWidth * 0.42,
+      -bloomHeight * 0.62,
+      0,
+      -bloomHeight * 0.28,
+    );
+    ctx.bezierCurveTo(
+      bloomWidth * 0.42,
+      -bloomHeight * 0.62,
+      bloomWidth * 0.58,
+      bloomHeight * 0.18,
+      0,
+      bloomHeight * 0.52,
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalAlpha = 0.92;
+    ctx.fillStyle = index % 2 === 0 ? palette.accentTwo : palette.accent;
+    [-0.28, 0.28].forEach((offset) => {
+      ctx.beginPath();
+      ctx.ellipse(
+        bloomWidth * offset,
+        bloomHeight * 0.02,
+        bloomWidth * 0.2,
+        bloomHeight * 0.48,
+        offset,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    });
+    ctx.restore();
   }
 
   function drawFlower(
@@ -1803,7 +2447,7 @@
   }
 
   function createDownloadPath(config) {
-    return `/pages/downloads/mothers-day-card.html?card=${encodeConfig(config)}`;
+    return `/pages/downloads/mothers-day-card.html#card=${encodeConfig(config)}`;
   }
 
   function cloneOptions(options) {
@@ -1813,6 +2457,7 @@
   window.MothersDayCardRenderer = {
     normalizeConfig,
     renderToCanvas,
+    renderToCanvasAsync,
     getPrice,
     getFilename,
     encodeConfig,
