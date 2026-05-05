@@ -276,6 +276,9 @@ class CartManager {
     if (customization.textLayoutLabel) {
       details.push(`Text layout: ${customization.textLayoutLabel}`);
     }
+    if (customization.fontLabel) {
+      details.push(`Font: ${customization.fontLabel}`);
+    }
     if (customization.salutation) {
       details.push(`Salutation: ${customization.salutation}`);
     }
