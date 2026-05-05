@@ -186,6 +186,10 @@ class StoreManager {
           <dd>8 message arrangements</dd>
         </div>
         <div>
+          <dt>Fonts</dt>
+          <dd>5 typography styles</dd>
+        </div>
+        <div>
           <dt>Photo</dt>
           <dd>Optional image upload</dd>
         </div>
@@ -249,6 +253,7 @@ class StoreManager {
     const styles = renderer.getStyleOptions();
     const layouts = renderer.getLayoutOptions();
     const textLayouts = renderer.getTextLayoutOptions();
+    const fonts = renderer.getFontOptions();
     const modal = document.createElement("div");
     modal.className = "store-customizer-modal";
     modal.setAttribute("role", "dialog");
@@ -286,6 +291,13 @@ class StoreManager {
               <legend>Text layout</legend>
               <div class="card-text-layout-grid">
                 ${textLayouts.map((textLayout, index) => this.createTextLayoutChoice(textLayout, index === 0)).join("")}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Font</legend>
+              <div class="card-font-grid">
+                ${fonts.map((font, index) => this.createFontChoice(font, index === 0)).join("")}
               </div>
             </fieldset>
 
@@ -552,12 +564,25 @@ class StoreManager {
     `;
   }
 
+  createFontChoice(font, checked) {
+    return `
+      <label class="font-choice">
+        <input type="radio" name="font" value="${this.escapeAttribute(font.id)}" ${checked ? "checked" : ""} />
+        <span>
+          <strong>${this.escapeHTML(font.label)}</strong>
+          <small>${this.escapeHTML(font.description)}</small>
+        </span>
+      </label>
+    `;
+  }
+
   readCustomizerConfig(form, photoDataUrl = "") {
     const formData = new FormData(form);
     return window.MothersDayCardRenderer.normalizeConfig({
       style: formData.get("style"),
       layout: formData.get("layout"),
       textLayout: formData.get("textLayout"),
+      font: formData.get("font"),
       salutation: formData.get("salutation"),
       recipient: formData.get("recipient"),
       message: formData.get("message"),
@@ -633,6 +658,7 @@ class StoreManager {
     const style = renderer.getStyle(normalized.style);
     const layout = renderer.getLayout(normalized.layout);
     const textLayout = renderer.getTextLayout(normalized.textLayout);
+    const font = renderer.getFont(normalized.font);
     const token = renderer.encodeConfig(normalized);
     const timestamp = Date.now();
 
@@ -641,7 +667,7 @@ class StoreManager {
       id: `${product.id}-${timestamp}`,
       originalId: product.id,
       price: renderer.getPrice(normalized),
-      summary: `${style.label} ${layout.label.toLowerCase()} card with ${textLayout.label.toLowerCase()} text for ${normalized.recipient}.`,
+      summary: `${style.label} ${layout.label.toLowerCase()} card with ${textLayout.label.toLowerCase()} text and ${font.label.toLowerCase()} font for ${normalized.recipient}.`,
       delivery: "Personalized PNG download page after payment, also emailed",
       downloadUrl: `/pages/downloads/mothers-day-card.html#card=${token}`,
       downloadLabel: "Open PNG download page",
@@ -651,6 +677,7 @@ class StoreManager {
         `Style: ${style.label}`,
         `Format: ${layout.label}`,
         `Text layout: ${textLayout.label}`,
+        `Font: ${font.label}`,
         ...(normalized.photoDataUrl ? ["Photo: included"] : []),
       ],
       customization: {
@@ -659,6 +686,7 @@ class StoreManager {
         styleLabel: style.label,
         layoutLabel: layout.label,
         textLayoutLabel: textLayout.label,
+        fontLabel: font.label,
         filename: renderer.getFilename(normalized),
         outputFormat: "PNG",
         downloadToken: token,

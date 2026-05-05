@@ -1,6 +1,7 @@
 (function () {
   const FONT_STACK = '"Montserrat", "Inter", Arial, sans-serif';
   const BODY_FONT_STACK = '"Inter", Arial, sans-serif';
+  const DEFAULT_FONT_ID = "modern";
   const DEFAULT_MESSAGE =
     "Thank you for everything you do. You are loved more than words can say.";
   const PRODUCT_PRICE = 5;
@@ -421,6 +422,44 @@
     },
   ];
 
+  const FONT_OPTIONS = [
+    {
+      id: "modern",
+      label: "Modern",
+      description: "Bold sans heading with clean note text",
+      titleFamily: FONT_STACK,
+      bodyFamily: BODY_FONT_STACK,
+    },
+    {
+      id: "classic-serif",
+      label: "Classic Serif",
+      description: "Elegant serif heading with literary note text",
+      titleFamily: '"Playfair Display", Georgia, serif',
+      bodyFamily: '"Lora", Georgia, serif',
+    },
+    {
+      id: "handwritten",
+      label: "Handwritten",
+      description: "Warm script heading with readable note text",
+      titleFamily: '"Dancing Script", "Brush Script MT", cursive',
+      bodyFamily: '"Lora", Georgia, serif',
+    },
+    {
+      id: "soft-rounded",
+      label: "Soft Rounded",
+      description: "Friendly rounded letters throughout the card",
+      titleFamily: '"Poppins", "Inter", Arial, sans-serif',
+      bodyFamily: '"Poppins", "Inter", Arial, sans-serif',
+    },
+    {
+      id: "keepsake",
+      label: "Keepsake",
+      description: "Refined keepsake lettering with classic notes",
+      titleFamily: '"Cormorant Garamond", Georgia, serif',
+      bodyFamily: '"Lora", Georgia, serif',
+    },
+  ];
+
   const STYLE_MAP = new Map(STYLE_OPTIONS.map((option) => [option.id, option]));
   const LAYOUT_MAP = new Map(
     LAYOUT_OPTIONS.map((option) => [option.id, option]),
@@ -428,6 +467,7 @@
   const TEXT_LAYOUT_MAP = new Map(
     TEXT_LAYOUT_OPTIONS.map((option) => [option.id, option]),
   );
+  const FONT_MAP = new Map(FONT_OPTIONS.map((option) => [option.id, option]));
 
   function createPalette(
     backgroundStart,
@@ -465,6 +505,7 @@
     const textLayout = TEXT_LAYOUT_MAP.has(config.textLayout)
       ? config.textLayout
       : TEXT_LAYOUT_OPTIONS[0].id;
+    const font = FONT_MAP.has(config.font) ? config.font : DEFAULT_FONT_ID;
     const rawSignature = cleanField(config.signature || "", 50);
     const signature =
       Number(config.version || 0) < 3 &&
@@ -474,10 +515,11 @@
         : rawSignature;
 
     return {
-      version: 3,
+      version: 4,
       style,
       layout,
       textLayout,
+      font,
       salutation: cleanField(config.salutation || "Dear", 32),
       recipient: cleanField(config.recipient || "Mom", 40),
       message: cleanField(config.message || "", 180),
@@ -511,6 +553,18 @@
 
   function getTextLayout(textLayoutId) {
     return TEXT_LAYOUT_MAP.get(textLayoutId) || TEXT_LAYOUT_OPTIONS[0];
+  }
+
+  function getFont(fontId) {
+    return FONT_MAP.get(fontId) || FONT_OPTIONS[0];
+  }
+
+  function getTitleFont(config) {
+    return getFont(config.font).titleFamily;
+  }
+
+  function getBodyFont(config) {
+    return getFont(config.font).bodyFamily;
   }
 
   function getPrice() {
@@ -551,6 +605,7 @@
     canvas.style.aspectRatio = `${width} / ${height}`;
     canvas.dataset.layout = layout.id;
     canvas.dataset.textLayout = normalized.textLayout;
+    canvas.dataset.font = normalized.font;
     canvas.dataset.preview = isPreview ? "true" : "false";
 
     if (typeof ctx.setTransform === "function") {
@@ -586,6 +641,7 @@
 
   async function renderToCanvasAsync(canvas, config, options = {}) {
     const normalized = normalizeConfig(config);
+    await loadFontsForConfig(normalized);
     const photoImage = normalized.photoDataUrl
       ? await loadPhotoImage(normalized.photoDataUrl)
       : null;
@@ -594,6 +650,24 @@
       ...options,
       photoImage,
     });
+  }
+
+  async function loadFontsForConfig(config) {
+    if (!document.fonts?.load) return;
+
+    const font = getFont(config.font);
+    const fontSpecs = [
+      `800 48px ${font.titleFamily}`,
+      `700 48px ${font.titleFamily}`,
+      `700 36px ${font.bodyFamily}`,
+      `500 32px ${font.bodyFamily}`,
+    ];
+
+    await Promise.all(
+      fontSpecs.map((fontSpec) =>
+        document.fonts.load(fontSpec).catch(() => []),
+      ),
+    );
   }
 
   function loadPhotoImage(photoDataUrl) {
@@ -1376,7 +1450,7 @@
       fontSize: metrics.titleSize,
       minFontSize: 42,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
     });
     drawFittedSingleLine(ctx, {
@@ -1387,7 +1461,7 @@
       fontSize: metrics.recipientSize,
       minFontSize: 24,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.accent,
     });
     drawFittedParagraph(ctx, {
@@ -1399,7 +1473,7 @@
       fontSize: metrics.messageSize,
       minFontSize: 22,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
@@ -1410,7 +1484,7 @@
       fontSize: metrics.signatureSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
     });
   }
@@ -1431,7 +1505,7 @@
       fontSize: metrics.titleSize * 0.9,
       minFontSize: 36,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
       align: "left",
     });
@@ -1443,7 +1517,7 @@
       fontSize: metrics.recipientSize,
       minFontSize: 24,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.accent,
       align: "left",
     });
@@ -1456,7 +1530,7 @@
       fontSize: metrics.messageSize,
       minFontSize: 22,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
       align: "left",
     });
@@ -1468,7 +1542,7 @@
       fontSize: metrics.signatureSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
       align: "left",
     });
@@ -1501,7 +1575,7 @@
       fontSize: metrics.titleSize * 0.76,
       minFontSize: 28,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
       align: "left",
       lineHeightRatio: 1.0,
@@ -1514,7 +1588,7 @@
       fontSize: metrics.recipientSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.accent,
       align: "left",
     });
@@ -1527,7 +1601,7 @@
       fontSize: metrics.messageSize * 0.74,
       minFontSize: 18,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
       align: "left",
       lineHeightRatio: 1.28,
@@ -1540,7 +1614,7 @@
       fontSize: metrics.signatureSize * 0.88,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
       align: "left",
     });
@@ -1561,7 +1635,7 @@
       fontSize: metrics.titleSize,
       minFontSize: 42,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
     });
     drawFittedParagraph(ctx, {
@@ -1573,7 +1647,7 @@
       fontSize: metrics.messageSize,
       minFontSize: 21,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
@@ -1584,7 +1658,7 @@
       fontSize: metrics.signatureSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
     });
   }
@@ -1608,7 +1682,7 @@
       fontSize: metrics.titleSize * 0.94,
       minFontSize: 38,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
     });
     ctx.save();
@@ -1626,7 +1700,7 @@
       fontSize: metrics.recipientSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.accent,
     });
     drawFittedParagraph(ctx, {
@@ -1638,7 +1712,7 @@
       fontSize: metrics.messageSize * 0.88,
       minFontSize: 20,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
@@ -1649,7 +1723,7 @@
       fontSize: metrics.signatureSize,
       minFontSize: 22,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
     });
   }
@@ -1684,7 +1758,7 @@
       fontSize: metrics.titleSize * 0.72,
       minFontSize: 26,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
       align: "left",
       lineHeightRatio: 1.0,
@@ -1698,7 +1772,7 @@
       fontSize: metrics.messageSize * 0.72,
       minFontSize: 18,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
       align: "left",
       lineHeightRatio: 1.28,
@@ -1711,7 +1785,7 @@
       fontSize: metrics.signatureSize * 0.78,
       minFontSize: 20,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
       align: "left",
     });
@@ -1730,7 +1804,7 @@
         fontSize: stackSize,
         minFontSize: 34,
         weight: 800,
-        family: FONT_STACK,
+        family: getTitleFont(config),
         color: index === 1 ? palette.accent : palette.title,
       });
     });
@@ -1742,7 +1816,7 @@
       fontSize: metrics.recipientSize,
       minFontSize: 22,
       weight: 800,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.accentTwo,
     });
     drawFittedParagraph(ctx, {
@@ -1754,7 +1828,7 @@
       fontSize: metrics.messageSize * 0.82,
       minFontSize: 19,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
     });
     drawFittedSingleLine(ctx, {
@@ -1765,7 +1839,7 @@
       fontSize: metrics.signatureSize * 0.9,
       minFontSize: 20,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
     });
   }
@@ -1781,7 +1855,7 @@
       fontSize: metrics.titleSize * 0.8,
       minFontSize: 34,
       weight: 800,
-      family: FONT_STACK,
+      family: getTitleFont(config),
       color: palette.title,
     });
     drawFittedParagraph(ctx, {
@@ -1793,7 +1867,7 @@
       fontSize: metrics.messageSize * 0.76,
       minFontSize: 18,
       weight: 500,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.text,
       lineHeightRatio: 1.28,
     });
@@ -1805,7 +1879,7 @@
       fontSize: metrics.signatureSize * 0.76,
       minFontSize: 18,
       weight: 700,
-      family: BODY_FONT_STACK,
+      family: getBodyFont(config),
       color: palette.muted,
     });
   }
@@ -2346,8 +2420,14 @@
 
   function drawPreviewWatermark(ctx, width, height, palette) {
     const minSide = Math.min(width, height);
-    const watermarkSize = Math.max(42, minSide * 0.13);
-    const bandHeight = Math.max(44, minSide * 0.09);
+    const watermarkSize = Math.max(44, minSide * 0.09);
+    const badgeMargin = Math.max(24, minSide * 0.035);
+    const badgePaddingX = Math.max(18, minSide * 0.025);
+    const badgePaddingY = Math.max(12, minSide * 0.016);
+    const labelSize = Math.max(16, minSide * 0.024);
+    const noteSize = Math.max(11, minSide * 0.015);
+    const badgeLabel = "PREVIEW ONLY";
+    const badgeNote = "Paid PNG has no watermark";
 
     ctx.save();
     ctx.translate(width / 2, height / 2);
@@ -2355,37 +2435,52 @@
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = `800 ${watermarkSize}px ${FONT_STACK}`;
-    ctx.lineWidth = Math.max(3, minSide * 0.007);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.76)";
-    ctx.fillStyle = "rgba(15, 23, 42, 0.2)";
-
-    for (let y = -height; y <= height; y += watermarkSize * 1.55) {
-      for (let x = -width; x <= width; x += watermarkSize * 3.9) {
-        ctx.strokeText("PREVIEW", x, y);
-        ctx.fillText("PREVIEW", x, y);
-      }
-    }
+    ctx.lineWidth = Math.max(2, minSide * 0.004);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.42)";
+    ctx.fillStyle = "rgba(15, 23, 42, 0.12)";
+    ctx.strokeText("PREVIEW", 0, 0);
+    ctx.fillText("PREVIEW", 0, 0);
     ctx.restore();
 
     ctx.save();
-    ctx.fillStyle = "rgba(15, 23, 42, 0.76)";
-    ctx.fillRect(0, height - bandHeight, width, bandHeight);
+    ctx.font = `800 ${labelSize}px ${BODY_FONT_STACK}`;
+    const labelWidth = ctx.measureText(badgeLabel).width;
+    ctx.font = `600 ${noteSize}px ${BODY_FONT_STACK}`;
+    const noteWidth = ctx.measureText(badgeNote).width;
+    const badgeWidth = Math.min(
+      width - badgeMargin * 2,
+      Math.max(labelWidth, noteWidth) + badgePaddingX * 2,
+    );
+    const badgeHeight = labelSize + noteSize + badgePaddingY * 2.6;
+    const badgeX = width - badgeWidth - badgeMargin;
+    const badgeY = height - badgeHeight - badgeMargin;
+
+    roundedRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 18);
+    ctx.fillStyle = "rgba(15, 23, 42, 0.46)";
+    ctx.fill();
+    ctx.strokeStyle = palette.accent;
+    ctx.globalAlpha = 0.6;
+    ctx.lineWidth = Math.max(2, minSide * 0.003);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = `800 ${Math.max(13, minSide * 0.026)}px ${BODY_FONT_STACK}`;
+    ctx.font = `800 ${labelSize}px ${BODY_FONT_STACK}`;
     ctx.fillText(
-      "PREVIEW ONLY - PAID DOWNLOAD REMOVES WATERMARK",
-      width / 2,
-      height - bandHeight / 2,
+      badgeLabel,
+      badgeX + badgeWidth / 2,
+      badgeY + badgePaddingY + labelSize / 2,
     );
-
-    ctx.strokeStyle = palette.accent;
-    ctx.lineWidth = Math.max(2, minSide * 0.004);
-    ctx.beginPath();
-    ctx.moveTo(0, height - bandHeight);
-    ctx.lineTo(width, height - bandHeight);
-    ctx.stroke();
+    ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
+    ctx.font = `600 ${noteSize}px ${BODY_FONT_STACK}`;
+    ctx.fillText(
+      badgeNote,
+      badgeX + badgeWidth / 2,
+      badgeY + badgeHeight - badgePaddingY - noteSize / 2,
+      badgeWidth - badgePaddingX,
+    );
     ctx.restore();
   }
 
@@ -2466,8 +2561,10 @@
     getStyleOptions: () => cloneOptions(STYLE_OPTIONS),
     getLayoutOptions: () => cloneOptions(LAYOUT_OPTIONS),
     getTextLayoutOptions: () => cloneOptions(TEXT_LAYOUT_OPTIONS),
+    getFontOptions: () => cloneOptions(FONT_OPTIONS),
     getStyle,
     getLayout,
     getTextLayout,
+    getFont,
   };
 })();
