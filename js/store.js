@@ -266,9 +266,15 @@ class StoreManager {
             <p class="store-kicker">Mother's Day card</p>
             <h3 id="cardCustomizerTitle">Customize your card</h3>
           </div>
-          <button class="customizer-icon-button" type="button" data-close-customizer aria-label="Close customizer">
-            <i class="fas fa-xmark"></i>
-          </button>
+          <div class="customizer-header-actions">
+            <button class="customizer-preview-toggle" type="button" data-toggle-card-preview aria-controls="cardPreviewShell" aria-expanded="true">
+              <i class="fas fa-eye-slash" aria-hidden="true"></i>
+              <span>Preview</span>
+            </button>
+            <button class="customizer-icon-button" type="button" data-close-customizer aria-label="Close customizer">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </div>
         </div>
 
         <div class="customizer-body">
@@ -326,11 +332,11 @@ class StoreManager {
             <div class="customizer-field customizer-photo-field">
               <span id="cardPhotoLabel">Photo</span>
               <div class="customizer-photo-actions">
-                <label class="customizer-file-button" aria-labelledby="cardPhotoLabel">
-                  <input type="file" name="photo" accept="image/*" />
+                <input class="customizer-file-input" id="cardPhotoInput" type="file" name="photo" accept="image/*" aria-labelledby="cardPhotoLabel" />
+                <button class="customizer-file-button" type="button" data-choose-card-photo aria-describedby="cardPhotoStatus">
                   <i class="fas fa-image" aria-hidden="true"></i>
                   <span>Choose image</span>
-                </label>
+                </button>
                 <button class="customizer-secondary-button" type="button" data-clear-card-photo hidden>
                   <i class="fas fa-xmark" aria-hidden="true"></i>
                   <span>Remove</span>
@@ -356,7 +362,7 @@ class StoreManager {
             </div>
           </form>
 
-          <div class="card-preview-shell" aria-live="polite">
+          <div class="card-preview-shell" id="cardPreviewShell" aria-live="polite">
             <canvas id="cardPreviewCanvas"></canvas>
           </div>
         </div>
@@ -364,17 +370,57 @@ class StoreManager {
     `;
 
     document.body.appendChild(modal);
+    document.documentElement.classList.add("is-customizer-open");
+    document.body.classList.add("is-customizer-open");
 
     const form = modal.querySelector("#cardCustomizerForm");
     const canvas = modal.querySelector("#cardPreviewCanvas");
     const priceElement = modal.querySelector("#customizerPrice");
     const submitButton = modal.querySelector("#addCardToCartBtn");
+    const previewToggleButton = modal.querySelector(
+      "[data-toggle-card-preview]",
+    );
+    const choosePhotoButton = modal.querySelector("[data-choose-card-photo]");
     const photoInput = modal.querySelector('input[name="photo"]');
     const photoStatus = modal.querySelector("#cardPhotoStatus");
     const clearPhotoButton = modal.querySelector("[data-clear-card-photo]");
+    const mobilePreviewQuery = window.matchMedia("(max-width: 900px)");
+    const scrollContainer = form;
     let currentPhotoDataUrl = "";
     let photoProcessing = false;
     let previewRequest = 0;
+    let pendingPhotoScrollTop = 0;
+
+    const setPreviewExpanded = (isExpanded) => {
+      modal.classList.toggle("is-preview-collapsed", !isExpanded);
+
+      if (!previewToggleButton) return;
+
+      previewToggleButton.setAttribute("aria-expanded", String(isExpanded));
+      previewToggleButton.setAttribute(
+        "aria-label",
+        isExpanded ? "Hide card preview" : "Show card preview",
+      );
+      previewToggleButton.innerHTML = `
+        <i class="fas fa-${isExpanded ? "eye-slash" : "eye"}" aria-hidden="true"></i>
+        <span>Preview</span>
+      `;
+    };
+
+    const handlePreviewBreakpointChange = (event) => {
+      setPreviewExpanded(!event.matches);
+    };
+
+    setPreviewExpanded(!mobilePreviewQuery.matches);
+
+    if (typeof mobilePreviewQuery.addEventListener === "function") {
+      mobilePreviewQuery.addEventListener(
+        "change",
+        handlePreviewBreakpointChange,
+      );
+    } else if (typeof mobilePreviewQuery.addListener === "function") {
+      mobilePreviewQuery.addListener(handlePreviewBreakpointChange);
+    }
 
     canvas.addEventListener("contextmenu", (event) => {
       event.preventDefault();
@@ -423,6 +469,26 @@ class StoreManager {
       }
     };
 
+    const restorePhotoScroll = () => {
+      if (scrollContainer) {
+        scrollContainer.scrollTop = pendingPhotoScrollTop;
+      }
+
+      window.requestAnimationFrame(() => {
+        if (scrollContainer) {
+          scrollContainer.scrollTop = pendingPhotoScrollTop;
+        }
+
+        if (choosePhotoButton && document.activeElement === photoInput) {
+          try {
+            choosePhotoButton.focus({ preventScroll: true });
+          } catch {
+            choosePhotoButton.focus();
+          }
+        }
+      });
+    };
+
     const handlePhotoChange = async () => {
       const file = photoInput?.files?.[0];
 
@@ -431,6 +497,7 @@ class StoreManager {
         if (photoStatus) photoStatus.textContent = "No photo selected";
         if (clearPhotoButton) clearPhotoButton.hidden = true;
         await updatePreview();
+        restorePhotoScroll();
         return;
       }
 
@@ -452,11 +519,22 @@ class StoreManager {
       } finally {
         setPhotoProcessing(false);
         await updatePreview();
+        restorePhotoScroll();
       }
     };
 
     const closeCustomizer = () => {
       document.removeEventListener("keydown", handleEscape);
+      if (typeof mobilePreviewQuery.removeEventListener === "function") {
+        mobilePreviewQuery.removeEventListener(
+          "change",
+          handlePreviewBreakpointChange,
+        );
+      } else if (typeof mobilePreviewQuery.removeListener === "function") {
+        mobilePreviewQuery.removeListener(handlePreviewBreakpointChange);
+      }
+      document.documentElement.classList.remove("is-customizer-open");
+      document.body.classList.remove("is-customizer-open");
       modal.remove();
       this.activeCustomizerCleanup = null;
     };
@@ -480,6 +558,21 @@ class StoreManager {
     });
 
     document.addEventListener("keydown", handleEscape);
+    previewToggleButton?.addEventListener("click", () => {
+      const shouldExpand = modal.classList.contains("is-preview-collapsed");
+      setPreviewExpanded(shouldExpand);
+
+      if (shouldExpand) {
+        void updatePreview();
+      }
+    });
+    choosePhotoButton?.addEventListener("click", () => {
+      pendingPhotoScrollTop = scrollContainer?.scrollTop || 0;
+      photoInput?.click();
+    });
+    photoInput?.addEventListener("click", () => {
+      pendingPhotoScrollTop = scrollContainer?.scrollTop || 0;
+    });
     form.addEventListener("input", (event) => {
       if (event.target?.type !== "file") {
         void updatePreview();
